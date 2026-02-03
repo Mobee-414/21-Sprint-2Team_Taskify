@@ -1,26 +1,45 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  /* 사이즈와 높이 */
+  --font-size-3xl: 32px / 42px;
+  --font-size-2xl: 24px / 32px;
+  --font-size-xl: 20px / 32px;
+  --font-size-2lg: 18px / 26px;
+  --font-size-lg: 16px / 26px;
+  --font-size-md: 14px / 24px;
+  --font-size-sm: 13px / 22px;
+  /* 12px 시리즈 두 종류 */
+  --font-size-xs: 12px / 20px; /* 기본 12px (LH 20) */
+  --font-size-xs-tight: 12px / 18px; /* 좁은 12px (LH 18) */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* 굵기 */
+  --font-weight-bold: 700;
+  --font-weight-semibold: 600;
+  --font-weight-medium: 500;
+  --font-weight-regular: 400;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+  /* 컬러 */
+  --color-violet-main: #5534da;
+  --color-violet-light: #f1effd;
+  --color-purple-deep: #760dde;
+  --color-pink-main: #e876ea;
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  --color-black-pure: #000000;
+  --color-black-dark: #171717;
+  --color-black-medium: #333236;
+  --color-black-light: #4b4b4b;
+
+  --color-gray-dark: #787486;
+  --color-gray-medium: #9fa6b2;
+  --color-gray-base: #d9d9d9;
+  --color-gray-light: #eeeeee;
+  --color-gray-bg: #fafafa;
+
+  --color-red-point: #d6173a;
+  --color-green-point: #7ac555;
+  --color-orange-point: #ffa500;
+  --color-blue-point: #76a5ea;
+
+  --color-white: #ffffff;
 }
