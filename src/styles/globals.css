@@ -1,17 +1,27 @@
 @import "tailwindcss";
 
 @theme {
-  /* 사이즈와 높이 */
-  --font-size-3xl: 32px / 42px;
-  --font-size-2xl: 24px / 32px;
-  --font-size-xl: 20px / 32px;
-  --font-size-2lg: 18px / 26px;
-  --font-size-lg: 16px / 26px;
-  --font-size-md: 14px / 24px;
-  --font-size-sm: 13px / 22px;
-  /* 12px 시리즈 두 종류 */
-  --font-size-xs: 12px / 20px; /* 기본 12px (LH 20) */
-  --font-size-xs-tight: 12px / 18px; /* 좁은 12px (LH 18) */
+  /* 사이즈 */
+  --font-size-3xl: 32px;
+  --font-size-2xl: 24px;
+  --font-size-xl: 20px;
+  --font-size-2lg: 18px;
+  --font-size-lg: 16px;
+  --font-size-md: 14px;
+  --font-size-sm: 13px;
+  --font-size-xs: 12px;
+  --font-size-xs-tight: 12px;
+
+  /* 줄높이 */
+  --line-height-3xl: 42px;
+  --line-height-2xl: 32px;
+  --line-height-xl: 32px;
+  --line-height-2lg: 26px;
+  --line-height-lg: 26px;
+  --line-height-md: 24px;
+  --line-height-sm: 22px;
+  --line-height-xs: 20px;
+  --line-height-xs-tight: 18px;
 
   /* 굵기 */
   --font-weight-bold: 700;
@@ -42,4 +52,83 @@
   --color-blue-point: #76a5ea;
 
   --color-white: #ffffff;
+}
+
+@layer utilities {
+  .text-3xl {
+    font-size: var(--font-size-3xl);
+    line-height: var(--line-height-3xl);
+  }
+  .text-2xl {
+    font-size: var(--font-size-2xl);
+    line-height: var(--line-height-2xl);
+  }
+  .text-xl {
+    font-size: var(--font-size-xl);
+    line-height: var(--line-height-xl);
+  }
+  .text-2lg {
+    font-size: var(--font-size-2lg);
+    line-height: var(--line-height-2lg);
+  }
+  .text-lg {
+    font-size: var(--font-size-lg);
+    line-height: var(--line-height-lg);
+  }
+  .text-md {
+    font-size: var(--font-size-md);
+    line-height: var(--line-height-md);
+  }
+  .text-sm {
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-sm);
+  }
+  .text-xs {
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-xs);
+  }
+  .text-xs-tight {
+    font-size: var(--font-size-xs-tight);
+    line-height: var(--line-height-xs-tight);
+  }
+
+  /* PC 사이즈 대응 (md: 768px 이상) */
+  @media (min-width: 48rem) {
+    .md\:text-3xl {
+      font-size: var(--font-size-3xl);
+      line-height: var(--line-height-3xl);
+    }
+    .md\:text-2xl {
+      font-size: var(--font-size-2xl);
+      line-height: var(--line-height-2xl);
+    }
+    .md\:text-xl {
+      font-size: var(--font-size-xl);
+      line-height: var(--line-height-xl);
+    }
+    .md\:text-2lg {
+      font-size: var(--font-size-2lg);
+      line-height: var(--line-height-2lg);
+    }
+    .md\:text-lg {
+      font-size: var(--font-size-lg);
+      line-height: var(--line-height-lg);
+    }
+    .md\:text-md {
+      font-size: var(--font-size-md);
+      line-height: var(--line-height-md);
+    }
+    .md\:text-sm {
+      font-size: var(--font-size-sm);
+      line-height: var(--line-height-sm);
+    }
+    .md\:text-xs {
+      font-size: var(--font-size-xs);
+      line-height: var(--line-height-xs);
+    }
+    .md\:text-xs-tight {
+      font-size: var(--font-size-xs-tight);
+      line-height: var(--line-height-xs-tight);
+    }
+  }
 }
