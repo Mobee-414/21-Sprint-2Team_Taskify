@@ -15,21 +15,13 @@ interface InputProps<T extends FieldValues> {
   errorSize?: "12-14" | "14-14";
 }
 
-const LABEL_VARIANTS = {
+const FONT_VARIANTS = {
+  "12-14": "text-xs md:text-md",
+  "14-14": "text-md",
   "14-16": "text-md md:text-lg",
   "14-18": "text-md md:text-2lg",
   "16-18": "text-lg md:text-2lg",
   "16-16": "text-lg",
-};
-
-const INPUT_VARIANTS = {
-  "14-16": "text-md md:text-lg",
-  "16-16": "text-lg",
-};
-
-const ERROR_VARIANTS = {
-  "12-14": "text-xs md:text-md",
-  "14-14": "text-md",
 };
 
 export function Input<T extends FieldValues>({
@@ -53,7 +45,7 @@ export function Input<T extends FieldValues>({
     <div className="flex flex-col gap-[8px]">
       <label
         htmlFor={field.name}
-        className={`${LABEL_VARIANTS[labelSize]} ${weightClass} text-black-medium`}
+        className={`${FONT_VARIANTS[labelSize]} ${weightClass} text-black-medium`}
       >
         {label}
         {required && (
@@ -71,7 +63,7 @@ export function Input<T extends FieldValues>({
           className={`
             w-full 
             h-[50px]
-            ${INPUT_VARIANTS[inputSize]}
+            ${FONT_VARIANTS[inputSize]}
             font-regular
             text-black-medium 
             px-[16px] py-[12px] 
@@ -99,7 +91,7 @@ export function Input<T extends FieldValues>({
         )}
       </div>
       {error && (
-        <div className={`${ERROR_VARIANTS[errorSize]} text-red-point`}>
+        <div className={`${FONT_VARIANTS[errorSize]} text-red-point`}>
           {error}
         </div>
       )}
