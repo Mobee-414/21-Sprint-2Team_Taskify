@@ -2,13 +2,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
+export const CardDetailSchema = z.object({
+  content: z.string().min(1),
+});
+export type CardDetailValues = z.infer<typeof CardDetailSchema>;
+
 export function useCardDetail(cardId: number) {
   // 댓글
-  const CardDetailSchema = z.object({
-    content: z.string().min(1),
-  });
-  type CardDetailValues = z.infer<typeof CardDetailSchema>;
-
   const {
     control,
     formState: { isValid },
