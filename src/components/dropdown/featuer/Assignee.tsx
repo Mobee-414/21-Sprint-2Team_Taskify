@@ -8,8 +8,8 @@ import {
 import { useDropdown } from "../DropdownContext";
 
 import Image from "next/image";
-import arrowIcon from "../../assets/icon/arrow_drop_down.svg";
-import checkIcon from "../../assets/icon/check.svg";
+import arrowIcon from "../../../../public/icons/arrow_drop_down.svg";
+import checkIcon from "../../../../public/icons/icon/check.svg";
 
 export type AssigneeUser = {
   id: number;

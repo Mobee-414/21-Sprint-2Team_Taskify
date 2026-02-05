@@ -4,11 +4,13 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-} from "../dropdown/Dropdown";
-import { useDropdown } from "../dropdown/DropdownContext";
+} from "../Dropdown";
+import { useDropdown } from "../DropdownContext";
 
-import arrowIcon from "../../assets/icon/arrow_drop_down.svg";
-import checkIcon from "../../assets/icon/check.svg";
+import Image from "next/image";
+
+import arrowIcon from "../../../../public/icons/arrow_drop_down.svg";
+import checkIcon from "../../../../public/icons/icon/check.svg";
 
 
 // 추후 api 연동으로 변경 가능
@@ -43,10 +45,12 @@ function StatusTrigger({ value }: { value: string }) {
     >
       <StatusPill text={value} />
 
-      <img
+      <Image
         src={arrowIcon}
         alt="open"
-        className={`ml-auto w-[26px] h-[26px] transition-transform ${
+        width={26}
+        height={26}
+        className={`ml-auto transition-transform ${
           open ? "rotate-180" : ""
         }`}
       />
@@ -82,10 +86,12 @@ export function StatusDropdown() {
               className="!px-0 !py-0 w-[217px] h-[48px] hover:bg-gray-50"
             >
               <div className="flex items-center h-full w-full pl-[16px] pr-[16px]">
-                <img
+                <Image
                   src={checkIcon}
                   alt="selected"
-                  className={`w-[22px] h-[22px] ${
+                  width={22}
+                  height={22}
+                  className={`${
                     isSelected ? "opacity-100" : "opacity-0"
                   }`}
                 />
@@ -94,10 +100,11 @@ export function StatusDropdown() {
 
                 <StatusPill text={item} />
 
-                <img
+                <Image  
                   src={arrowIcon}
-                  alt="more"
-                  className="ml-auto w-[26px] h-[26px]"
+                  alt="화살표 아이콘"
+                  width={26}
+                  height={26}
                 />
               </div>
             </DropdownItem>

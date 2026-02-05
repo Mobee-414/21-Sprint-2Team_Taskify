@@ -3,15 +3,17 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-} from "../dropdown/Dropdown";
+} from "../Dropdown";
 
-import kebabIcon from "../../assets/icon/kebab_more_vert.svg";
+import Image from "next/image";
+
+import kebabIcon from "../../../../public/icons/kebab_more_vert.svg";
 
 export function KebabMenuDropdown() {
   return (
     <Dropdown>
       <DropdownTrigger>
-        <img
+        <Image
           src={kebabIcon}
           className="w-[28px] h-[28px] cursor-pointer hover:opacity-70 transition"
           alt="menu"
