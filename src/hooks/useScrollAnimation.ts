@@ -5,20 +5,27 @@ const useScrollAnimation = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setIsVisible(entry.isIntersecting);
+        const ratio = entry.intersectionRatio;
+
+        // Hysteresis 적용: 나타날 때와 사라질 때의 기준을 다르게 설정
+        setIsVisible((prev) => {
+          if (!prev && ratio >= 0.4) return true;
+          if (prev && ratio <= 0.2) return false; 
+          return prev;
+        });
       },
       {
-        threshold: 0.4,
+        threshold: [0, 0.2, 0.4, 1],
         rootMargin: "0px 0px -150px 0px",
       }
     );
 
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
-
+    observer.observe(el);
     return () => observer.disconnect();
   }, []);
 
