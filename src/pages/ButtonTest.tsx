@@ -1,12 +1,14 @@
 // 버튼 샘플 테스트 입니다.
 'use client'
 import React from  "react";
+import Image from 'next/image';
 import ButtonLogin from '../components/common/Button/ButtonLogin';
 import ButtonBase from '../components/common/Button/ButtonBase';
 import ButtonModal from '../components/common/Button/ButtonModal';
 import ButtonColumnAdd from '@/components/common/Button/ButtonColumnAdd';
 import ButtonDashboardAdd from '@/components/common/Button/ButtonDashboardAdd';
 import ButtonDashboardDelete from '@/components/common/Button/ButtonDashboardDelete';
+import ButtonComponenet24 from '@/components/common/Button/ButtonComponent24';
 
 export default function ButtonTest () {
   const handleClick = (name: string) => {
@@ -69,7 +71,7 @@ export default function ButtonTest () {
 
           <div className="flex flex-col">
             <ButtonBase 
-              disabled 
+               
               onClick={() => handleClick('disabled')}
               variant="secondary"
               acceptSize="desktop"
@@ -89,7 +91,7 @@ export default function ButtonTest () {
 
           <div className="flex flex-col">
             <ButtonBase 
-              disabled 
+               
               onClick={() => handleClick('disabled')}
               variant="secondary"
               acceptSize="tablet"
@@ -109,7 +111,7 @@ export default function ButtonTest () {
 
           <div className="flex flex-col">
             <ButtonBase 
-              disabled 
+               
               onClick={() => handleClick('disabled')}
               variant="secondary"
               acceptSize="mobile"
@@ -132,9 +134,9 @@ export default function ButtonTest () {
 
           <div className="flex flex-col">
             <ButtonModal 
-              disabled 
+               
               onClick={() => handleClick('disabled')}
-              variant="secondary"
+              variant="primary"
               loginWidth="mobile"
             >
               확인
@@ -143,7 +145,7 @@ export default function ButtonTest () {
 
           <ButtonModal 
             onClick = {() => handleClick('로그인')}
-            variant="primary"
+            variant="secondary"
             fontSize="md"         
             loginWidth="desktop"   
           >
@@ -152,7 +154,7 @@ export default function ButtonTest () {
 
           <div className="flex flex-col">
             <ButtonModal
-              disabled 
+               
               onClick={() => handleClick('disabled')}
               variant="secondary"
               loginWidth="mobile"
@@ -170,6 +172,12 @@ export default function ButtonTest () {
             acceptSize="desktop"                    
           >
             새로운 컬럼 추가하기
+            <Image 
+              src='/icons/AddIcon.png' 
+              alt='추가'
+              width={22}
+              height={22} 
+            />
           </ButtonColumnAdd>
 
           <div className="flex flex-col">
@@ -179,6 +187,12 @@ export default function ButtonTest () {
               acceptSize="tablet"
             >
               새로운 컬럼 추가하기
+              <Image 
+              src='/icons/AddIcon.png' 
+              alt='추가'
+              width={22}
+              height={22} 
+            />
             </ButtonColumnAdd>
           </div>
 
@@ -188,6 +202,12 @@ export default function ButtonTest () {
             acceptSize="mobile" 
           >
             새로운 컬럼 추가하기
+            <Image 
+              src='/icons/AddIcon.png' 
+              alt='추가'
+              width={22}
+              height={22} 
+            />
           </ButtonColumnAdd>
 
           {/* ButtonTodoAdd */}
@@ -198,7 +218,12 @@ export default function ButtonTest () {
             variant="secondary" 
             acceptSize="desktop"                    
           >
-            +
+            <Image 
+              src='/icons/AddIcon.png' 
+              alt='추가'
+              width={22}
+              height={22} 
+            />
           </ButtonColumnAdd>
 
           <div className="flex flex-col">
@@ -207,7 +232,12 @@ export default function ButtonTest () {
               variant="secondary"              
               acceptSize="tablet"
             >
-              +
+              <Image 
+              src='/icons/AddIcon.png' 
+              alt='추가'
+              width={22}
+              height={22} 
+            />
             </ButtonColumnAdd>
           </div>
 
@@ -216,7 +246,12 @@ export default function ButtonTest () {
             variant="secondary"
             acceptSize="mobile" 
           >
-            +
+            <Image 
+              src='/icons/AddIcon.png' 
+              alt='추가'
+              width={22}
+              height={22} 
+            />
           </ButtonColumnAdd>
 
           {/* ButtonDashboardAdd */}
@@ -226,7 +261,13 @@ export default function ButtonTest () {
             variant="secondary" 
             acceptSize="desktop"                    
           >
-            새로운 대시보드 +
+            새로운 대시보드 
+            <Image 
+              src='/icons/AddIcon.png' 
+              alt='추가'
+              width={22}
+              height={22} 
+            />
           </ButtonDashboardAdd>
 
           <div className="flex flex-col">
@@ -235,7 +276,13 @@ export default function ButtonTest () {
               variant="secondary"              
               acceptSize="tablet"
             >
-              새로운 대시보드 +
+              새로운 대시보드 
+              <Image 
+              src='/icons/AddIcon.png' 
+              alt='추가'
+              width={22}
+              height={22} 
+            />
             </ButtonDashboardAdd>
           </div>
 
@@ -244,7 +291,13 @@ export default function ButtonTest () {
             variant="secondary"
             acceptSize="mobile" 
           >
-            새로운 대시보드 +
+            새로운 대시보드 
+            <Image 
+              src='/icons/AddIcon.png' 
+              alt='추가'
+              width={22}
+              height={22} 
+            />
           </ButtonDashboardAdd>
 
           {/* ButtonDashboardDelete */}
@@ -274,6 +327,45 @@ export default function ButtonTest () {
           >
             대시보드 삭제
           </ButtonDashboardDelete>
+
+
+          {/* ButtonComponent24 */}
+          <h1 className="text-2xl font-bold">컴포넌트 24</h1>
+          <ButtonComponenet24 
+            onClick = {() => handleClick('로그인')} 
+            variant="secondary" 
+            acceptSize="desktop"                    
+          >
+            입력
+          </ButtonComponenet24>
+
+          <div className="flex flex-col">
+            <ButtonComponenet24 
+              onClick={() => handleClick('disabled')}
+              variant="secondary"              
+              acceptSize="desktop"
+            >
+             삭제
+            </ButtonComponenet24>
+          </div>
+
+          <ButtonComponenet24 
+            onClick = {() => handleClick('로그인')}
+            variant="secondary"
+            acceptSize="tablet" 
+          >
+            입력
+          </ButtonComponenet24>
+
+          <div className="flex flex-col">
+            <ButtonComponenet24 
+              onClick={() => handleClick('disabled')}
+              variant="secondary"              
+              acceptSize="mobile"
+            >
+              삭제
+            </ButtonComponenet24>
+          </div>
 
       </div>
   );

@@ -5,7 +5,7 @@ import type {
   MouseEventHandler,
   ReactNode,
 } from 'react';
-import clsx from 'clsx';
+import clsx from 'clsx'; 
 
 type FontSize = 'sm' | 'md' | 'lg';
 type ButtonSize = 'sm' | 'md' | 'lg';
@@ -69,6 +69,7 @@ const variantMap: Record<ButtonVariant, string> = {
   `,
   secondary: `
     bg-[var(--color-white)]
+    hover:bg-[var(--color-grey-bg)]
     text-[color:var(--color-black-medium)]
   `,
 };

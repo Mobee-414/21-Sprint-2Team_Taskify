@@ -63,7 +63,8 @@ const variantMap: Record<ButtonVariant, string> = {
     disabled:bg-[var(--color-gray-base)]
   `,
   secondary: `
-    bg-[var(--color-gray-base)]
+    bg-[var(--color-white)]
+    hover:bg-[var(--color-gray-bg)]
     text-[var(--color-gray-dark )]
   `,
 };
@@ -84,7 +85,7 @@ export default function BaseButton ( {
   buttonSize = 'md',
   fontSize= 'md',
   variant = 'primary',
-  borderline = 'none',
+  borderline = 'grey',
   loginWidth = 'desktop',
   ...rest
   }: BaseButtonProps) {

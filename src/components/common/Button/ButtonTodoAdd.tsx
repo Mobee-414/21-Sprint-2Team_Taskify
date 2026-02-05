@@ -69,7 +69,8 @@ const variantMap: Record<ButtonVariant, string> = {
   `,
   secondary: `
     bg-[var(--color-white)]
-    text-[color:var(--color-black-medium)]
+    hover:bg-[var(--color-gray-bg)]
+    
   `,
 };
 

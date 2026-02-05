@@ -65,7 +65,8 @@ const variantMap: Record<ButtonVariant, string> = {
     disabled:bg-[var(--color-gray-base)]
   `,
   secondary: `
-    bg-[var(--color-gray-base)]
+    bg-[var(--color-white)]
+    hover:bg-[var(--color-grey-bg)]
     text-[color:var(--color-violet-main)]
   `,
 };
