@@ -13,19 +13,23 @@ export default function ModalTestPage() {
   const [isCardDetailModalOpen, setIsCardDetailModalOpen] = useState(false);
 
   // 할일 생성수정 모달
+  const TARGET_COLUMNID_ID = 1; // 해당 상수가 쓰인곳은 칼럼 아이디로 변경 필요
   const TARGET_CARD_ID = 1; // 해당 상수가 쓰인곳은 카드 아이디로 변경 필요
   const [isCardFormModalOpen, setIsCardFormModalOpen] = useState(false);
   const [CardModalMode, setCardModalMode] = useState<"create" | "edit">(
     "create",
   );
-  const [columnId, SetColumnId] = useState<number | null>(null);
+  const [columnId, setColumnId] = useState<number | null>(null);
   const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
 
-  const handleCardFormOpen = (mode: "create" | "edit", id: number) => {
-    if (mode === "create") {
-      SetColumnId(id);
-    } else {
-      setSelectedCardId(id);
+  const handleCardFormOpen = (
+    mode: "create" | "edit",
+    columnId: number,
+    cardId?: number,
+  ) => {
+    setColumnId(columnId);
+    if (mode === "edit" && cardId) {
+      setSelectedCardId(cardId);
       setIsCardDetailModalOpen(false);
     }
     setCardModalMode(mode);
@@ -84,18 +88,20 @@ export default function ModalTestPage() {
         onClose={() => setIsCardDetailModalOpen(false)}
         cardId={TARGET_CARD_ID}
         columnTitle={"테스트"}
-        handleCardFormOpen={() => handleCardFormOpen("edit", TARGET_CARD_ID)}
+        handleCardFormOpen={() =>
+          handleCardFormOpen("edit", TARGET_COLUMNID_ID, TARGET_CARD_ID)
+        }
       />
 
       {/* 할일 생성수정 모달 */}
       <button
         className="rounded bg-purple-deep px-4 py-2 text-white"
-        onClick={() => handleCardFormOpen("create", 1)}
+        onClick={() => handleCardFormOpen("create", TARGET_COLUMNID_ID)}
       >
         할일 생성
       </button>
 
-      {(columnId !== null || selectedCardId !== null) && (
+      {columnId !== null && (
         <CardFormModal
           isOpen={isCardFormModalOpen}
           onClose={() => setIsCardFormModalOpen(false)}

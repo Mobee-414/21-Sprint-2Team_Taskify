@@ -7,7 +7,7 @@ interface CardFormModalProps {
   isOpen: boolean;
   onClose: () => void;
   mode: "create" | "edit";
-  columnId?: number | null;
+  columnId: number;
   cardId?: number | null;
 }
 
@@ -19,7 +19,7 @@ export default function CardFormModal({
   cardId,
 }: CardFormModalProps) {
   const { control, errors, isValid, handleSubmit, onSubmit } = useCardForm(
-    1,
+    1, // params로 dashboardId 가져올 예정
     columnId ?? null,
     cardId ?? null,
   );

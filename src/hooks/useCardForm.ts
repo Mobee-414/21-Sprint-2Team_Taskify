@@ -6,6 +6,7 @@ export const CardFormSchema = z.object({
   assigneeUserId: z.number(),
   dashboardId: z.number(),
   columnId: z.number(),
+  cardId: z.number().optional().nullable(),
   title: z.string().nonempty("제목을을 입력해주세요."),
   description: z.string().nonempty("설명을 입력해주세요."),
   dueDate: z.string(),
@@ -16,7 +17,7 @@ export type CardFormValues = z.infer<typeof CardFormSchema>;
 
 export function useCardForm(
   dashboardId: number,
-  columnId: number | null,
+  columnId: number,
   cardId: number | null,
 ) {
   const {
@@ -29,7 +30,7 @@ export function useCardForm(
     defaultValues: {
       assigneeUserId: 1,
       dashboardId: dashboardId,
-      ...(columnId && { columnId }), // columnId가 있을때만 추가
+      columnId,
       ...(cardId && { cardId }), // cardId가 있을때만 추가
       title: "",
       description: "",
