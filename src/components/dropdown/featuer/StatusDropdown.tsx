@@ -9,19 +9,14 @@ import { useDropdown } from "../DropdownContext";
 
 import Image from "next/image";
 
-import arrowIcon from "../../../../public/icons/arrow_drop_down.svg";
-import checkIcon from "../../../../public/icons/icon/check.svg";
-
-
 // 추후 api 연동으로 변경 가능
 const STATUS = ["To Do", "On Progress", "Done"];
-const PURPLE = "#5534DA";
 
 function StatusPill({ text }: { text: string }) {
   return (
-    <div className="flex items-center gap-2 rounded-full bg-[#F1EEFF] px-4 py-2">
-      <span className="w-2 h-2 rounded-full" style={{ backgroundColor: PURPLE }} />
-      <span className="text-[14px] font-normal" style={{ color: PURPLE }}>
+    <div className="flex items-center gap-2 rounded-full bg-[var(--color-violet-light)] px-4 py-2">
+      <span className="w-2 h-2 rounded-full bg-[var(--color-violet-main)]" />
+      <span className="text-md font-regular text-[var(--color-violet-main)]">
         {text}
       </span>
     </div>
@@ -37,22 +32,21 @@ function StatusTrigger({ value }: { value: string }) {
       className={`
         flex items-center
         w-[217px] h-[48px]
-        rounded-[6px] bg-white
+        rounded-[6px]
+        bg-[var(--color-white)]
         px-4
         border-[1px]
-        ${open ? "border-[#5534DA]" : "border-gray-200"}
+        ${open ? "border-[var(--color-violet-main)]" : "border-gray-200"}
       `}
     >
       <StatusPill text={value} />
 
       <Image
-        src={arrowIcon}
+        src="/icons/arrow_drop_down.svg"
         alt="open"
         width={26}
         height={26}
-        className={`ml-auto transition-transform ${
-          open ? "rotate-180" : ""
-        }`}
+        className={`ml-auto transition-transform ${open ? "rotate-180" : ""}`}
       />
     </button>
   );
@@ -71,7 +65,8 @@ export function StatusDropdown() {
         className="
           mt-[2px]
           w-[217px] h-[144px]
-          rounded-[6px] bg-white
+          rounded-[6px]
+          bg-[var(--color-white)]
           border border-gray-200
           overflow-hidden
         "
@@ -83,28 +78,32 @@ export function StatusDropdown() {
             <DropdownItem
               key={item}
               onClick={() => setValue(item)}
-              className="!px-0 !py-0 w-[217px] h-[48px] hover:bg-gray-50"
+              className="
+                !px-0 !py-0
+                w-[217px] h-[48px]
+                hover:bg-gray-50
+              "
             >
               <div className="flex items-center h-full w-full pl-[16px] pr-[16px]">
                 <Image
-                  src={checkIcon}
+                  src="/icons/check.svg"
                   alt="selected"
                   width={22}
                   height={22}
-                  className={`${
-                    isSelected ? "opacity-100" : "opacity-0"
-                  }`}
+                  className={`${isSelected ? "opacity-100" : "opacity-0"}`}
                 />
 
-                <div className="w-[3px]" />
+                <div className="w-[8px]" />
 
                 <StatusPill text={item} />
 
-                <Image  
-                  src={arrowIcon}
-                  alt="화살표 아이콘"
+                {/* ✅ 메뉴 아이템 화살표 유지 */}
+                <Image
+                  src="/icons/arrow_drop_down.svg"
+                  alt="status arrow"
                   width={26}
                   height={26}
+                  className="ml-auto"
                 />
               </div>
             </DropdownItem>

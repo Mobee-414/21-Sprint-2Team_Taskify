@@ -10,15 +10,17 @@ const PriorityIntroSection = () => {
         ref={ref}
         className={`
           relative grid h-[600px] w-[1200px] grid-cols-2 items-center rounded-[8px]
-          bg-[#F9FAFB]
+          bg-[var(--color-gray-surface)]
           transition-all duration-700 ease-out
           ${isVisible ? "translate-y-0 opacity-100" : "translate-y-16 opacity-0"}
         `}
       >
         <div className="absolute left-20 top-[123px] max-w-[420px]">
-          <p className="text-[22px] font-medium text-[#4b4b4b]">Point1</p>
+          <p className="text-lg2 font-medium text-[var(--color-black-light)]">
+            Point1
+          </p>
 
-          <h3 className="mt-[100px] text-[48px] font-bold leading-tight text-black">
+          <h3 className="mt-[100px] text-4xl font-bold text-[var(--color-black-pure)]">
             일의 우선순위를<br />
             관리하세요
           </h3>

@@ -11,6 +11,9 @@
   --font-size-sm: 13px;
   --font-size-xs: 12px;
   --font-size-xs-tight: 12px;
+  --font-size-lg2: 22px;
+  --font-size-xl2: 28px;
+  --font-size-4xl: 48px;
 
   /* 줄높이 */
   --line-height-3xl: 42px;
@@ -22,6 +25,9 @@
   --line-height-sm: 22px;
   --line-height-xs: 20px;
   --line-height-xs-tight: 18px;
+  --line-height-lg2: 30px;
+  --line-height-xl2: 38px;
+  --line-height-4xl: 58px;
 
   /* 굵기 */
   --font-weight-bold: 700;
@@ -45,6 +51,7 @@
   --color-gray-base: #d9d9d9;
   --color-gray-light: #eeeeee;
   --color-gray-bg: #fafafa;
+  --color-gray-surface: #f9fafb;
 
   --color-red-point: #d6173a;
   --color-green-point: #7ac555;
@@ -90,6 +97,18 @@
   .text-xs-tight {
     font-size: var(--font-size-xs-tight);
     line-height: var(--line-height-xs-tight);
+  }
+  .text-lg2 {
+    font-size: var(--font-size-lg2);
+    line-height: var(--line-height-lg2);
+  }
+  .text-xl2 {
+    font-size: var(--font-size-xl2);
+    line-height: var(--line-height-xl2);
+  }
+  .text-4xl {
+    font-size: var(--font-size-4xl);
+    line-height: var(--line-height-4xl);
   }
 
   /* PC 사이즈 대응 (md: 768px 이상) */

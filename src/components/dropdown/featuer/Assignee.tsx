@@ -8,34 +8,47 @@ import {
 import { useDropdown } from "../DropdownContext";
 
 import Image from "next/image";
-import arrowIcon from "../../../../public/icons/arrow_drop_down.svg";
-import checkIcon from "../../../../public/icons/icon/check.svg";
 
 export type AssigneeUser = {
   id: number;
-  name: string;
-  avatarColor?: string;
+  nickname: string;               // API 명세 기준
+  profileImageUrl: string | null; // 프로필 이미지 URL
+  avatarColor?: string;           // fallback 용 (추후 제거 가능)
 };
 
 type Props = {
-  users: AssigneeUser[];           // 상위 컴포넌트에서 API 연동 후 전달
+  users: AssigneeUser[];
   selectedUserId?: number;
   placeholder?: string;
   onChange: (user: AssigneeUser) => void;
 };
 
 function Avatar({
-  name,
+  nickname,
+  imageUrl,
   color,
   size = 26,
 }: {
-  name: string;
+  nickname: string;
+  imageUrl: string | null;
   color?: string;
   size?: number;
 }) {
+  if (imageUrl) {
+    return (
+      <Image
+        src={imageUrl}
+        alt={nickname}
+        width={size}
+        height={size}
+        className="rounded-full object-cover"
+      />
+    );
+  }
+
   return (
     <div
-      className="flex items-center justify-center rounded-full text-white"
+      className="flex items-center justify-center rounded-full text-[var(--color-white)]"
       style={{
         width: size,
         height: size,
@@ -44,16 +57,18 @@ function Avatar({
         fontWeight: 600,
       }}
     >
-      {name?.[0] ?? "?"}
+      {nickname?.[0] ?? "?"}
     </div>
   );
 }
 
 function AssigneeTrigger({
   label,
+  imageUrl,
   color,
 }: {
   label: string;
+  imageUrl: string | null;
   color?: string;
 }) {
   const { open } = useDropdown();
@@ -65,21 +80,21 @@ function AssigneeTrigger({
         flex items-center
         w-[217px] h-[48px]
         rounded-[6px]
-        bg-white
+        bg-[var(--color-white)]
         px-4
         border-[1px]
-        ${open ? "border-[#6D28D9]" : "border-gray-200"}
+        ${open ? "border-[var(--color-violet-main)]" : "border-gray-200"}
         cursor-pointer
       `}
     >
-      <Avatar name={label} color={color} size={26} />
+      <Avatar nickname={label} imageUrl={imageUrl} color={color} size={26} />
 
-      <span className="ml-[6px] text-[16px] font-normal text-[#333236]">
+      <span className="ml-[6px] text-lg font-regular text-[var(--color-black-medium)]">
         {label}
       </span>
 
       <Image
-        src={arrowIcon}
+        src="/icons/arrow_drop_down.svg"
         alt="open"
         width={26}
         height={26}
@@ -101,16 +116,15 @@ export function AssigneeDropdown({
   }, [users, selectedUserId]);
 
   if (users.length === 0 || !selectedUser) {
-    return (
-      <AssigneeTrigger label={placeholder} color="#A3C4A2" />
-    );
+    return <AssigneeTrigger label={placeholder} imageUrl={null} color="#A3C4A2" />;
   }
 
   return (
     <Dropdown>
       <DropdownTrigger>
         <AssigneeTrigger
-          label={selectedUser.name}
+          label={selectedUser.nickname}
+          imageUrl={selectedUser.profileImageUrl}
           color={selectedUser.avatarColor}
         />
       </DropdownTrigger>
@@ -120,7 +134,7 @@ export function AssigneeDropdown({
           mt-[2px]
           w-[217px]
           rounded-xl
-          bg-white
+          bg-[var(--color-white)]
           border border-gray-200
           shadow-[0_6px_18px_rgba(0,0,0,0.12)]
           overflow-hidden
@@ -137,16 +151,24 @@ export function AssigneeDropdown({
             >
               <div className="flex items-center h-full w-full pl-[16px] pr-[16px]">
                 <Image
-                  src={checkIcon}
+                  src="/icons/check.svg"
                   alt="selected"
                   width={22}
                   height={22}
                   className={`${isSelected ? "opacity-100" : "opacity-0"}`}
                 />
+
                 <div className="w-[8px]" />
-                <Avatar name={user.name} color={user.avatarColor} size={26} />
-                <span className="ml-[6px] text-[16px] font-normal text-[#333236]">
-                  {user.name}
+
+                <Avatar
+                  nickname={user.nickname}
+                  imageUrl={user.profileImageUrl}
+                  color={user.avatarColor}
+                  size={26}
+                />
+
+                <span className="ml-[6px] text-lg font-regular text-[var(--color-black-medium)]">
+                  {user.nickname}
                 </span>
               </div>
             </DropdownItem>
