@@ -11,7 +11,6 @@ type FontSize = 'sm' | 'md' | 'lg';
 type ButtonSize = 'sm' | 'md' | 'lg';
 type ButtonVariant = 'primary' | 'secondary';
 type ButtonBorderLine = 'none' | 'gray';
-type WidthPreset = 'default' | 'login'
 
 interface BaseButtonProps extends Omit <
     ButtonHTMLAttributes<HTMLButtonElement>,
@@ -30,7 +29,6 @@ interface BaseButtonProps extends Omit <
   variant?: ButtonVariant;
   borderline?: ButtonBorderLine;
 
-  widthPreset?: WidthPreset;
 };
 
 // font 사이즈
@@ -46,16 +44,6 @@ const buttonSizeMap: Record<ButtonSize, string> = {
   md: 'h-[50px] px-4',
   lg: 'h-[50px] px-6',
 }
-
-// 버튼 width (반응형)
-const widthPresetMap: Record<WidthPreset, string> = {
-  default: 'w-full',
-
-  login:`
-    w-[351px]
-    md:w-[520px]
-  `,
-};
 
 // variant
 const variantMap: Record<ButtonVariant, string> = {
@@ -89,7 +77,6 @@ export default function BaseButton ( {
   fontSize= 'md',
   variant = 'primary',
   borderline = 'none',
-  widthPreset = 'login',
 
   ...rest
   }: BaseButtonProps) {
@@ -107,9 +94,9 @@ export default function BaseButton ( {
         buttonSizeMap[buttonSize],
         fontSizeMap[fontSize],
         variantMap[variant],
-        borderMap[borderline],
-        widthPresetMap[widthPreset],
-
+        borderMap[borderline],        
+        
+        'w-[351px] md:w-[520px]',
         className,
       )}
       {...rest}

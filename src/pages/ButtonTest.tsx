@@ -11,7 +11,6 @@ import ButtonColumnAdd from '@/components/common/Button/ButtonColumnAdd';
 import ButtonDashboardAdd from '@/components/common/Button/ButtonDashboardAdd';
 import ButtonDashboardDelete from '@/components/common/Button/ButtonDashboardDelete';
 
-
 export default function ButtonTest () {
   const handleClick = (name: string) => {
     alert(`${name} 버튼 클릭 입니다`);
@@ -32,7 +31,7 @@ export default function ButtonTest () {
             <ButtonLogin               
               onClick={() => handleClick('disabled')}
               variant="secondary"
-            
+              disabled
             >
               로그인
             </ButtonLogin>

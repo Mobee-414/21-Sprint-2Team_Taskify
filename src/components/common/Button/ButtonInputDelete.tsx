@@ -72,7 +72,7 @@ export default function BaseButton({
 
         // mobile
         `
-        w-[52px] h-[32px] gap-[10px]
+        w-[52px] h-[28px] gap-[10px]
         text-[length:var(--font-size-xs-tight)]
         leading-[var(--line-height-xs-tight)]
         font-[var(--font-weight-medium)]
