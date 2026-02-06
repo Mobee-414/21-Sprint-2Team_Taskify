@@ -5,6 +5,7 @@ import BaseModal from "@/components/common/BaseModal";
 import CardDetailModal from "@/components/modals/CardDetailModal";
 import CardFormModal from "@/components/modals/CardFormModal.tsx";
 import InviteModal from "@/components/modals/InviteModal";
+import ConfirmModal from "@/components/modals/ConfirmModal";
 
 export default function ModalTestPage() {
   const [openSmall, setOpenSmall] = useState(false);
@@ -12,6 +13,18 @@ export default function ModalTestPage() {
 
   // 할일 상세보기 모달
   const [isCardDetailModalOpen, setIsCardDetailModalOpen] = useState(false);
+
+  // 할일 삭제 모달
+  const [isCardDeleteModalOpen, setIsCardDeleteModalOpen] = useState(false);
+  const [deleteTargetTitle, setDeleteTargetTitle] = useState("");
+  const handleCardDeleteModalOpen = (title: string) => {
+    setDeleteTargetTitle(title);
+    setIsCardDeleteModalOpen(true);
+  };
+  const handleCardDelete = () => {
+    console.log("할일 카드 삭제 버튼 클릭");
+    setIsCardDeleteModalOpen(false);
+  };
 
   // 할일 생성수정 모달
   const TARGET_COLUMNID_ID = 1; // 해당 상수가 쓰인곳은 칼럼 아이디로 변경 필요
@@ -95,7 +108,17 @@ export default function ModalTestPage() {
         handleCardFormOpen={() =>
           handleCardFormOpen("edit", TARGET_COLUMNID_ID, TARGET_CARD_ID)
         }
+        handleCardDeleteModalOpen={(title) => handleCardDeleteModalOpen(title)}
       />
+
+      {/* 할일 삭제 모달 */}
+      <ConfirmModal
+        isOpen={isCardDeleteModalOpen}
+        onClose={() => setIsCardDeleteModalOpen(false)}
+        onClick={handleCardDelete}
+      >
+        {deleteTargetTitle} 카드가 삭제됩니다.
+      </ConfirmModal>
 
       {/* 할일 생성수정 모달 */}
       <button
