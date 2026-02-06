@@ -4,6 +4,7 @@ import { useState } from "react";
 import BaseModal from "@/components/common/BaseModal";
 import CardDetailModal from "@/components/modals/CardDetailModal";
 import CardFormModal from "@/components/modals/CardFormModal.tsx";
+import InviteModal from "@/components/modals/InviteModal";
 
 export default function ModalTestPage() {
   const [openSmall, setOpenSmall] = useState(false);
@@ -35,6 +36,9 @@ export default function ModalTestPage() {
     setCardModalMode(mode);
     setIsCardFormModalOpen(true);
   };
+
+  // 초대하기 모달
+  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
 
   return (
     <div className="p-10 flex gap-4">
@@ -110,6 +114,18 @@ export default function ModalTestPage() {
           cardId={selectedCardId}
         />
       )}
+
+      {/* 초대하기 모달 */}
+      <button
+        className="rounded bg-pink-main px-4 py-2 text-white"
+        onClick={() => setIsInviteModalOpen(true)}
+      >
+        초대하기
+      </button>
+      <InviteModal
+        isOpen={isInviteModalOpen}
+        onClose={() => setIsInviteModalOpen(false)}
+      />
     </div>
   );
 }

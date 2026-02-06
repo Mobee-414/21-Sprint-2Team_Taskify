@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { ControllerRenderProps, FieldValues, Path } from "react-hook-form";
 
 interface InputProps<T extends FieldValues> {
@@ -36,6 +36,8 @@ export function Input<T extends FieldValues>({
   inputSize,
   errorSize = "12-14",
 }: InputProps<T>) {
+  const id = useId();
+
   const [showPw, setShowPw] = useState(false);
   const inputType = type === "password" ? (showPw ? "text" : "password") : type;
 
@@ -44,7 +46,7 @@ export function Input<T extends FieldValues>({
   return (
     <div className="flex flex-col gap-[8px]">
       <label
-        htmlFor={field.name}
+        htmlFor={id}
         className={`${FONT_VARIANTS[labelSize]} ${weightClass} text-black-medium`}
       >
         {label}
@@ -58,7 +60,7 @@ export function Input<T extends FieldValues>({
         <input
           {...field}
           type={inputType}
-          id={field.name}
+          id={id}
           placeholder={placeholder}
           className={`
             w-full 

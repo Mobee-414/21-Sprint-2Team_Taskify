@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import z from "zod";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 export const CardFormSchema = z.object({
@@ -24,7 +24,7 @@ export function useCardForm(
     control,
     formState: { errors, isValid },
     handleSubmit: handleSubmit,
-  } = useForm({
+  } = useForm<CardFormValues>({
     resolver: zodResolver(CardFormSchema),
     mode: "onChange",
     defaultValues: {
