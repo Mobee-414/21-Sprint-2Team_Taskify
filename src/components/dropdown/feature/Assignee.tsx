@@ -5,7 +5,7 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from "../Dropdown";
-import { useDropdown } from "../../../contexts/DropdownContext";
+import { useDropdown } from "@/contexts/DropdownContext";
 
 import Image from "next/image";
 

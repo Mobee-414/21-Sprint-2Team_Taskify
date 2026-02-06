@@ -1,5 +1,5 @@
 import Image from "next/image";
-import useScrollAnimation from "../../../hooks/useScrollAnimation";
+import useScrollAnimation from "@/hooks/useScrollAnimation";
 
 const FeatureIntroSection = () => {
   const { ref, isVisible } = useScrollAnimation();
