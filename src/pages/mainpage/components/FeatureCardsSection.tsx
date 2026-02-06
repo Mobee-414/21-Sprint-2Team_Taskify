@@ -1,5 +1,5 @@
 import Image from "next/image";
-import useScrollAnimation from "../../../hooks/useScrollAnimation";
+import useScrollAnimation from "@/hooks/useScrollAnimation";
 
 const cards = [
   {
@@ -29,7 +29,7 @@ const FeatureCardsSection = () => {
   const { ref, isVisible } = useScrollAnimation();
 
   return (
-    <section className="bg-white pb-[160px]">
+    <section className="bg-[var(--color-white)] pb-[160px]">
       <div
         ref={ref}
         className={`
@@ -38,7 +38,7 @@ const FeatureCardsSection = () => {
           ${isVisible ? "translate-y-0 opacity-100" : "translate-y-16 opacity-0"}
         `}
       >
-        <h3 className="mb-[36px] text-left text-[28px] font-bold text-black">
+        <h3 className="mb-[36px] text-left text-xl2 font-bold text-[var(--color-black-pure)]">
           생산성을 높이는 다양한 설정 <span className="ml-2">⚡</span>
         </h3>
 
@@ -46,7 +46,7 @@ const FeatureCardsSection = () => {
           {cards.map((card) => (
             <div key={card.title} className="w-[378px]">
               {/* 이미지 영역 */}
-              <div className="flex h-[260px] w-[378px] items-center justify-center rounded-t-[8px] bg-[#eeeeee]">
+              <div className="flex h-[260px] w-[378px] items-center justify-center rounded-t-[8px] bg-[var(--color-gray-light)]">
                 <Image
                   src={card.img}
                   alt={card.title}
@@ -56,11 +56,11 @@ const FeatureCardsSection = () => {
               </div>
 
               {/* 텍스트 영역 */}
-              <div className="h-[124px] w-[378px] rounded-b-[8px] bg-[#fafafa] px-6 py-5">
-                <h4 className="text-[18px] font-bold text-black">
+              <div className="h-[124px] w-[378px] rounded-b-[8px] bg-[var(--color-gray-bg)] px-6 py-5">
+                <h4 className="text-2lg font-bold text-[var(--color-black-pure)]">
                   {card.title}
                 </h4>
-                <p className="mt-[18px] text-[16px] font-medium leading-6 text-[#4b4b4b]">
+                <p className="mt-[18px] text-lg font-medium text-[var(--color-black-light)]">
                   {card.desc}
                 </p>
               </div>

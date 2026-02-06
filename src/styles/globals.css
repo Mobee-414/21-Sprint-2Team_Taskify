@@ -2,8 +2,11 @@
 
 @theme {
   /* 사이즈 */
+  --font-size-4xl: 48px;
   --font-size-3xl: 32px;
+  --font-size-xl2: 28px;
   --font-size-2xl: 24px;
+  --font-size-lg2: 22px;
   --font-size-xl: 20px;
   --font-size-2lg: 18px;
   --font-size-lg: 16px;
@@ -13,9 +16,12 @@
   --font-size-xs-tight: 12px;
 
   /* 줄높이 */
+  --line-height-4xl: 58px;
   --line-height-3xl: 42px;
+  --line-height-xl2: 38px;
   --line-height-2xl: 32px;
   --line-height-xl: 32px;
+  --line-height-lg2: 30px;
   --line-height-2lg: 26px;
   --line-height-lg: 26px;
   --line-height-md: 24px;
@@ -45,6 +51,7 @@
   --color-gray-base: #d9d9d9;
   --color-gray-light: #eeeeee;
   --color-gray-bg: #fafafa;
+  --color-gray-surface: #f9fafb;
 
   --color-red-point: #d6173a;
   --color-green-point: #7ac555;
@@ -55,13 +62,25 @@
 }
 
 @layer utilities {
+   .text-4xl {
+    font-size: var(--font-size-4xl);
+    line-height: var(--line-height-4xl);
+  }
   .text-3xl {
     font-size: var(--font-size-3xl);
     line-height: var(--line-height-3xl);
   }
+  .text-xl2 {
+    font-size: var(--font-size-xl2);
+    line-height: var(--line-height-xl2);
+  }
   .text-2xl {
     font-size: var(--font-size-2xl);
     line-height: var(--line-height-2xl);
+  }
+  .text-lg2 {
+    font-size: var(--font-size-lg2);
+    line-height: var(--line-height-lg2);
   }
   .text-xl {
     font-size: var(--font-size-xl);
