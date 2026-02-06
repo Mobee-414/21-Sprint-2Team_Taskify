@@ -24,7 +24,7 @@ export function useCardForm(
     control,
     formState: { errors, isValid },
     handleSubmit: handleSubmit,
-  } = useForm({
+  } = useForm<CardFormValues>({
     resolver: zodResolver(CardFormSchema),
     mode: "onChange",
     defaultValues: {

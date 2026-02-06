@@ -13,7 +13,7 @@ export function useCardDetail(cardId: number) {
     control,
     formState: { isValid },
     handleSubmit: handleSubmit,
-  } = useForm({
+  } = useForm<CardDetailValues>({
     resolver: zodResolver(CardDetailSchema),
     mode: "onChange",
     defaultValues: {

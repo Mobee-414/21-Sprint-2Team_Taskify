@@ -15,7 +15,7 @@ export function useInvite() {
     control,
     formState: { errors, isValid },
     handleSubmit,
-  } = useForm({
+  } = useForm<InviteValues>({
     resolver: zodResolver(InviteSchema),
     mode: "all",
     defaultValues: {
