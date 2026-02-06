@@ -10,8 +10,8 @@ import clsx from 'clsx';
 type FontSize = 'sm' | 'md' | 'lg';
 type ButtonSize = 'sm' | 'md' | 'lg';
 type ButtonVariant = 'primary' | 'secondary';
-type ButtonBorderline = 'none' | 'grey';
-type ButtonLoginWidth= 'desktop' | 'mobile';
+type ButtonBorderLine = 'none' | 'gray';
+type WidthPreset = 'default' | 'login'
 
 interface BaseButtonProps extends Omit <
     ButtonHTMLAttributes<HTMLButtonElement>,
@@ -28,9 +28,9 @@ interface BaseButtonProps extends Omit <
   buttonSize?: ButtonSize;
   fontSize?: FontSize;
   variant?: ButtonVariant;
-  borderline?: ButtonBorderline;
+  borderline?: ButtonBorderLine;
 
-  loginWidth?: ButtonLoginWidth;
+  widthPreset?: WidthPreset;
 };
 
 // font 사이즈
@@ -42,18 +42,22 @@ const fontSizeMap: Record<FontSize, string> = {
 
 // button height / padding
 const buttonSizeMap: Record<ButtonSize, string> = {
-  sm: 'h-8 px-3',
-  md: 'h-10 px-4',
-  lg: 'h-12 px-6',
+  sm: 'h-[50px] px-3',
+  md: 'h-[50px] px-4',
+  lg: 'h-[50px] px-6',
 }
 
-// 버튼 width
-const loginWidthMap: Record<ButtonLoginWidth, string> = {
-  desktop: 'w-[520px]',
-  mobile: 'w-[351px]',
+// 버튼 width (반응형)
+const widthPresetMap: Record<WidthPreset, string> = {
+  default: 'w-full',
+
+  login:`
+    w-[351px]
+    md:w-[520px]
+  `,
 };
 
-// 버튼
+// variant
 const variantMap: Record<ButtonVariant, string> = {
   primary: `
     bg-[var(--color-violet-main)]
@@ -69,9 +73,9 @@ const variantMap: Record<ButtonVariant, string> = {
 };
 
 // 테두리
-const borderMap: Record<ButtonBorderline, string> = {
+const borderMap: Record<ButtonBorderLine, string> = {
   none: 'border-none',
-  grey: 'border border-[var(--color-gray-base)]',
+  gray: 'border border-[var(--color-gray-base)]',
 };
 
 export default function BaseButton ( {
@@ -85,7 +89,8 @@ export default function BaseButton ( {
   fontSize= 'md',
   variant = 'primary',
   borderline = 'none',
-  loginWidth = 'desktop',
+  widthPreset = 'login',
+
   ...rest
   }: BaseButtonProps) {
    
@@ -96,7 +101,6 @@ export default function BaseButton ( {
       onClick = {onClick}
       className = {clsx(
         'flex items-center justify-center gap-[10px]' ,
-        'h-[50px]',
         'rounded-[8px]',
         disabled && 'cursor-not-allowed',
 
@@ -104,7 +108,7 @@ export default function BaseButton ( {
         fontSizeMap[fontSize],
         variantMap[variant],
         borderMap[borderline],
-        loginWidthMap[loginWidth],
+        widthPresetMap[widthPreset],
 
         className,
       )}

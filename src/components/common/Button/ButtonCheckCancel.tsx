@@ -10,8 +10,7 @@ import clsx from 'clsx';
 type FontSize = 'sm' | 'md' | 'lg';
 type ButtonSize = 'sm' | 'md' | 'lg';
 type ButtonVariant = 'primary' | 'secondary';
-type ButtonBorderline = 'none' | 'grey';
-type ButtonAcceptSize= 'desktop' | 'tablet' | 'mobile';
+type ButtonBorderLine = 'none' | 'gray';
 
 interface BaseButtonProps extends Omit <
     ButtonHTMLAttributes<HTMLButtonElement>,
@@ -28,32 +27,23 @@ interface BaseButtonProps extends Omit <
   buttonSize?: ButtonSize;
   fontSize?: FontSize;
   variant?: ButtonVariant;
-  borderline?: ButtonBorderline;
-  acceptSize?: ButtonAcceptSize;
+  borderline?: ButtonBorderLine;
+
 };
 
 // font 사이즈
-const acceptFontSizeMap: Record<ButtonAcceptSize, string> = {
-  desktop: `
-    text-[length:var(--font-size-md)]
-    leading-[var(--line-height-md)]
-  `,
-  tablet: `
-    text-[length:var(--font-size-md)]
-    leading-[var(--line-height-md)]
-  `,
-  mobile: `
-    text-[length:var(--font-size-xs-tight)]
-    leading-[var(--line-height-xs-tight)]
-  `,
+const fontSizeMap: Record<FontSize, string> = {
+  sm: 'text-sm',
+  md: 'text-base ',
+  lg: 'text-lg',
 };
 
-// 버튼 width
-const acceptButtonSizeMap: Record<ButtonAcceptSize, string> = {
-  desktop: 'w-[84px] h-[32px] gap-[10px] ',
-  tablet: 'w-[72px] h-[30px] gap-[10px] ',
-  mobile: 'w-[109px] h-[32px] gap-[10px] ',
-};
+// button height / padding
+const buttonSizeMap: Record<ButtonSize, string> = {
+  sm: 'h-8 px-3',
+  md: 'h-10 px-4',
+  lg: 'h-12 px-6',
+}
 
 // 버튼
 const variantMap: Record<ButtonVariant, string> = {
@@ -66,43 +56,52 @@ const variantMap: Record<ButtonVariant, string> = {
   `,
   secondary: `
     bg-[var(--color-white)]
-    hover:bg-[var(--color-grey-bg)]
-    text-[color:var(--color-violet-main)]
+    hover:bg-[var(--color-gray-bg)]
+    text-[var(--color-gray-dark )]
   `,
 };
 
 // 테두리
-const borderMap: Record<ButtonBorderline, string> = {
+const borderMap: Record<ButtonBorderLine, string> = {
   none: 'border-none',
-  grey: 'border border-[var(--color-gray-base)]',
+  gray: 'border border-[var(--color-gray-base)]',
 };
 
-export default function BaseButton({
+export default function BaseButton ( {
   children,
   disabled,
   onClick,
   type = 'button',
   className,
 
+  buttonSize = 'md',
+  fontSize= 'md',
   variant = 'primary',
-  borderline = 'grey',
-  acceptSize = 'desktop',
+  borderline = 'gray',
+  
   ...rest
-}: BaseButtonProps) {
+  }: BaseButtonProps) {
+   
   return (
     <button
-      type={type}
-      disabled={disabled}
-      onClick={onClick}
-      className={clsx(
-        'flex items-center justify-center gap-[10px]',
-        'rounded-[4px]',
+      type = {type}
+      disabled = {disabled}
+      onClick = {onClick}
+      className = {clsx(
+        'flex items-center justify-center gap-[10px]' ,
+        'rounded-[8px]',
         disabled && 'cursor-not-allowed',
 
-        acceptButtonSizeMap[acceptSize],
-        acceptFontSizeMap[acceptSize],
+        // desktop / tablet
+        'md:w-[120px] md:h-[48px]',
+        // mobile
+        'w-[138px] h-[42px]',
+
+        buttonSizeMap[buttonSize],
+        fontSizeMap[fontSize],
         variantMap[variant],
         borderMap[borderline],
+        
 
         className,
       )}
@@ -111,4 +110,4 @@ export default function BaseButton({
       {children}
     </button>
   );
-}
+};

@@ -24,8 +24,8 @@ interface BaseButtonProps extends Omit <
 
   variant?: ButtonVariant;
   borderline?: ButtonBorderLine;
-
 };
+
 
 // 버튼
 const variantMap: Record<ButtonVariant, string> = {
@@ -39,7 +39,7 @@ const variantMap: Record<ButtonVariant, string> = {
   secondary: `
     bg-[var(--color-white)]
     hover:bg-[var(--color-gray-bg)]
-    
+    text-[color:var(--color-violet-main)]
   `,
 };
 
@@ -58,7 +58,7 @@ export default function BaseButton({
 
   variant = 'primary',
   borderline = 'gray',
-  
+
   ...rest
 }: BaseButtonProps) {
   return (
@@ -67,32 +67,20 @@ export default function BaseButton({
       disabled={disabled}
       onClick={onClick}
       className={clsx(
-        'flex items-center justify-center ',
+        'flex items-center justify-center gap-[10px]',
         'rounded-[4px]',
         disabled && 'cursor-not-allowed',
 
-        // mobile 
-        `
-        w-[284px] h-[32px] gap-[12px]
-        text-[length:var(--font-size-lg)]
-        leading-[var(--line-height-xs-tight)]
-        font-[var(--font-weight-bold)]
-        `,
-
-        // tablet
-        `
-        md:w-[544px] md:h-[40px] md:gap-[10px]
-        md:text-[length:var(--font-size-2lg)]
-        md:leading-[var(--line-height-md)]
-        `,
-
-        // desktop
-        `
-        lg:w-[314px] lg:h-[40px]
-        lg:text-[length:var(--font-size-2lg)]
-        lg:leading-[var(--line-height-md)]
-        `,
-
+        // PC
+        'lg:w-[84px] lg:h-[32px]',
+        'lg:text-[length:var(--font-size-md)] lg:leading-[var(--line-height-md)]',
+        // Tablet
+        'md:w-[72px] md:h-[30px]',
+        'md:text-[length:var(--font-size-md)] md:leading-[var(--line-height-md)]',
+        // Mobile
+        'w-[109px] h-[32px]',
+        'text-[length:var(--font-size-xs-tight)] leading-[var(--line-height-xs-tight)]',
+        
         variantMap[variant],
         borderMap[borderline],
 

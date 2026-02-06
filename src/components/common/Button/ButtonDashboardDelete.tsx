@@ -7,11 +7,9 @@ import type {
 } from 'react';
 import clsx from 'clsx';
 
-type FontSize = 'sm' | 'md' | 'lg';
-type ButtonSize = 'sm' | 'md' | 'lg';
 type ButtonVariant = 'primary' | 'secondary';
-type ButtonBorderline = 'none' | 'grey';
-type ButtonAcceptSize= 'desktop' | 'tablet' | 'mobile';
+type ButtonBorderLine = 'none' | 'gray';
+
 
 interface BaseButtonProps extends Omit <
     ButtonHTMLAttributes<HTMLButtonElement>,
@@ -25,37 +23,9 @@ interface BaseButtonProps extends Omit <
   className?: string;
   loading?: boolean;
 
-  buttonSize?: ButtonSize;
-  fontSize?: FontSize;
   variant?: ButtonVariant;
-  borderline?: ButtonBorderline;
-  acceptSize?: ButtonAcceptSize;
-};
+  borderline?: ButtonBorderLine;
 
-// font 사이즈
-const acceptFontSizeMap: Record<ButtonAcceptSize, string> = {
-  desktop: `
-    text-[length:var(--font-size-2lg)]
-    leading-[var(--line-height-md)]
-    font-[var(--font-weight-bold)]
-  `,
-  tablet: `
-    text-[length:var(--font-size-2lg)]
-    leading-[var(--line-height-md)]
-    font-[var(--font-weight-bold)]
-  `,
-  mobile: `
-    text-[length:var(--font-size-lg)]
-    leading-[var(--line-height-xs-tight)]
-    font-[var(--font-weight-bold)]
-  `,
-};
-
-// 버튼 width
-const acceptButtonSizeMap: Record<ButtonAcceptSize, string> = {
-  desktop: 'w-[320px] h-[62px] gap-[10px] ',
-  tablet: 'w-[320px] h-[62px] gap-[10px] ',
-  mobile: 'w-[284px] h-[52px] gap-[10px] ',
 };
 
 // 버튼
@@ -75,9 +45,9 @@ const variantMap: Record<ButtonVariant, string> = {
 };
 
 // 테두리
-const borderMap: Record<ButtonBorderline, string> = {
+const borderMap: Record<ButtonBorderLine, string> = {
   none: 'border-none',
-  grey: 'border border-[var(--color-gray-base)]',
+  gray: 'border border-[var(--color-gray-base)]',
 };
 
 export default function BaseButton({
@@ -88,8 +58,7 @@ export default function BaseButton({
   className,
 
   variant = 'primary',
-  borderline = 'grey',
-  acceptSize = 'desktop',
+  borderline = 'gray',
   ...rest
 }: BaseButtonProps) {
   return (
@@ -102,8 +71,27 @@ export default function BaseButton({
         'rounded-[4px]',
         disabled && 'cursor-not-allowed',
 
-        acceptButtonSizeMap[acceptSize],
-        acceptFontSizeMap[acceptSize],
+        // 모바일
+        `
+        w-[284px] h-[52px] gap-[10px]
+        text-[length:var(--font-size-lg)]
+        leading-[var(--line-height-xs-tight)]
+        font-[var(--font-weight-bold)]
+        `,
+
+        // 테블릿
+        `
+        md:w-[320px] md:h-[62px]
+        md:text-[length:var(--font-size-2lg)]
+        md:leading-[var(--line-height-md)]
+        `,
+
+        // PC
+        `
+        lg:w-[320px] lg:h-[62px]
+        `,
+
+
         variantMap[variant],
         borderMap[borderline],
 

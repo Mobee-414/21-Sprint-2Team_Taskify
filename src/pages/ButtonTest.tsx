@@ -1,14 +1,16 @@
-// 버튼 샘플 테스트 입니다.
+ // 버튼 샘플 테스트 입니다.
 'use client'
 import React from  "react";
 import Image from 'next/image';
 import ButtonLogin from '../components/common/Button/ButtonLogin';
-import ButtonBase from '../components/common/Button/ButtonBase';
-import ButtonModal from '../components/common/Button/ButtonModal';
+import ButtonAcceptReject from '../components/common/Button/ButtonAcceptReject';
+import ButtonCheckCancel from '../components/common/Button/ButtonCheckCancel';
+import ButtonInputDelete from '@/components/common/Button/ButtonInputDelete';
+import ButtonTodoAdd from '../components/common/Button/ButtonTodoAdd';
 import ButtonColumnAdd from '@/components/common/Button/ButtonColumnAdd';
 import ButtonDashboardAdd from '@/components/common/Button/ButtonDashboardAdd';
 import ButtonDashboardDelete from '@/components/common/Button/ButtonDashboardDelete';
-import ButtonComponenet24 from '@/components/common/Button/ButtonComponent24';
+
 
 export default function ButtonTest () {
   const handleClick = (name: string) => {
@@ -17,356 +19,143 @@ export default function ButtonTest () {
 
   return (
       <div className="bg-gray-50 min-h-screen flex flex-col items-start gap-6 p-6">
-      
-      {/* ButtonLogin */}
+        {/* ButtonLogin */}
         <h1 className="text-2xl font-bold">로그인 버튼</h1>
           <ButtonLogin 
             onClick = {() => handleClick('로그인')}
-            variant="primary"
-            fontSize="md"
+            variant="primary"            
           >
             로그인
           </ButtonLogin>
 
           <div className="flex flex-col">
-            <ButtonLogin 
-              disabled 
+            <ButtonLogin               
               onClick={() => handleClick('disabled')}
               variant="secondary"
+            
             >
               로그인
             </ButtonLogin>
           </div>
 
-          <ButtonLogin 
+          {/* ButtonAcceptReject */}
+          <h1 className="text-2xl font-bold">수락 거절 버튼</h1>
+          <ButtonAcceptReject 
             onClick = {() => handleClick('로그인')}
-            variant="primary"
-            fontSize="md"
-            loginWidth="mobile"
-          >
-            로그인
-          </ButtonLogin>
-
-          <div className="flex flex-col">
-            <ButtonLogin 
-              disabled 
-              onClick={() => handleClick('disabled')}
-              variant="secondary"
-              loginWidth="mobile"
-            >
-              로그인
-            </ButtonLogin>
-          </div>
-
-        {/* ButtonBase */}
-        <h1 className="text-2xl font-bold">수락 거절 버튼</h1>
-          <ButtonBase 
-            onClick = {() => handleClick('로그인')}
-            variant="primary"
-            fontSize="md"
-            acceptSize="desktop"
+            variant="primary"            
           >
             수락
-          </ButtonBase>
+          </ButtonAcceptReject>
 
           <div className="flex flex-col">
-            <ButtonBase 
-               
+            <ButtonAcceptReject               
               onClick={() => handleClick('disabled')}
-              variant="secondary"
-              acceptSize="desktop"
+              variant="secondary"            
             >
               거절
-            </ButtonBase>
+            </ButtonAcceptReject>
           </div>
 
-            <ButtonBase 
+          {/* ButtonCheckCancel */}
+          <h1 className="text-2xl font-bold">확인 취소 버튼</h1>
+          <ButtonCheckCancel 
             onClick = {() => handleClick('로그인')}
-            variant="primary"
-            fontSize="md"
-            acceptSize="tablet"
-          >
-            수락
-          </ButtonBase>
-
-          <div className="flex flex-col">
-            <ButtonBase 
-               
-              onClick={() => handleClick('disabled')}
-              variant="secondary"
-              acceptSize="tablet"
-            >
-              거절
-            </ButtonBase>
-          </div>
-
-            <ButtonBase 
-            onClick = {() => handleClick('로그인')}
-            variant="primary"
-            fontSize="md"
-            acceptSize="mobile"
-          >
-            수락
-          </ButtonBase>
-
-          <div className="flex flex-col">
-            <ButtonBase 
-               
-              onClick={() => handleClick('disabled')}
-              variant="secondary"
-              acceptSize="mobile"
-            >
-              거절
-            </ButtonBase>
-          </div>
-
-
-{/* ButtonModal */}
-        <h1 className="text-2xl font-bold">모달 버튼</h1>
-          <ButtonModal 
-            onClick = {() => handleClick('로그인')}
-            variant="primary"
-            fontSize="md"    
-            loginWidth="desktop"        
+            variant="primary"            
           >
             확인
-          </ButtonModal>
+          </ButtonCheckCancel>
 
           <div className="flex flex-col">
-            <ButtonModal 
-               
+            <ButtonCheckCancel               
               onClick={() => handleClick('disabled')}
-              variant="primary"
-              loginWidth="mobile"
-            >
-              확인
-            </ButtonModal>
-          </div>
-
-          <ButtonModal 
-            onClick = {() => handleClick('로그인')}
-            variant="secondary"
-            fontSize="md"         
-            loginWidth="desktop"   
-          >
-            취소
-          </ButtonModal>
-
-          <div className="flex flex-col">
-            <ButtonModal
-               
-              onClick={() => handleClick('disabled')}
-              variant="secondary"
-              loginWidth="mobile"
+              variant="secondary"            
             >
               취소
-            </ButtonModal>
+            </ButtonCheckCancel>
           </div>
 
-          {/* ButtonColumnAdd */}
-          <h1 className="text-2xl font-bold">버튼 컬럼추가</h1>
-
-          <ButtonColumnAdd 
-            onClick = {() => handleClick('로그인')} 
-            variant="secondary" 
-            acceptSize="desktop"                    
+          {/* ButtonInputDelete */}
+          <h1 className="text-2xl font-bold">입력 삭제 버튼</h1>
+          <ButtonInputDelete 
+            onClick = {() => handleClick('로그인')}
+            variant="secondary"            
           >
-            새로운 컬럼 추가하기
-            <Image 
-              src='/icons/AddIcon.png' 
-              alt='추가'
-              width={22}
-              height={22} 
-            />
-          </ButtonColumnAdd>
+            입력
+          </ButtonInputDelete>
 
           <div className="flex flex-col">
-            <ButtonColumnAdd 
+            <ButtonInputDelete               
               onClick={() => handleClick('disabled')}
-              variant="secondary"              
-              acceptSize="tablet"
+              variant="secondary"            
             >
-              새로운 컬럼 추가하기
-              <Image 
-              src='/icons/AddIcon.png' 
-              alt='추가'
-              width={22}
-              height={22} 
-            />
-            </ButtonColumnAdd>
+              삭제
+            </ButtonInputDelete>
           </div>
-
-          <ButtonColumnAdd 
-            onClick = {() => handleClick('로그인')}
-            variant="secondary"
-            acceptSize="mobile" 
-          >
-            새로운 컬럼 추가하기
-            <Image 
-              src='/icons/AddIcon.png' 
-              alt='추가'
-              width={22}
-              height={22} 
-            />
-          </ButtonColumnAdd>
 
           {/* ButtonTodoAdd */}
-          <h1 className="text-2xl font-bold">투두 추가</h1>
-
-          <ButtonColumnAdd 
-            onClick = {() => handleClick('로그인')} 
-            variant="secondary" 
-            acceptSize="desktop"                    
+          <h1 className="text-2xl font-bold">투두 + 버튼</h1>
+          <ButtonTodoAdd 
+            onClick = {() => handleClick('로그인')}
+            variant="secondary"            
           >
             <Image 
-              src='/icons/AddIcon.png' 
-              alt='추가'
+              src="/icons/add_icon.png"
+              alt= "add"
               width={22}
-              height={22} 
+              height={22}
+              className="
+                w-[20px] h-[20px]
+                md:w-[22px] md:h-[22px]
+                "
             />
-          </ButtonColumnAdd>
+          </ButtonTodoAdd>
 
-          <div className="flex flex-col">
-            <ButtonColumnAdd 
-              onClick={() => handleClick('disabled')}
-              variant="secondary"              
-              acceptSize="tablet"
-            >
-              <Image 
-              src='/icons/AddIcon.png' 
-              alt='추가'
-              width={22}
-              height={22} 
-            />
-            </ButtonColumnAdd>
-          </div>
-
+          {/* ButtonColumnAdd */}
+          <h1 className="text-2xl font-bold">컬럼 추가 버튼</h1>
           <ButtonColumnAdd 
             onClick = {() => handleClick('로그인')}
-            variant="secondary"
-            acceptSize="mobile" 
+            variant="secondary"            
           >
+            새로운 컬럼 추가하기
             <Image 
-              src='/icons/AddIcon.png' 
-              alt='추가'
+              src="/icons/add_icon.png"
+              alt= "add"
               width={22}
-              height={22} 
+              height={22}
+              className="
+                w-[20px] h-[20px]
+                md:w-[22px] md:h-[22px]
+                "
             />
           </ButtonColumnAdd>
 
           {/* ButtonDashboardAdd */}
-          <h1 className="text-2xl font-bold">대시보드 추가</h1>
+          <h1 className="text-2xl font-bold">대시보드 추가 버튼</h1>
           <ButtonDashboardAdd 
-            onClick = {() => handleClick('로그인')} 
-            variant="secondary" 
-            acceptSize="desktop"                    
+            onClick = {() => handleClick('로그인')}
+            variant="secondary"            
           >
-            새로운 대시보드 
+            새로운 대시보드
             <Image 
-              src='/icons/AddIcon.png' 
-              alt='추가'
+              src="/icons/add_icon.png"
+              alt= "add"
               width={22}
-              height={22} 
+              height={22}
+              className="
+                w-[20px] h-[20px]
+                md:w-[22px] md:h-[22px]
+                "
             />
           </ButtonDashboardAdd>
 
-          <div className="flex flex-col">
-            <ButtonDashboardAdd 
-              onClick={() => handleClick('disabled')}
-              variant="secondary"              
-              acceptSize="tablet"
-            >
-              새로운 대시보드 
-              <Image 
-              src='/icons/AddIcon.png' 
-              alt='추가'
-              width={22}
-              height={22} 
-            />
-            </ButtonDashboardAdd>
-          </div>
-
-          <ButtonDashboardAdd 
-            onClick = {() => handleClick('로그인')}
-            variant="secondary"
-            acceptSize="mobile" 
-          >
-            새로운 대시보드 
-            <Image 
-              src='/icons/AddIcon.png' 
-              alt='추가'
-              width={22}
-              height={22} 
-            />
-          </ButtonDashboardAdd>
-
-          {/* ButtonDashboardDelete */}
-          <h1 className="text-2xl font-bold">대시보드 삭제</h1>
-          <ButtonDashboardDelete 
-            onClick = {() => handleClick('로그인')} 
-            variant="secondary" 
-            acceptSize="desktop"                    
-          >
-            대시보드 삭제
-          </ButtonDashboardDelete>
-
-          <div className="flex flex-col">
-            <ButtonDashboardDelete 
-              onClick={() => handleClick('disabled')}
-              variant="secondary"              
-              acceptSize="tablet"
-            >
-              대시보드 삭제
-            </ButtonDashboardDelete>
-          </div>
-
+          {/* ButtonColumnAdd */}
+          <h1 className="text-2xl font-bold">대시보드 삭제 버튼</h1>
           <ButtonDashboardDelete 
             onClick = {() => handleClick('로그인')}
-            variant="secondary"
-            acceptSize="mobile" 
+            variant="secondary"            
           >
-            대시보드 삭제
+            대시보드 삭제하기
           </ButtonDashboardDelete>
-
-
-          {/* ButtonComponent24 */}
-          <h1 className="text-2xl font-bold">컴포넌트 24</h1>
-          <ButtonComponenet24 
-            onClick = {() => handleClick('로그인')} 
-            variant="secondary" 
-            acceptSize="desktop"                    
-          >
-            입력
-          </ButtonComponenet24>
-
-          <div className="flex flex-col">
-            <ButtonComponenet24 
-              onClick={() => handleClick('disabled')}
-              variant="secondary"              
-              acceptSize="desktop"
-            >
-             삭제
-            </ButtonComponenet24>
-          </div>
-
-          <ButtonComponenet24 
-            onClick = {() => handleClick('로그인')}
-            variant="secondary"
-            acceptSize="tablet" 
-          >
-            입력
-          </ButtonComponenet24>
-
-          <div className="flex flex-col">
-            <ButtonComponenet24 
-              onClick={() => handleClick('disabled')}
-              variant="secondary"              
-              acceptSize="mobile"
-            >
-              삭제
-            </ButtonComponenet24>
-          </div>
-
       </div>
   );
 };
