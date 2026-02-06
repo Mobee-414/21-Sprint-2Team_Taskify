@@ -2,12 +2,14 @@ interface HeaderProps {
   title: string;
   onClose: () => void;
   handleCardFormOpen: () => void;
+  handleCardDeleteModalOpen: (title: string) => void;
 }
 
 export default function Header({
   title,
   onClose,
   handleCardFormOpen,
+  handleCardDeleteModalOpen,
 }: HeaderProps) {
   return (
     <div className="flex justify-between">
@@ -18,7 +20,7 @@ export default function Header({
           kabak 메뉴
           <ul>
             <li onClick={handleCardFormOpen}>수정하기</li>
-            <li>삭제하기</li>
+            <li onClick={() => handleCardDeleteModalOpen(title)}>삭제하기</li>
           </ul>
         </div>
         <button onClick={onClose}>닫기</button>
