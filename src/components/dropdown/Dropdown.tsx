@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useState } from "react";
-import { DropdownContext, useDropdown } from "./DropdownContext";
-import { useOutsideClick } from "./useOutsideClick";
-import { useEscapeClose } from "./useEscapeClose";
+import { DropdownContext, useDropdown } from "../../contexts/DropdownContext";
+import { useOutsideClick } from "../../hooks/useOutsideClick";
+import { useEscapeClose } from "../../hooks/useEscapeClose";
 
 type Props = {
   children: React.ReactNode;

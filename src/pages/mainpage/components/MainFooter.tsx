@@ -1,16 +1,22 @@
-import Image from 'next/image';
+import Image from "next/image";
 
 const MainFooter = () => {
   return (
-    <footer className="flex w-full justify-center bg-white">
-      <div className="flex h-[64px] w-full max-w-[1760px] items-center justify-between px-4 text-[14px] text-[#4b4b4b]">
-        <span className="text-[16px]">© codeit · 2023</span>
+    <footer className="flex w-full justify-center bg-[var(--color-white)]">
+      <div className="flex h-[64px] w-full max-w-[1760px] items-center justify-between px-4 text-md text-[var(--color-black-light)]">
+        <span className="text-lg">© codeit · 2023</span>
 
         <div className="flex gap-6">
-          <a href="#" className="text-[16px] transition-colors hover:text-black">
+          <a
+            href="#"
+            className="text-lg transition-colors hover:text-[var(--color-black-pure)]"
+          >
             Privacy Policy
           </a>
-          <a href="#" className="text-[16px] transition-colors hover:text-black">
+          <a
+            href="#"
+            className="text-lg transition-colors hover:text-[var(--color-black-pure)]"
+          >
             FAQ
           </a>
         </div>
