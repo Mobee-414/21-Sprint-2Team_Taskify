@@ -34,7 +34,7 @@ interface BaseButtonProps extends Omit <
 // font 사이즈
 const fontSizeMap: Record<FontSize, string> = {
   sm: 'text-sm',
-  md: 'text-base ',
+  md: 'text-md ',
   lg: 'text-lg',
 };
 
