@@ -3,7 +3,7 @@
 import { useState } from "react";
 import BaseModal from "@/components/common/BaseModal";
 import CardDetailModal from "@/components/modals/CardDetailModal";
-import CardFormModal from "@/components/modals/CardFormModal.tsx";
+import CardFormModal from "@/components/modals/CardFormModal";
 import InviteModal from "@/components/modals/InviteModal";
 import ConfirmModal from "@/components/modals/ConfirmModal";
 
