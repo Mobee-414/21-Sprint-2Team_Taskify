@@ -38,10 +38,10 @@ export default function InviteModal({ isOpen, onClose }: InviteModalProps) {
                   type="email"
                   placeholder="이메일을 입력해주세요"
                   error={errors.email?.message}
-                  labelSize="16-18"
-                  labelWeight="500"
-                  inputSize="14-16"
-                  errorSize="12-14"
+                  labelSize="labelLg"
+                  labelWeight="medium"
+                  inputSize="inputMd"
+                  errorSize="errorSm"
                 />
               )}
             />

@@ -68,10 +68,10 @@ export default function Content({
               placeholder="제목을 입력해주세요"
               required={true}
               error={errors.title?.message}
-              labelSize="14-18"
-              labelWeight="500"
-              inputSize="14-16"
-              errorSize="12-14"
+              labelSize="labelMd"
+              labelWeight="medium"
+              inputSize="inputMd"
+              errorSize="errorSm"
             />
           )}
         />
