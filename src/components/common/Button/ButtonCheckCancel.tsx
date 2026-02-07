@@ -34,7 +34,7 @@ interface BaseButtonProps extends Omit <
 // font 사이즈
 const fontSizeMap: Record<FontSize, string> = {
   sm: 'text-sm',
-  md: 'text-base ',
+  md: 'text-md ',
   lg: 'text-lg',
 };
 
@@ -67,7 +67,7 @@ const borderMap: Record<ButtonBorderLine, string> = {
   gray: 'border border-[var(--color-gray-base)]',
 };
 
-export default function BaseButton ( {
+export default function ButtonCheckCancel ( {
   children,
   disabled,
   onClick,
@@ -91,11 +91,6 @@ export default function BaseButton ( {
         'flex items-center justify-center gap-[10px]' ,
         'rounded-[8px]',
         disabled && 'cursor-not-allowed',
-
-        // desktop / tablet
-        'md:w-[120px] md:h-[48px]',
-        // mobile
-        'w-[138px] h-[42px]',
 
         buttonSizeMap[buttonSize],
         fontSizeMap[fontSize],

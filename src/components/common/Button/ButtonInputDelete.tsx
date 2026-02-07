@@ -49,7 +49,7 @@ const borderMap: Record<ButtonBorderLine, string> = {
   gray: 'border border-[var(--color-gray-base)]',
 };
 
-export default function BaseButton({
+export default function ButtonInputDelete({
   children,
   disabled,
   onClick,
@@ -69,26 +69,6 @@ export default function BaseButton({
         'flex items-center justify-center ',
         'rounded-[4px]',
         disabled && 'cursor-not-allowed',
-
-        // mobile
-        `
-        w-[52px] h-[28px] gap-[10px]
-        text-[length:var(--font-size-xs-tight)]
-        leading-[var(--line-height-xs-tight)]
-        font-[var(--font-weight-medium)]
-        `,
-
-        // tablet
-        `
-        md:w-[84px] md:h-[28px]
-        md:leading-[var(--line-height-md)]
-        `,
-
-        // PC
-        `
-        lg:w-[84px] lg:h-[32px]
-        lg:leading-[var(--line-height-md)]
-        `,
 
         variantMap[variant],
         borderMap[borderline],

@@ -66,7 +66,7 @@ const borderMap: Record<ButtonBorderLine, string> = {
   gray: 'border border-[var(--color-gray-base)]',
 };
 
-export default function BaseButton ( {
+export default function ButtonLogin ( {
   children,
   disabled,
   onClick,

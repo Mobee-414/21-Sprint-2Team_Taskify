@@ -49,7 +49,7 @@ const borderMap: Record<ButtonBorderLine, string> = {
   gray: 'border border-[var(--color-gray-base)]',
 };
 
-export default function BaseButton({
+export default function ButtonAcceptReject({
   children,
   disabled,
   onClick,
@@ -71,16 +71,6 @@ export default function BaseButton({
         'rounded-[4px]',
         disabled && 'cursor-not-allowed',
 
-        // PC
-        'lg:w-[84px] lg:h-[32px]',
-        'lg:text-[length:var(--font-size-md)] lg:leading-[var(--line-height-md)]',
-        // Tablet
-        'md:w-[72px] md:h-[30px]',
-        'md:text-[length:var(--font-size-md)] md:leading-[var(--line-height-md)]',
-        // Mobile
-        'w-[109px] h-[32px]',
-        'text-[length:var(--font-size-xs-tight)] leading-[var(--line-height-xs-tight)]',
-        
         variantMap[variant],
         borderMap[borderline],
 
