@@ -9,15 +9,15 @@ const Login = () => {
     <div className="min-h-screen flex flex-col items-center justify-center bg-[var(--color-gray-bg)]" >
       <LoginLogo />
 
-      <div className='mt-4'>
+      <div className='mt-2'>
         <LoginWelcomMessage />
       </div>
 
-      <div className='mt-8'>
+      <div className='mt-2'>
         <LoginForm />
       </div>
 
-      <div className='mt-6'>
+      <div className='mt-2'>
         <LoginSignupLink />
       </div>
     </div>
