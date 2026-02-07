@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { useId, useState } from "react";
 import { ControllerRenderProps, FieldValues, Path } from "react-hook-form";
+import { clsx } from "clsx";
 
 /**
  * [폰트 사이즈 가이드]
@@ -60,7 +61,11 @@ export function Input<T extends FieldValues>({
     <div className="flex flex-col gap-[8px]">
       <label
         htmlFor={id}
-        className={`${labelSize} ${labelWeight} text-black-medium`}
+        className={clsx(
+          FONT_SIZE_VARIANTS[labelSize],
+          WEIGHT_VARIANTS[labelWeight],
+          "text-black-medium",
+        )}
       >
         {label}
         {required && (
@@ -75,20 +80,16 @@ export function Input<T extends FieldValues>({
           type={inputType}
           id={id}
           placeholder={placeholder}
-          className={`
-            w-full 
-            h-[50px]
-            ${inputSize}
-            font-regular
-            text-black-medium 
-            px-[16px] py-[12px] 
-            ${type === "password" ? "pr-[40px]" : ""}
-            border rounded-[8px] 
-            ${error ? "border-red-point" : "border-gray-base"} 
-            outline-none
-            focus:border-violet-main
-            placeholder:text-gray-medium
-          `}
+          className={clsx(
+            "w-full h-[50px] border rounded-[8px] outline-none",
+            FONT_SIZE_VARIANTS[inputSize],
+            "font-regular text-black-medium",
+            "px-[16px] py-[12px]",
+            type === "password" ? "pr-[40px]" : "",
+            error ? "border-red-point" : "border-gray-base",
+            "focus:border-violet-main",
+            "placeholder:text-gray-medium",
+          )}
         />
         {type === "password" && (
           <button
@@ -105,7 +106,11 @@ export function Input<T extends FieldValues>({
           </button>
         )}
       </div>
-      {error && <div className={`${errorSize} text-red-point`}>{error}</div>}
+      {error && (
+        <div className={clsx(FONT_SIZE_VARIANTS[errorSize], "text-red-point")}>
+          {error}
+        </div>
+      )}
     </div>
   );
 }
