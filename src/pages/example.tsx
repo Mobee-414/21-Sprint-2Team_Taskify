@@ -17,10 +17,10 @@ export default function Example() {
               type="email"
               placeholder="이메일을 입력해주세요"
               error={errors.email?.message}
-              labelSize="14-16"
-              labelWeight="400"
-              inputSize="14-16"
-              errorSize="12-14"
+              labelSize="labelSm"
+              labelWeight="normal"
+              inputSize="inputMd"
+              errorSize="errorSm"
             />
           )}
         />
@@ -35,9 +35,9 @@ export default function Example() {
               placeholder="비밀번호를 입력해주세요"
               required={true}
               error={errors.password?.message}
-              labelSize="14-18"
-              labelWeight="500"
-              inputSize="16-16"
+              labelSize="labelSm"
+              labelWeight="medium"
+              inputSize="inputLg"
             />
           )}
         />

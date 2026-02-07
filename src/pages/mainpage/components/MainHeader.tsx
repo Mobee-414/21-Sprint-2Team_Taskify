@@ -1,8 +1,8 @@
-import Image from 'next/image';
+import Image from "next/image";
 
 const MainHeader = () => {
   return (
-    <header className="mt-[15px] flex w-full justify-center bg-white">
+    <header className="mt-[15px] flex w-full justify-center bg-[var(--color-white)]">
       <div className="flex h-[40px] w-full max-w-[1760px] items-center justify-between px-4">
         <Image
           src="/icons/main_logo.svg"
@@ -13,10 +13,10 @@ const MainHeader = () => {
         />
 
         <div className="flex gap-9">
-          <button className="text-base font-normal text-black">
+          <button className="text-lg font-regular text-[var(--color-black-pure)]">
             로그인
           </button>
-          <button className="text-base font-normal text-black">
+          <button className="text-lg font-regular text-[var(--color-black-pure)]">
             회원가입
           </button>
         </div>

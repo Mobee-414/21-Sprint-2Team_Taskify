@@ -1,6 +1,31 @@
 import Image from "next/image";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { ControllerRenderProps, FieldValues, Path } from "react-hook-form";
+import { clsx } from "clsx";
+
+/**
+ * [폰트 사이즈 가이드]
+ * - 네이밍 컨벤션: 역할(label/input/error) + 크기(Sm/Md/Lg/Fixed)
+ * - 수치 대응: "MOBILE 사이즈 - PC 사이즈" 기준 (Tailwind responsive design)
+ * - 활용 예시: labelSm = MOBILE 14px / PC 16px 대응
+ */
+const FONT_SIZE_VARIANTS = {
+  labelSm: "text-md md:text-lg", // 14-16
+  labelMd: "text-md md:text-2lg", // 14-18
+  labelLg: "text-lg md:text-2lg", // 16-18
+  labelFixed: "text-lg", // 16-16 (고정)
+
+  inputMd: "text-md md:text-lg", // 14-16
+  inputLg: "text-lg", // 16-16 (고정)
+
+  errorSm: "text-xs md:text-md", // 12-14
+  errorMd: "text-md", // 14-14 (고정)
+};
+
+const WEIGHT_VARIANTS = {
+  normal: "font-normal", // 400
+  medium: "font-medium", // 500
+};
 
 interface InputProps<T extends FieldValues> {
   label: string;
@@ -9,20 +34,11 @@ interface InputProps<T extends FieldValues> {
   placeholder: string;
   required?: boolean;
   error?: string | null;
-  labelSize: "14-16" | "14-18" | "16-18" | "16-16";
-  labelWeight: "400" | "500";
-  inputSize: "14-16" | "16-16";
-  errorSize?: "12-14" | "14-14";
+  labelSize?: keyof typeof FONT_SIZE_VARIANTS;
+  labelWeight?: keyof typeof WEIGHT_VARIANTS;
+  inputSize?: keyof typeof FONT_SIZE_VARIANTS;
+  errorSize?: keyof typeof FONT_SIZE_VARIANTS;
 }
-
-const FONT_VARIANTS = {
-  "12-14": "text-xs md:text-md",
-  "14-14": "text-md",
-  "14-16": "text-md md:text-lg",
-  "14-18": "text-md md:text-2lg",
-  "16-18": "text-lg md:text-2lg",
-  "16-16": "text-lg",
-};
 
 export function Input<T extends FieldValues>({
   label,
@@ -31,21 +47,25 @@ export function Input<T extends FieldValues>({
   placeholder,
   required = false,
   error,
-  labelSize,
-  labelWeight,
-  inputSize,
-  errorSize = "12-14",
+  labelSize = "labelMd",
+  labelWeight = "medium",
+  inputSize = "inputMd",
+  errorSize = "errorMd",
 }: InputProps<T>) {
+  const id = useId();
+
   const [showPw, setShowPw] = useState(false);
   const inputType = type === "password" ? (showPw ? "text" : "password") : type;
-
-  const weightClass = labelWeight === "400" ? "font-regular" : "font-medium";
 
   return (
     <div className="flex flex-col gap-[8px]">
       <label
-        htmlFor={field.name}
-        className={`${FONT_VARIANTS[labelSize]} ${weightClass} text-black-medium`}
+        htmlFor={id}
+        className={clsx(
+          FONT_SIZE_VARIANTS[labelSize],
+          WEIGHT_VARIANTS[labelWeight],
+          "text-black-medium",
+        )}
       >
         {label}
         {required && (
@@ -58,22 +78,18 @@ export function Input<T extends FieldValues>({
         <input
           {...field}
           type={inputType}
-          id={field.name}
+          id={id}
           placeholder={placeholder}
-          className={`
-            w-full 
-            h-[50px]
-            ${FONT_VARIANTS[inputSize]}
-            font-regular
-            text-black-medium 
-            px-[16px] py-[12px] 
-            ${type === "password" ? "pr-[40px]" : ""}
-            border rounded-[8px] 
-            ${error ? "border-red-point" : "border-gray-base"} 
-            outline-none
-            focus:border-violet-main
-            placeholder:text-gray-medium
-          `}
+          className={clsx(
+            "w-full h-[50px] border rounded-[8px] outline-none",
+            FONT_SIZE_VARIANTS[inputSize],
+            "font-regular text-black-medium",
+            "px-[16px] py-[12px]",
+            type === "password" ? "pr-[40px]" : "",
+            error ? "border-red-point" : "border-gray-base",
+            "focus:border-violet-main",
+            "placeholder:text-gray-medium",
+          )}
         />
         {type === "password" && (
           <button
@@ -91,7 +107,7 @@ export function Input<T extends FieldValues>({
         )}
       </div>
       {error && (
-        <div className={`${FONT_VARIANTS[errorSize]} text-red-point`}>
+        <div className={clsx(FONT_SIZE_VARIANTS[errorSize], "text-red-point")}>
           {error}
         </div>
       )}

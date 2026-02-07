@@ -59,7 +59,7 @@ export default function BaseModal({
 
   return createPortal(
     <div 
-      className="fixed inset-0 z-[999] flex items-center justify-center bg-black/60"
+      className="fixed inset-0 z-999 flex items-center justify-center bg-black/60"
       onClick={onClose}
     >
       <div
@@ -70,11 +70,17 @@ export default function BaseModal({
           ${RADIUS_VARIANTS[radius]}
           ${PADDING_VARIANTS[padding]}
           ${GAP_VARIANTS[gap]}
+          max-h-[90vh]
+          overflow-hidden
         `}
         style={{ width: width ? `${width}px` : 'auto' }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className={`flex w-full flex-col items-center ${GAP_VARIANTS[gap]}`}>
+        <div className={`
+          flex w-full flex-col items-center
+          overflow-y-auto
+          ${GAP_VARIANTS[gap]}
+        `}>
           {children}
         </div>
       </div>
