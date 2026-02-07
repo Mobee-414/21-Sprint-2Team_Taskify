@@ -7,7 +7,7 @@ interface ColumnProps {
 
 export default function Column({ title, count, }: ColumnProps) {
   return (
-    <div className="min-w-88.5 flex flex-col gap-4 bg-gray-bg p-3 max-h-full">
+    <div className="w-full lg:min-w-[354px] flex flex-col gap-4 p-3">
       <div className="flex justify-between items-center px-1">
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-violet-main" />
@@ -22,7 +22,7 @@ export default function Column({ title, count, }: ColumnProps) {
         <Image src="/icons/add_box_purple.svg" alt="할일 추가" width={22} height={22} />
       </button>
 
-      <div className="flex flex-col gap-3 overflow-y-auto pr-1">
+      <div className="flex-1 flex flex-col gap-3 overflow-y-auto pr-1">
         {/* 여기에 TaskCard 렌더링될 예정 */}
         <div className="h-40 bg-white rounded-lg shadow-sm p-4">할 일 카드 예시</div>
       </div>
