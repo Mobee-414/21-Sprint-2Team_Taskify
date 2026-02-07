@@ -6,13 +6,22 @@ import LoginSignupLink from '@/pages/login/components/LoginSignupLink';
 
 const Login = () => {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[var(--color-gray-bg)]" >
       <LoginLogo />
-      <LoginWelcomMessage />
-      <LoginForm />
-      <LoginSignupLink />
+
+      <div className='mt-4'>
+        <LoginWelcomMessage />
+      </div>
+
+      <div className='mt-8'>
+        <LoginForm />
+      </div>
+
+      <div className='mt-6'>
+        <LoginSignupLink />
+      </div>
     </div>
-  )
-}
+  );
+};
 
 export default Login;
