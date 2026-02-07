@@ -141,19 +141,12 @@ export default function Content({
           name="dueDate"
           control={control}
           render={({ field }) => (
-            <div>
-              <div>
-                <label htmlFor={field.name}>마감일</label>
-              </div>
-              <div>
-                <DatePickerInput
-                  datepickerRef={datepickerRef}
-                  field={field}
-                  error={errors.dueDate?.message}
-                  handleDateChange={handleDateChange}
-                />
-              </div>
-            </div>
+            <DatePickerInput
+              datepickerRef={datepickerRef}
+              field={field}
+              error={errors.dueDate?.message}
+              handleDateChange={handleDateChange}
+            />
           )}
         />
 
@@ -161,17 +154,12 @@ export default function Content({
           name="tags"
           control={control}
           render={({ field }) => (
-            <div>
-              <div>
-                <label htmlFor={field.name}>태그</label>
-              </div>
-              <TagInput
-                tagList={tagList}
-                field={field}
-                error={errors.dueDate?.message}
-                handleKeyDown={handleKeyDown}
-              />
-            </div>
+            <TagInput
+              tagList={tagList}
+              field={field}
+              error={errors.dueDate?.message}
+              handleKeyDown={handleKeyDown}
+            />
           )}
         />
 
@@ -179,19 +167,14 @@ export default function Content({
           name="imageUrl"
           control={control}
           render={({ field }) => (
-            <div>
-              <label htmlFor={field.name}>
-                이미지
-                <ImageInput
-                  fileInputRef={fileInputRef}
-                  field={field}
-                  error={errors.imageUrl?.message as string}
-                  previewUrl={previewUrl}
-                  handleFileChange={handleFileChange}
-                  handleImageButtonClick={handleImageButtonClick}
-                />
-              </label>
-            </div>
+            <ImageInput
+              fileInputRef={fileInputRef}
+              field={field}
+              error={errors.imageUrl?.message as string}
+              previewUrl={previewUrl}
+              handleFileChange={handleFileChange}
+              handleImageButtonClick={handleImageButtonClick}
+            />
           )}
         />
 

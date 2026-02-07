@@ -1,6 +1,7 @@
 import { ControllerRenderProps } from "react-hook-form";
 import { TagItem } from "@/types/card.type";
 import { CardFormValues } from "@/hooks/useCardForm";
+import { useId } from "react";
 
 interface TagInputProps {
   tagList: TagItem[];
@@ -19,26 +20,33 @@ export default function TagInput({
   error,
   handleKeyDown,
 }: TagInputProps) {
+  const id = useId();
+
   return (
     <div>
-      {tagList.map((tag, index) => (
-        <span
-          key={index}
-          style={{
-            backgroundColor: tag.bgColor,
-            color: tag.fontColor,
-          }}
-        >
-          {tag.name}
-        </span>
-      ))}
-      <input
-        id={field.name}
-        type="text"
-        placeholder="입력 후 Enter"
-        onKeyDown={(e) => handleKeyDown(e, field.value, field.onChange)}
-      />
-      {error && <div>{error}</div>}
+      <div>
+        <label htmlFor={id}>태그</label>
+      </div>
+      <div>
+        {tagList.map((tag, index) => (
+          <span
+            key={index}
+            style={{
+              backgroundColor: tag.bgColor,
+              color: tag.fontColor,
+            }}
+          >
+            {tag.name}
+          </span>
+        ))}
+        <input
+          id={id}
+          type="text"
+          placeholder="입력 후 Enter"
+          onKeyDown={(e) => handleKeyDown(e, field.value, field.onChange)}
+        />
+        {error && <div>{error}</div>}
+      </div>
     </div>
   );
 }

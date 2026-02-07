@@ -2,6 +2,7 @@ import DatePicker from "react-datepicker";
 import { ControllerRenderProps } from "react-hook-form";
 import { DatepickerProps } from "@/types/card.type";
 import { CardFormValues } from "@/hooks/useCardForm";
+import { useId } from "react";
 
 interface DatePickerInputProps extends DatepickerProps {
   field: ControllerRenderProps<CardFormValues, "dueDate">;
@@ -14,21 +15,31 @@ export default function DatePickerInput({
   error,
   handleDateChange,
 }: DatePickerInputProps) {
+  const id = useId();
+
   return (
-    <>
-      <DatePicker
-        ref={datepickerRef}
-        placeholderText="날짜를 입력해 주세요"
-        selected={field.value ? new Date(field.value) : null}
-        onChange={(date: Date | null) => handleDateChange(date, field.onChange)}
-        dateFormat="yyyy.MM.dd HH:mm"
-        showTimeSelect
-        timeIntervals={30}
-        timeCaption="시간"
-        shouldCloseOnSelect={false}
-        minDate={new Date(new Date().setDate(new Date().getDate() + 1))}
-      />
+    <div>
+      <div>
+        <label htmlFor={id}>마감일</label>
+      </div>
+      <div>
+        <DatePicker
+          ref={datepickerRef}
+          id={id}
+          placeholderText="날짜를 입력해 주세요"
+          selected={field.value ? new Date(field.value) : null}
+          onChange={(date: Date | null) =>
+            handleDateChange(date, field.onChange)
+          }
+          dateFormat="yyyy.MM.dd HH:mm"
+          showTimeSelect
+          timeIntervals={30}
+          timeCaption="시간"
+          shouldCloseOnSelect={false}
+          minDate={new Date(new Date().setDate(new Date().getDate() + 1))}
+        />
+      </div>
       {error && <div>{error}</div>}
-    </>
+    </div>
   );
 }

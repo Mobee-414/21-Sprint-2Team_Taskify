@@ -1,6 +1,6 @@
 import { CardFormValues } from "@/hooks/useCardForm";
 import Image from "next/image";
-import { ChangeEvent } from "react";
+import { ChangeEvent, useId } from "react";
 import { ControllerRenderProps } from "react-hook-form";
 
 interface ImageInputProps {
@@ -23,35 +23,37 @@ export default function ImageInput({
   handleImageButtonClick,
   handleFileChange,
 }: ImageInputProps) {
+  const id = useId();
+
   return (
     <div>
-      <div
-        className="imagePreview"
-        onClick={(e) => {
-          e.stopPropagation();
-          handleImageButtonClick;
-        }}
-      >
-        <Image
-          width={76}
-          height={76}
-          src={`${previewUrl ? previewUrl : ""}`}
-          alt=""
-        />
-        <span>아이콘</span>
+      <div>
+        <label htmlFor={id}>이미지</label>
       </div>
-      <input
-        id={field.name}
-        type="file"
-        accept="image/*"
-        aria-label="이미지 파일 선택"
-        ref={(e) => {
-          field.ref(e);
-          fileInputRef.current = e;
-        }}
-        className="hidden"
-        onChange={(e) => handleFileChange(e, field.onChange)}
-      />
+      <div>
+        <div
+          className="imagePreview relative w-[76px] h-[76px] border border-black-pure"
+          onClick={(e) => {
+            e.stopPropagation();
+            e.stopPropagation();
+            handleImageButtonClick();
+          }}
+        >
+          {previewUrl && <Image fill src={previewUrl} alt="" />}
+        </div>
+        <input
+          id={id}
+          type="file"
+          accept="image/*"
+          aria-label="이미지 파일 선택"
+          ref={(e) => {
+            field.ref(e);
+            fileInputRef.current = e;
+          }}
+          className="hidden"
+          onChange={(e) => handleFileChange(e, field.onChange)}
+        />
+      </div>
       {error && <div>{error}</div>}
     </div>
   );
