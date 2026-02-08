@@ -9,7 +9,8 @@ interface InviteModalProps {
 }
 
 export default function InviteModal({ isOpen, onClose }: InviteModalProps) {
-  const { control, errors, isValid, handleSubmit, onSubmit } = useInvite();
+  const { control, errors, isValid, handleSubmit, onSubmit } =
+    useInvite(onClose);
 
   return (
     <BaseModal
@@ -49,7 +50,9 @@ export default function InviteModal({ isOpen, onClose }: InviteModalProps) {
               <button type="button" onClick={onClose}>
                 취소
               </button>
-              <button type="submit">초대</button>
+              <button type="submit" disabled={!isValid}>
+                초대
+              </button>
             </div>
           </form>
         </div>
