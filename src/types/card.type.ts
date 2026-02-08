@@ -13,3 +13,19 @@ export interface TagItem {
   bgColor: string;
   fontColor: string;
 }
+
+export interface CardDetailType {
+  id: number;
+  title: string;
+  description: string;
+  tags: string[];
+  dueDate: string;
+  assignee: {
+    profileImageUrl: string;
+    nickname: string;
+    id: number;
+  };
+  imageUrl: string;
+  teamId: string;
+  columnId: number;
+}
