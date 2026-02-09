@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
 interface BaseModalProps {
@@ -14,51 +14,58 @@ interface BaseModalProps {
 }
 
 const RADIUS_VARIANTS = {
-  sm: 'rounded-lg', // 8px
-  md: 'rounded-2xl', // 16px
+  sm: "rounded-lg", // 8px
+  md: "rounded-2xl", // 16px
 };
 
 const PADDING_VARIANTS = {
-  md: 'p-6', // 24px
-  lg: 'p-8', // 32px
+  md: "p-6", // 24px
+  lg: "p-8", // 32px
 };
 
 const GAP_VARIANTS = {
-  sm: 'gap-[10px]',
-  md: 'gap-[14px]',
-  lg: 'gap-8', // 32px
-}
+  sm: "gap-[10px]",
+  md: "gap-[14px]",
+  lg: "gap-8", // 32px
+};
 
 export default function BaseModal({
   isOpen,
   onClose,
   children,
   width,
-  radius = 'md',
-  padding = 'lg',
-  gap = 'md',
+  radius = "md",
+  padding = "lg",
+  gap = "md",
 }: BaseModalProps) {
+  const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
+
   useEffect(() => {
-    if (!isOpen) return;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setPortalTarget(document.body);
+  }, []);
+
+  useEffect(() => {
+    if (!isOpen || !portalTarget) return;
 
     // 스크롤 방지
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
 
     const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === "Escape") onClose();
     };
-    window.addEventListener('keydown', handleEsc);
+    window.addEventListener("keydown", handleEsc);
 
     return () => {
-      document.body.style.overflow = '';
-      window.removeEventListener('keydown', handleEsc);
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", handleEsc);
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, portalTarget]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !portalTarget) return null;
 
   return createPortal(
-    <div 
+    <div
       className="fixed inset-0 z-999 flex items-center justify-center bg-black/60"
       onClick={onClose}
     >
@@ -73,18 +80,20 @@ export default function BaseModal({
           max-h-[90vh]
           overflow-hidden
         `}
-        style={{ width: width ? `${width}px` : 'auto' }}
+        style={{ width: width ? `${width}px` : "auto" }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className={`
+        <div
+          className={`
           flex w-full flex-col items-center
           overflow-y-auto
           ${GAP_VARIANTS[gap]}
-        `}>
+        `}
+        >
           {children}
         </div>
       </div>
-    </div>
-    ,document.body
+    </div>,
+    portalTarget
   );
 }
