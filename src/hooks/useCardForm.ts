@@ -1,11 +1,13 @@
 import { ChangeEvent, useEffect, useRef, useState } from "react";
-import DatePicker from "react-datepicker";
+import axios from "axios";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { CardDetailType, TagItem } from "@/types/card.type";
+import { DatePicker } from "react-datepicker";
 import { formatToApiDate } from "@/utils/formatDate";
-import { TagItem } from "@/types/card.type";
 import { getTagColor } from "@/utils/getTagColor";
+import { postCardImage, postCards, putCards } from "@/api/cards.api";
 
 export const CardFormSchema = z.object({
   assigneeUserId: z.number(),
@@ -56,34 +58,44 @@ export const CardFormSchema = z.object({
 export type CardFormValues = z.infer<typeof CardFormSchema>;
 
 export function useCardForm(
-  dashboardId: number,
+  onClose: () => void,
+  onSuccess: (newCard: CardDetailType) => void,
   columnId: number,
-  cardId: number | null,
+  initialData?: CardDetailType | null,
 ) {
+  // const params = useParams();
+  // const dashboardId = params.dashboardId;
+  const dashboardId = 17279; // 임시 고정
+
   const {
     control,
-    formState: { errors, isValid },
+    formState: { errors, isDirty },
     handleSubmit: handleSubmit,
   } = useForm<CardFormValues>({
     resolver: zodResolver(CardFormSchema),
     mode: "onChange",
     defaultValues: {
-      assigneeUserId: 1,
+      // assigneeUserId: initialData?.assignee.id,
+      assigneeUserId: 6522,
       dashboardId: dashboardId,
-      columnId,
-      ...(cardId && { cardId }), // cardId가 있을때만 추가
-      title: "",
-      description: "",
-      dueDate: "",
-      tags: [],
-      imageUrl: "",
+      columnId: columnId,
+      cardId: initialData?.id,
+      title: initialData?.title || "",
+      description: initialData?.description || "",
+      dueDate: initialData?.dueDate || "",
+      tags: initialData?.tags || [],
+      imageUrl: initialData?.imageUrl || "",
     },
   });
 
   const datepickerRef = useRef<DatePicker>(null);
-  const [tagList, setTagList] = useState<TagItem[]>([]);
+  const [tagList, setTagList] = useState<TagItem[]>(() => {
+    return initialData?.tags ? initialData.tags.map(getTagColor) : [];
+  });
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(() => {
+    return initialData?.imageUrl || null;
+  });
 
   // 마감일 날짜 선택 및 변경
   const handleDateChange = (
@@ -121,6 +133,7 @@ export function useCardForm(
         const newList = [...tagList];
         newList.pop();
         setTagList(newList);
+        onChange(newList.map((tag) => tag.name));
       }
     }
   };
@@ -142,8 +155,56 @@ export function useCardForm(
     setPreviewUrl(blobUrl);
   };
 
+  const uploadImage = async (imageUrl: File) => {
+    const res = await postCardImage(imageUrl, columnId);
+    const nextImageUrl: string = res.imageUrl;
+    return nextImageUrl;
+  };
+
+  const onCreate = async (data: CardFormValues) => {
+    const result = await postCards(data);
+    return result;
+  };
+
+  const onUpdate = async (data: CardFormValues) => {
+    if (!data.cardId) return;
+
+    const result = await putCards(data.cardId, data);
+    return result;
+  };
+
   const onSubmit = async (data: CardFormValues) => {
-    console.log(data);
+    try {
+      let finalData = data;
+      if (typeof data.imageUrl !== "string") {
+        const returnImageUrl = await uploadImage(data.imageUrl);
+        finalData = {
+          ...data,
+          imageUrl: returnImageUrl,
+        };
+      }
+      let result;
+      if (!data.cardId) {
+        const { cardId, ...payload } = finalData;
+        result = await onCreate(payload);
+      } else if (data.cardId && isDirty) {
+        result = await onUpdate(finalData);
+      }
+      if (result) {
+        onSuccess(result);
+        console.log(result);
+      }
+      onClose();
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const serverMessage = error.response?.data?.message;
+        alert(serverMessage || "서버 응답 오류가 발생했습니다.");
+      } else {
+        alert("예상치 못한 에러가 발생했습니다.");
+      }
+      console.error("할 일 저장 실패:", error);
+      return;
+    }
   };
 
   useEffect(() => {
@@ -152,20 +213,19 @@ export function useCardForm(
         URL.revokeObjectURL(previewUrl);
       }
     };
-  }, [previewUrl]);
+  }, [initialData?.id]);
 
   return {
     control,
     errors,
-    isValid,
     handleSubmit,
     onSubmit,
     datepickerRef,
     handleDateChange,
     tagList,
     handleKeyDown,
-    fileInputRef,
     previewUrl,
+    fileInputRef,
     handleImageButtonClick,
     handleFileChange,
   };
