@@ -28,7 +28,7 @@ export default function ModalTestPage() {
 
   // 할일 생성수정 모달
   const TARGET_COLUMNID_ID = 1; // 해당 상수가 쓰인곳은 칼럼 아이디로 변경 필요
-  const TARGET_CARD_ID = 1; // 해당 상수가 쓰인곳은 카드 아이디로 변경 필요
+  const TARGET_CARD_ID = 14879; // 해당 상수가 쓰인곳은 카드 아이디로 변경 필요
   const [isCardFormModalOpen, setIsCardFormModalOpen] = useState(false);
   const [CardModalMode, setCardModalMode] = useState<"create" | "edit">(
     "create",

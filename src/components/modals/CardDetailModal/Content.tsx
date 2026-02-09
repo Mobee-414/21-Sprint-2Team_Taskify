@@ -1,5 +1,7 @@
 import { Control, Controller, UseFormHandleSubmit } from "react-hook-form";
 import { CardDetailValues } from "@/hooks/useCardDetail";
+import { CardDetailType, TagItem } from "@/types/card.type";
+import Image from "next/image";
 
 interface ContentProps {
   columnTitle: string;
@@ -7,6 +9,10 @@ interface ContentProps {
   isValid: boolean;
   handleSubmit: UseFormHandleSubmit<CardDetailValues>;
   onSubmit: (data: CardDetailValues) => void;
+  title: string;
+  description: string;
+  imageUrl: string;
+  tagList: TagItem[];
 }
 
 export default function Content({
@@ -15,18 +21,41 @@ export default function Content({
   isValid,
   handleSubmit,
   onSubmit,
+  title,
+  description,
+  imageUrl,
+  tagList,
 }: ContentProps) {
   return (
     <div>
       <div className="flex">
         <div>{columnTitle}</div>
         <div>
-          <span>해시태그</span>
-          <span>해시태그</span>
+          {tagList.length > 0 &&
+            tagList.map((tag, index) => (
+              <span
+                key={index}
+                style={{
+                  backgroundColor: tag.bgColor,
+                  color: tag.fontColor,
+                }}
+              >
+                {tag.name}
+              </span>
+            ))}
         </div>
       </div>
-      <div>할일 설명</div>
-      <div>할일 이미지</div>
+      <div>{description}</div>
+      <div>
+        {imageUrl && (
+          <Image
+            width={420}
+            height={246}
+            src={imageUrl}
+            alt={`${title} 이미지`}
+          />
+        )}
+      </div>
 
       <div className="h-[224px] overflow-y-auto">
         <form onSubmit={handleSubmit(onSubmit)}>
