@@ -5,8 +5,8 @@ import Image from 'next/image';
 import ButtonBase from '../components/common/Button/ButtonBase';
 
 // 클라이언트에서 필요할때만 랜더링 서버에서는 무시
-const PasswordMismatch = dynamic(
-  () => import('@/components/modals/LoginModal/PasswordMismatch'), { ssr: false }
+const Notice = dynamic(
+  () => import('@/components/modals/NoticeModal'), { ssr: false }
 );
 
 export default function ButtonTest () {
@@ -36,9 +36,10 @@ export default function ButtonTest () {
       </ButtonBase>
 
       <div>
-        <PasswordMismatch
+        <Notice
           isOpen={open}
           onClose={() => setOpen(false)}
+          message='문구작성 하시면 됩니다'
         />
       </div>
       
