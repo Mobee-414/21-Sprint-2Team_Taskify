@@ -9,18 +9,15 @@ const HeroSection = () => {
   const router = useRouter();
 
   const handleLogin = async () => {
-    const now = Date.now();
-    const email = `test_${now}@taskify.dev`;
-    const nickname = `테스트${String(now).slice(-4)}`; 
-    const password = "password123"; 
+    const email = process.env.NEXT_PUBLIC_TEST_EMAIL!;
+    const nickname = process.env.NEXT_PUBLIC_TEST_NICKNAME!;
+    const password = process.env.NEXT_PUBLIC_TEST_PASSWORD!;
 
     try {
       await signup({ email, nickname, password });
 
       const { accessToken } = await login({ email, password });
-
       localStorage.setItem("accessToken", accessToken);
-
       router.push("/mydashboard");
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
@@ -35,13 +32,15 @@ const HeroSection = () => {
             router.push("/mydashboard");
             return;
           } catch {
-            alert("이미 존재하는 이메일이지만 로그인에 실패했습니다.");
+            alert("테스트 계정 로그인에 실패했습니다.");
             return;
           }
         }
+
         alert(`실패 (${status ?? "unknown"}): ${message}`);
         return;
       }
+
       console.error(e);
       alert("알 수 없는 오류가 발생했습니다.");
     }

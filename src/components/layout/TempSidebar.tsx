@@ -3,12 +3,21 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 
 import CreateDashboardModal from "@/components/modals/CreateDashboardModal";
-import { Dashboard, DashboardsResponse, getDashboardsPagination } from "@/api/dashboards.api";
+import {
+  Dashboard,
+  DashboardsResponse,
+  getDashboardsPagination,
+} from "@/api/dashboards.api";
 import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 
 const PAGE_SIZE = 10;
 
-export default function Sidebar() {
+type SidebarProps = {
+  refreshKey: number;               
+  onCreatedGlobal?: () => void;     
+};
+
+export default function Sidebar({ refreshKey, onCreatedGlobal }: SidebarProps) {
   const router = useRouter();
 
   const [data, setData] = useState<DashboardsResponse>({
@@ -90,8 +99,8 @@ export default function Sidebar() {
   }, []);
 
   useEffect(() => {
-  fetchPage(1);
-}, [fetchPage]);
+    fetchPage(1);
+  }, [fetchPage, refreshKey]);
 
   const onReachEnd = useCallback(() => {
     if (!hasMore) return;
@@ -122,6 +131,8 @@ export default function Sidebar() {
     }));
 
     setActiveId(created.id);
+
+    onCreatedGlobal?.();
   };
 
   return (

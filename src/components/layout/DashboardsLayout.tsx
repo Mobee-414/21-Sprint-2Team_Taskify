@@ -1,14 +1,32 @@
+import type { ReactNode } from "react";
 import TempSidebar from "./TempSidebar";
 import DashboardsHeader from "./DashboardsHeader";
 
-export default function DashboardsLayout() {
+type Props = {
+  children: ReactNode;
+  onClickPlus?: () => void;
+
+  refreshKey: number;
+  onRefresh: () => void;
+};
+
+export default function DashboardsLayout({
+  children,
+  onClickPlus,
+  refreshKey,
+  onRefresh,
+}: Props) {
   return (
     <div className="flex min-h-screen bg-gray-bg">
-      <TempSidebar />
+      <TempSidebar
+        refreshKey={refreshKey}
+        onCreatedGlobal={onRefresh}
+      />
 
       <div className="flex min-w-0 flex-1 flex-col">
-        
-        <DashboardsHeader onClickPlus={() => {}} />
+        <DashboardsHeader onClickPlus={onClickPlus ?? (() => {})} />
+
+        <main className="min-w-0 flex-1 p-[20px]">{children}</main>
       </div>
     </div>
   );

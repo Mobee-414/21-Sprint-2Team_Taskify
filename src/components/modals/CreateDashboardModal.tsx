@@ -67,7 +67,7 @@ export default function CreateDashboardModal({ onClose, onCreated }: Props) {
             <Input
               label="대시보드 이름"
               field={field}
-              placeholder=""
+              placeholder="대시보드 이름을 입력하세요"
               labelSize="labelFixed"
               labelWeight="medium"
               inputSize="inputLg"
@@ -118,7 +118,7 @@ export default function CreateDashboardModal({ onClose, onCreated }: Props) {
               cursor-pointer
               disabled:opacity-40 disabled:cursor-not-allowed
             "
-            >
+          >
             취소
           </button>
 
@@ -137,7 +137,7 @@ export default function CreateDashboardModal({ onClose, onCreated }: Props) {
               cursor-pointer
               disabled:opacity-40 disabled:cursor-not-allowed
             "
-            >
+          >
             {loading ? "생성 중..." : "생성"}
           </button>
         </div>
