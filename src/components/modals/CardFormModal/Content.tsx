@@ -4,20 +4,18 @@ import {
   FieldErrors,
   UseFormHandleSubmit,
 } from "react-hook-form";
-import { CardFormValues } from "@/hooks/useCardForm";
-import "react-datepicker/dist/react-datepicker.css";
-import { Input } from "@/components/common/Input";
-import DatePickerInput from "@/components/common/DatePickerInput";
-import { DatepickerProps, TagItem } from "@/types/card.type";
 import { ChangeEvent, RefObject } from "react";
-import Image from "next/image";
+import { DatepickerProps, TagItem } from "@/types/card.type";
+import { CardFormValues } from "@/hooks/useCardForm";
 import TagInput from "@/components/common/TagInput";
 import ImageInput from "@/components/common/ImageInput";
+import { Input } from "@/components/common/Input";
+import DatePickerInput from "@/components/common/DatePickerInput";
+import "react-datepicker/dist/react-datepicker.css";
 
 interface FormProps {
   control: Control<CardFormValues>;
   errors: FieldErrors<CardFormValues>;
-  isValid: boolean;
 }
 
 interface TagsProps {
@@ -60,7 +58,7 @@ export default function Content({
   tagsProps,
   imageProps,
 }: ContentProps) {
-  const { control, errors, isValid } = formProps;
+  const { control, errors } = formProps;
   const { datepickerRef, handleDateChange } = datepickerProps;
   const { tagList, handleKeyDown } = tagsProps;
   const { fileInputRef, previewUrl, handleImageButtonClick, handleFileChange } =
@@ -78,7 +76,8 @@ export default function Content({
                 <div>
                   <label htmlFor={field.name}>상태</label>
                 </div>
-                <div>드롭다운 추가</div>
+                {/* TODO: StatusDropdown 작업 예정 */}
+                {/* <StatusDropdown /> */}
               </div>
             )}
           />
@@ -92,7 +91,13 @@ export default function Content({
               <div>
                 <label htmlFor={field.name}>담당자</label>
               </div>
-              <div>드롭다운 추가</div>
+              {/* TODO: AssigneeDropdown 작업 예정 */}
+              {/* <AssigneeDropdown
+                users={assigneeList}
+                selectedUserId={selectedUserId}
+                onChange={handleAssigneeChange}
+                placeholder="담당자를 지정해주세요"
+              /> */}
             </div>
           )}
         />
@@ -157,7 +162,7 @@ export default function Content({
             <TagInput
               tagList={tagList}
               field={field}
-              error={errors.dueDate?.message}
+              error={errors.tags?.message}
               handleKeyDown={handleKeyDown}
             />
           )}

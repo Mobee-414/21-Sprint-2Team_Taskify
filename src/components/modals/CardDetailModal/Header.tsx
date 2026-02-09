@@ -18,7 +18,7 @@ export default function Header({
       <h2>{title}</h2>
       <div className="flex">
         <KebabMenuDropdown
-          onEdit={() => handleCardFormOpen()}
+          onEdit={handleCardFormOpen}
           onDelete={() => handleCardDeleteModalOpen(title)}
         />
         <button onClick={onClose}>닫기</button>
