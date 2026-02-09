@@ -38,12 +38,7 @@ export default function BaseModal({
   padding = "lg",
   gap = "md",
 }: BaseModalProps) {
-  const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    setPortalTarget(document.body);
-  }, []);
+  const portalTarget = typeof window !== "undefined" ? document.body : null;
 
   useEffect(() => {
     if (!isOpen || !portalTarget) return;
