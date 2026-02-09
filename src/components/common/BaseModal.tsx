@@ -35,7 +35,7 @@ export default function BaseModal({
   children,
   width,
   radius = 'md',
-  padding = 'md',
+  padding = 'lg',
   gap = 'md',
 }: BaseModalProps) {
   useEffect(() => {
