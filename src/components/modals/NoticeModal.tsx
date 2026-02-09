@@ -3,17 +3,17 @@
 import BaseModal from "@/components/common/BaseModal";
 import ButtonCheckCancel from "@/components/common/Button/ButtonCheckCancel";
 
-interface PasswordMismatchModalProps {
+interface NoticeModalProps {
   isOpen: boolean;
   onClose: () => void;
   message: string;
 }
 
-export default function PasswordMismatchModal({
+export default function NoticeModal({
   isOpen,
   onClose,
   message,
-}: PasswordMismatchModalProps) {
+}: NoticeModalProps) {
   return (
     <BaseModal
       isOpen={isOpen}
