@@ -1,61 +1,17 @@
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CardDetailType, TagItem } from "@/types/card.type";
 import { DatePicker } from "react-datepicker";
 import { formatToApiDate } from "@/utils/formatDate";
 import { getTagColor } from "@/utils/getTagColor";
 import { postCardImage, postCards, putCards } from "@/api/cards.api";
-
-export const CardFormSchema = z.object({
-  assigneeUserId: z.number(),
-  dashboardId: z.number(),
-  columnId: z.number(),
-  cardId: z.number().optional().nullable(),
-  title: z.string().nonempty("제목을을 입력해주세요."),
-  description: z.string().nonempty("설명을 입력해주세요."),
-  dueDate: z.string().nonempty("날짜를 선택해주세요."),
-  tags: z
-    .array(z.string())
-    .nonempty("태그를 1개 이상 입력해주세요.")
-    .refine((items) => new Set(items).size === items.length, {
-      message: "중복된 태그가 있습니다.",
-    }),
-  imageUrl: z
-    .union([z.string(), z.any()])
-    .refine((val) => {
-      if (!val || (Array.isArray(val) && val.length === 0)) return false;
-      return true;
-    }, "이미지는 필수입니다.")
-    .superRefine((val, ctx) => {
-      // 파일 객체인 경우에만 상세 검증 (문자열 URL일 때는 통과)
-      if (val instanceof File) {
-        // 크기 제한
-        if (val.size > 5 * 1024 * 1024) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "최대 파일 크기는 5MB입니다.",
-          });
-        }
-        // 형식 제한
-        const ACCEPTED_TYPES = [
-          "image/jpeg",
-          "image/jpg",
-          "image/png",
-          "image/webp",
-        ];
-        if (!ACCEPTED_TYPES.includes(val.type)) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "JPG, JPEG, PNG, WEBP 형식만 지원합니다.",
-          });
-        }
-      }
-    }),
-});
-export type CardFormValues = z.infer<typeof CardFormSchema>;
+import { CardFormSchema, CardFormValues } from "@/types/card.schema";
+import { getMembers } from "@/api/members.api";
+import { MemberType } from "@/types/user.type";
+import { getColumns } from "@/api/columns.api";
+import { columnType } from "@/types/column.type";
 
 export function useCardForm(
   onClose: () => void,
@@ -75,11 +31,10 @@ export function useCardForm(
     resolver: zodResolver(CardFormSchema),
     mode: "onChange",
     defaultValues: {
-      // assigneeUserId: initialData?.assignee.id,
-      assigneeUserId: 6522,
       dashboardId: dashboardId,
-      columnId: columnId,
-      cardId: initialData?.id,
+      columnId: initialData?.columnId || columnId,
+      assigneeUserId: initialData?.assignee.id,
+      cardId: initialData?.id || null,
       title: initialData?.title || "",
       description: initialData?.description || "",
       dueDate: initialData?.dueDate || "",
@@ -88,6 +43,8 @@ export function useCardForm(
     },
   });
 
+  const [columnList, setColumnList] = useState<columnType[]>([]);
+  const [memberList, setMemberList] = useState<MemberType[]>([]);
   const datepickerRef = useRef<DatePicker>(null);
   const [tagList, setTagList] = useState<TagItem[]>(() => {
     return initialData?.tags ? initialData.tags.map(getTagColor) : [];
@@ -96,6 +53,50 @@ export function useCardForm(
   const [previewUrl, setPreviewUrl] = useState<string | null>(() => {
     return initialData?.imageUrl || null;
   });
+
+  // 컬럼 목록 가져오기
+  const getColumnList = useCallback(async () => {
+    try {
+      const res = await getColumns(dashboardId);
+      if (res?.data?.result === "SUCCESS") {
+        const nextColumnList: columnType[] = res.data.data;
+        setColumnList(nextColumnList);
+      } else {
+        const serverMessage = res?.data?.message;
+        alert(serverMessage || "데이터를 가져오는 데 실패했습니다.");
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const serverMessage = error.response?.data?.message;
+        alert(serverMessage || "서버 응답 오류가 발생했습니다.");
+      } else {
+        alert("예상치 못한 에러가 발생했습니다.");
+      }
+
+      console.error("컬럼 목록 조회 실패:", error);
+      return;
+    }
+  }, []);
+
+  // 담당자 목록 가져오기 및 변경
+  const getMemberList = useCallback(async () => {
+    try {
+      const res = await getMembers(dashboardId);
+      if (!res || !res.data) return;
+      const nextMemberList: MemberType[] = res.data.members;
+      setMemberList(nextMemberList);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const serverMessage = error.response?.data?.message;
+        alert(serverMessage || "서버 응답 오류가 발생했습니다.");
+      } else {
+        alert("예상치 못한 에러가 발생했습니다.");
+      }
+
+      console.error("담당자 목록 조회 실패:", error);
+      return;
+    }
+  }, []);
 
   // 마감일 날짜 선택 및 변경
   const handleDateChange = (
@@ -183,6 +184,7 @@ export function useCardForm(
           imageUrl: returnImageUrl,
         };
       }
+
       let result;
       if (!data.cardId) {
         const { cardId, ...payload } = finalData;
@@ -208,18 +210,31 @@ export function useCardForm(
   };
 
   useEffect(() => {
+    const fetchData = async () => {
+      if (dashboardId) {
+        await getMemberList();
+      }
+      if (initialData?.id) {
+        await getColumnList();
+      }
+    };
+
+    fetchData();
+
     return () => {
       if (previewUrl) {
         URL.revokeObjectURL(previewUrl);
       }
     };
-  }, [initialData?.id]);
+  }, [initialData?.id, dashboardId, getMemberList, getColumnList]);
 
   return {
     control,
     errors,
     handleSubmit,
     onSubmit,
+    columnList,
+    memberList,
     datepickerRef,
     handleDateChange,
     tagList,

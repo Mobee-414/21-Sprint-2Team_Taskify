@@ -6,15 +6,15 @@ import {
   DropdownTrigger,
 } from "../Dropdown";
 import { useDropdown } from "@/contexts/DropdownContext";
-import { AssigneeUser } from "@/types/user.type";
+import { MemberType } from "@/types/user.type";
 import Avatar from "@/components/common/Avatar";
 import Image from "next/image";
 
 type Props = {
-  users: AssigneeUser[];
+  users: MemberType[];
   selectedUserId?: number;
   placeholder?: string;
-  onChange: (user: AssigneeUser) => void;
+  onChange: (id: number) => void;
 };
 
 function AssigneeTrigger({
@@ -67,7 +67,7 @@ export function AssigneeDropdown({
 }: Props) {
   const selectedUser = useMemo(() => {
     if (users.length === 0) return undefined;
-    return users.find((u) => u.id === selectedUserId) ?? users[0];
+    return users.find((u) => u.userId === selectedUserId) ?? users[0];
   }, [users, selectedUserId]);
 
   if (users.length === 0 || !selectedUser) {
@@ -98,12 +98,12 @@ export function AssigneeDropdown({
         "
       >
         {users.map((user) => {
-          const isSelected = user.id === selectedUser.id;
+          const isSelected = user.userId === selectedUser.id;
 
           return (
             <DropdownItem
               key={user.id}
-              onClick={() => onChange(user)}
+              onClick={() => onChange(user.userId)}
               className="!px-0 !py-0 h-[48px] hover:bg-gray-50"
             >
               <div className="flex items-center h-full w-full pl-[16px] pr-[16px]">

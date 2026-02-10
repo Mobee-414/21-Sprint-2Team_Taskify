@@ -6,11 +6,8 @@ import {
   DropdownTrigger,
 } from "../Dropdown";
 import { useDropdown } from "@/contexts/DropdownContext";
-
 import Image from "next/image";
-
-// 추후 api 연동으로 변경 가능
-const STATUS = ["To Do", "On Progress", "Done"];
+import { columnType } from "@/types/column.type";
 
 function StatusPill({ text }: { text: string }) {
   return (
@@ -23,7 +20,7 @@ function StatusPill({ text }: { text: string }) {
   );
 }
 
-function StatusTrigger({ value }: { value: string }) {
+function StatusTrigger({ selectedId }: { selectedId: string }) {
   const { open } = useDropdown();
 
   return (
@@ -39,7 +36,7 @@ function StatusTrigger({ value }: { value: string }) {
         ${open ? "border-[var(--color-violet-main)]" : "border-gray-200"}
       `}
     >
-      <StatusPill text={value} />
+      <StatusPill text={selectedId} />
 
       <Image
         src="/icons/arrow_drop_down.svg"
@@ -52,32 +49,46 @@ function StatusTrigger({ value }: { value: string }) {
   );
 }
 
-export function StatusDropdown() {
-  const [value, setValue] = useState("To Do");
+export function StatusDropdown({
+  columnList,
+  selectedColumnId,
+  onChange,
+}: {
+  columnList: columnType[];
+  selectedColumnId: number;
+  onChange: (id: number) => void;
+}) {
+  const [selectedId, setSelectedId] = useState<number | undefined>(
+    selectedColumnId,
+  );
+  const selectedColumn = columnList.find((col) => col.id === selectedId);
 
   return (
     <Dropdown>
       <DropdownTrigger>
-        <StatusTrigger value={value} />
+        <StatusTrigger selectedId={selectedColumn?.title || ""} />
       </DropdownTrigger>
 
       <DropdownMenu
         className="
           mt-[2px]
-          w-[217px] h-[144px]
+          w-[217px]
           rounded-[6px]
           bg-[var(--color-white)]
           border border-gray-200
           overflow-hidden
         "
       >
-        {STATUS.map((item) => {
-          const isSelected = item === value;
+        {columnList.map((item) => {
+          const isSelected = item.id === selectedId;
 
           return (
             <DropdownItem
-              key={item}
-              onClick={() => setValue(item)}
+              key={item.id}
+              onClick={() => {
+                setSelectedId(item.id);
+                onChange(item.id);
+              }}
               className="
                 !px-0 !py-0
                 w-[217px] h-[48px]
@@ -95,7 +106,7 @@ export function StatusDropdown() {
 
                 <div className="w-[8px]" />
 
-                <StatusPill text={item} />
+                <StatusPill text={item.title} />
 
                 {/* ✅ 메뉴 아이템 화살표 유지 */}
                 <Image

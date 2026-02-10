@@ -26,6 +26,8 @@ export default function CardFormModal({
     errors,
     handleSubmit,
     onSubmit,
+    columnList,
+    memberList,
     datepickerRef,
     handleDateChange,
     tagList,
@@ -64,6 +66,8 @@ export default function CardFormModal({
           handleSubmit={handleSubmit}
           onSubmit={onSubmit}
           onClose={onClose}
+          columnList={columnList}
+          memberList={memberList}
           datepickerProps={datepickerProps}
           tagsProps={tagsProps}
           imageProps={imageProps}

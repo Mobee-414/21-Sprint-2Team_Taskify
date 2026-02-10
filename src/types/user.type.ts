@@ -4,3 +4,10 @@ export type AssigneeUser = {
   profileImageUrl: string | null; // 프로필 이미지 URL
   avatarColor?: string; // fallback 용
 };
+
+export interface MemberType extends AssigneeUser {
+  createdAt: string;
+  updatedAt: string;
+  isOwner: boolean;
+  userId: number;
+}
