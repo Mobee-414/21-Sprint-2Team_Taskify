@@ -1,3 +1,4 @@
+import { CardDetailType } from "@/types/card.type";
 import BaseModal from "@/components/common/BaseModal";
 import { useCardForm } from "@/hooks/useCardForm";
 import Header from "./Header";
@@ -8,7 +9,8 @@ interface CardFormModalProps {
   onClose: () => void;
   mode: "create" | "edit";
   columnId: number;
-  cardId?: number | null;
+  initialData?: CardDetailType | null;
+  onSuccess: (newCard: CardDetailType) => void;
 }
 
 export default function CardFormModal({
@@ -16,12 +18,12 @@ export default function CardFormModal({
   onClose,
   mode,
   columnId,
-  cardId,
+  initialData,
+  onSuccess,
 }: CardFormModalProps) {
   const {
     control,
     errors,
-    isValid,
     handleSubmit,
     onSubmit,
     datepickerRef,
@@ -32,13 +34,9 @@ export default function CardFormModal({
     previewUrl,
     handleImageButtonClick,
     handleFileChange,
-  } = useCardForm(
-    1, // params로 dashboardId 가져올 예정
-    columnId ?? null,
-    cardId ?? null,
-  );
+  } = useCardForm(onClose, onSuccess, columnId, initialData);
 
-  const formProps = { control, errors, isValid };
+  const formProps = { control, errors };
   const datepickerProps = { datepickerRef, handleDateChange };
   const tagsProps = { tagList, handleKeyDown };
   const imageProps = {

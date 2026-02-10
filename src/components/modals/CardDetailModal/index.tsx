@@ -1,4 +1,5 @@
 import { useCardDetail } from "@/hooks/useCardDetail";
+import { CardDetailType } from "@/types/card.type";
 import BaseModal from "@/components/common/BaseModal";
 import Header from "./Header";
 import SideInfo from "./SideInfo";
@@ -9,7 +10,7 @@ interface CardDetailModalProps {
   onClose: () => void;
   cardId: number;
   columnTitle: string;
-  handleCardFormOpen: () => void;
+  handleCardFormOpen: (data: CardDetailType) => void;
   handleCardDeleteModalOpen: (title: string) => void;
 }
 
@@ -39,7 +40,7 @@ export default function CardDetailModal({
         <Header
           title={cardDetailData.title}
           onClose={onClose}
-          handleCardFormOpen={handleCardFormOpen}
+          handleCardFormOpen={() => handleCardFormOpen(cardDetailData)}
           handleCardDeleteModalOpen={handleCardDeleteModalOpen}
         />
 
