@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect } from "react";
 import { createPortal } from "react-dom";
 
 interface BaseModalProps {
@@ -38,10 +38,8 @@ export default function BaseModal({
   padding = "lg",
   gap = "md",
 }: BaseModalProps) {
-  const portalTarget = typeof window !== "undefined" ? document.body : null;
-
   useEffect(() => {
-    if (!isOpen || !portalTarget) return;
+    if (!isOpen) return;
 
     // 스크롤 방지
     document.body.style.overflow = "hidden";
@@ -55,9 +53,9 @@ export default function BaseModal({
       document.body.style.overflow = "";
       window.removeEventListener("keydown", handleEsc);
     };
-  }, [isOpen, onClose, portalTarget]);
+  }, [isOpen, onClose]);
 
-  if (!isOpen || !portalTarget) return null;
+  if (!isOpen) return null;
 
   return createPortal(
     <div
@@ -89,6 +87,6 @@ export default function BaseModal({
         </div>
       </div>
     </div>,
-    portalTarget
+    document.body
   );
 }
