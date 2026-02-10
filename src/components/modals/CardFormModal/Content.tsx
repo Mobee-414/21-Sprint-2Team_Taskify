@@ -8,7 +8,7 @@ import { ChangeEvent, RefObject } from "react";
 import { CardFormValues } from "@/types/card.schema";
 import { DatepickerProps, TagItem } from "@/types/card.type";
 import { MemberType } from "@/types/user.type";
-import { columnType } from "@/types/column.type";
+import { Column } from "@/types/column.type";
 import { Input } from "@/components/common/Input";
 import { StatusDropdown } from "@/components/dropdown/feature/StatusDropdown";
 import { AssigneeDropdown } from "@/components/dropdown/feature/Assignee";
@@ -48,7 +48,7 @@ interface ContentProps {
   handleSubmit: UseFormHandleSubmit<CardFormValues>;
   onSubmit: (data: CardFormValues) => void;
   onClose: () => void;
-  columnList: columnType[];
+  columnList: Column[];
   memberList: MemberType[];
   datepickerProps: DatepickerProps;
   tagsProps: TagsProps;

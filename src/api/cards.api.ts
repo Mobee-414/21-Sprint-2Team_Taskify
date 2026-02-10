@@ -11,7 +11,7 @@ export const postCardImage = async (image: File, columnId: number) => {
 
   const response = await axios.post(
     `/columns/${columnId}/card-image`,
-    formData,
+    formData
   );
 
   return response.data;

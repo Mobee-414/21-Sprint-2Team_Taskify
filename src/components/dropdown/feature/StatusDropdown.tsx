@@ -7,7 +7,7 @@ import {
 } from "../Dropdown";
 import { useDropdown } from "@/contexts/DropdownContext";
 import Image from "next/image";
-import { columnType } from "@/types/column.type";
+import { Column } from "@/types/column.type";
 
 function StatusPill({ text }: { text: string }) {
   return (
@@ -54,7 +54,7 @@ export function StatusDropdown({
   selectedColumnId,
   onChange,
 }: {
-  columnList: columnType[];
+  columnList: Column[];
   selectedColumnId: number;
   onChange: (id: number) => void;
 }) {

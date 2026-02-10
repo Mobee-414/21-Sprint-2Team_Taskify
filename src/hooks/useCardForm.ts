@@ -11,7 +11,7 @@ import { CardFormSchema, CardFormValues } from "@/types/card.schema";
 import { getMembers } from "@/api/members.api";
 import { MemberType } from "@/types/user.type";
 import { getColumns } from "@/api/columns.api";
-import { columnType } from "@/types/column.type";
+import { Column } from "@/types/column.type";
 
 export function useCardForm(
   onClose: () => void,
@@ -43,7 +43,7 @@ export function useCardForm(
     },
   });
 
-  const [columnList, setColumnList] = useState<columnType[]>([]);
+  const [columnList, setColumnList] = useState<Column[]>([]);
   const [memberList, setMemberList] = useState<MemberType[]>([]);
   const datepickerRef = useRef<DatePicker>(null);
   const [tagList, setTagList] = useState<TagItem[]>(() => {
@@ -59,7 +59,7 @@ export function useCardForm(
     try {
       const res = await getColumns(dashboardId);
       if (res?.data?.result === "SUCCESS") {
-        const nextColumnList: columnType[] = res.data.data;
+        const nextColumnList: Column[] = res.data.data;
         setColumnList(nextColumnList);
       } else {
         const serverMessage = res?.data?.message;

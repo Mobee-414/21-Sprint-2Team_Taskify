@@ -1,8 +1,5 @@
-export interface columnType {
+export interface Column {
   id: number;
   title: string;
-  teamId: string;
   dashboardId: number;
-  createdAt: string;
-  updatedAt: string;
 }
