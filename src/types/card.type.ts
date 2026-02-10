@@ -42,3 +42,9 @@ export interface CardUpdateType extends CardDefaultType {
   columnId: number;
   assigneeUserId: number;
 }
+
+export type SyncCardListType = (
+  action: "create" | "edit" | "delete",
+  cardData?: CardDetailType,
+  cardId?: number,
+) => void;

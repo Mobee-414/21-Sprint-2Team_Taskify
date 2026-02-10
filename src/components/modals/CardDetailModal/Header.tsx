@@ -4,7 +4,7 @@ interface HeaderProps {
   title: string;
   onClose: () => void;
   handleCardFormOpen: () => void;
-  handleCardDeleteModalOpen: (title: string) => void;
+  handleCardDeleteModalOpen: () => void;
 }
 
 export default function Header({
@@ -19,7 +19,7 @@ export default function Header({
       <div className="flex">
         <KebabMenuDropdown
           onEdit={handleCardFormOpen}
-          onDelete={() => handleCardDeleteModalOpen(title)}
+          onDelete={handleCardDeleteModalOpen}
         />
         <button onClick={onClose}>닫기</button>
       </div>
