@@ -1,3 +1,4 @@
+import { InviteValues } from "@/hooks/useInvite";
 import axios from "./axios";
 
 export type Invitation = {
@@ -22,12 +23,12 @@ const nowIso = () => new Date().toISOString();
 
 function makeMockInvitations(count = 30): Invitation[] {
   const inviters = [
-    { nickname: "Alice", email: "alice@test.com", id: 1 },
-    { nickname: "Bob", email: "bob@test.com", id: 2 },
-    { nickname: "Charlie", email: "charlie@test.com", id: 3 },
-    { nickname: "Daisy", email: "daisy@test.com", id: 4 },
-    { nickname: "Ethan", email: "ethan@test.com", id: 5 },
-    { nickname: "Fiona", email: "fiona@test.com", id: 6 },
+    { nickname: "Alice", email: "test1@test.com", id: 1 },
+    { nickname: "Bob", email: "test2@test.com", id: 2 },
+    { nickname: "Charlie", email: "test3@test.com", id: 3 },
+    { nickname: "Daisy", email: "test4@test.com", id: 4 },
+    { nickname: "Ethan", email: "test5@test.com", id: 5 },
+    { nickname: "Fiona", email: "test6@test.com", id: 6 },
   ];
 
   const topics = [
@@ -117,6 +118,14 @@ export async function respondInvitation(params: {
 
   await axios.put(`/invitations/${invitationId}`, { inviteAccepted: params.inviteAccepted });
   return { success: true };
+}
+
+export async function postInvitations(
+  dashboardId: number,
+  data: InviteValues
+): Promise<unknown> {
+  const res = await axios.post(`/dashboards/${dashboardId}/invitations`, data);
+  return res.data;
 }
 
 /**
