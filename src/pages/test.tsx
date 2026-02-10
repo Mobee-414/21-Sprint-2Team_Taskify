@@ -7,6 +7,7 @@ import CardFormModal from "@/components/modals/CardFormModal";
 import InviteModal from "@/components/modals/InviteModal";
 import ConfirmModal from "@/components/modals/ConfirmModal";
 import { CardDetailType } from "@/types/card.type";
+import { useCardDelete } from "@/hooks/useCardDelete";
 
 export default function ModalTestPage() {
   const [openSmall, setOpenSmall] = useState(false);
@@ -17,19 +18,12 @@ export default function ModalTestPage() {
 
   // 할일 삭제 모달
   const [isCardDeleteModalOpen, setIsCardDeleteModalOpen] = useState(false);
+  const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
   const [deleteTargetTitle, setDeleteTargetTitle] = useState("");
-  const handleCardDeleteModalOpen = (title: string) => {
-    setDeleteTargetTitle(title);
-    setIsCardDeleteModalOpen(true);
-  };
-  const handleCardDelete = () => {
-    console.log("할일 카드 삭제 버튼 클릭");
-    setIsCardDeleteModalOpen(false);
-  };
 
   // 할일 생성수정 모달
   const TARGET_COLUMNID_ID = 58310; // 해당 상수가 쓰인곳은 칼럼 아이디로 변경 필요
-  const TARGET_CARD_ID = 14879; // 해당 상수가 쓰인곳은 카드 아이디로 변경 필요
+  const TARGET_CARD_ID = 14877; // 해당 상수가 쓰인곳은 카드 아이디로 변경 필요
   const [isCardFormModalOpen, setIsCardFormModalOpen] = useState(false);
   const [CardModalMode, setCardModalMode] = useState<"create" | "edit">(
     "create",
@@ -37,6 +31,55 @@ export default function ModalTestPage() {
   const [columnId, setColumnId] = useState<number | null>(null);
   const [selectedCardData, setSelectedCardData] =
     useState<CardDetailType | null>(null);
+
+  // addCardLocally -> syncCardList 교체 필요(카드 생성수정삭제 동시)
+  const [cards, setCards] = useState<CardDetailType[]>([]);
+  const addCardLocally = (newCard: CardDetailType) => {
+    setCards((prev) => [newCard, ...prev]);
+    setSelectedCardData(null);
+  };
+
+  const syncCardList = (
+    type: "create" | "edit" | "delete",
+    card?: CardDetailType | undefined,
+    cardId?: number,
+  ) => {
+    switch (type) {
+      case "create":
+        if (card) setCards((prev) => [card, ...prev]);
+        break;
+
+      case "edit":
+        if (card)
+          setCards((prev) =>
+            prev.map((item) => (item.id === card.id ? card : item)),
+          );
+        break;
+
+      case "delete":
+        if (cardId)
+          setCards((prev) => prev.filter((item) => item.id !== cardId));
+        break;
+    }
+    setSelectedCardData(null);
+  };
+
+  const handleCardDeleteModalOpen = (id: number, title: string) => {
+    setDeleteTargetId(id);
+    setDeleteTargetTitle(title);
+    setIsCardDeleteModalOpen(true);
+  };
+
+  const { mutate: deleteCard } = useCardDelete(
+    deleteTargetId as number,
+    syncCardList,
+  );
+  const handleCardDelete = () => {
+    if (!deleteTargetId) return;
+    deleteCard();
+    setIsCardDeleteModalOpen(false);
+    setIsCardDetailModalOpen(false);
+  };
 
   const handleCardFormOpen = (
     mode: "create" | "edit",
@@ -54,13 +97,6 @@ export default function ModalTestPage() {
 
   const handleCardFormClose = () => {
     setIsCardFormModalOpen(false);
-    setSelectedCardData(null);
-  };
-
-  // 카드 생성수정 완료되면 새 카드 추가
-  const [cards, setCards] = useState<CardDetailType[]>([]);
-  const addCardLocally = (newCard: CardDetailType) => {
-    setCards((prev) => [newCard, ...prev]);
     setSelectedCardData(null);
   };
 
@@ -124,8 +160,8 @@ export default function ModalTestPage() {
           handleCardFormOpen={(data) =>
             handleCardFormOpen("edit", TARGET_COLUMNID_ID, data)
           }
-          handleCardDeleteModalOpen={(title) =>
-            handleCardDeleteModalOpen(title)
+          handleCardDeleteModalOpen={(id, title) =>
+            handleCardDeleteModalOpen(id, title)
           }
         />
       )}

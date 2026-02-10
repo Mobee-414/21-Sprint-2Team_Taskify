@@ -11,7 +11,7 @@ interface CardDetailModalProps {
   cardId: number;
   columnTitle: string;
   handleCardFormOpen: (data: CardDetailType) => void;
-  handleCardDeleteModalOpen: (title: string) => void;
+  handleCardDeleteModalOpen: (id: number, title: string) => void;
 }
 
 export default function CardDetailModal({
@@ -41,7 +41,9 @@ export default function CardDetailModal({
           title={cardDetailData.title}
           onClose={onClose}
           handleCardFormOpen={() => handleCardFormOpen(cardDetailData)}
-          handleCardDeleteModalOpen={handleCardDeleteModalOpen}
+          handleCardDeleteModalOpen={() =>
+            handleCardDeleteModalOpen(cardDetailData.id, cardDetailData.title)
+          }
         />
 
         <div className="flex justify-between">
