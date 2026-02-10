@@ -66,7 +66,7 @@ export default function ButtonDashboardAdd({
       onClick={onClick}
       className={clsx(
         'flex items-center justify-center ',
-        'rounded-[4px]',
+        'rounded-[8px]',
         disabled && 'cursor-not-allowed',
 
         // mobile
