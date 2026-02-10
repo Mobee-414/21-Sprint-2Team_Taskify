@@ -70,7 +70,7 @@ export default function ButtonLogin ( {
   children,
   disabled,
   onClick,
-  type = 'button',
+  type = 'submit',
   className,
 
   buttonSize = 'md',

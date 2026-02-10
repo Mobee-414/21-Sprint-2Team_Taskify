@@ -6,19 +6,21 @@ import LoginSignupLink from '@/pages/login/components/LoginSignupLink';
 
 const Login = () => {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[var(--color-gray-bg)]" >
-      <LoginLogo />
+    <div className='min-h-screen flex items-center justify-center bg-[var(--color-gray-bg)]'>
+      <div className="flex-col items-center" >
+        <LoginLogo />
 
-      <div className='mt-2'>
-        <LoginWelcomMessage />
-      </div>
+        <div className='mt-4'>
+          <LoginWelcomMessage />
+        </div>
 
-      <div className='mt-2'>
-        <LoginForm />
-      </div>
+        <div className='mt-4'>
+          <LoginForm />
+        </div>
 
-      <div className='mt-2'>
-        <LoginSignupLink />
+        <div className='mt-4 '>
+          <LoginSignupLink />
+        </div>
       </div>
     </div>
   );

@@ -5,19 +5,21 @@ import LoginLink from '@/pages/signup/components/LoginLink';
 
 const Signup = () => {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center">
-      <LoginLogo />
+    <div className='min-h-screen flex items-center justify-center bg-[var(--color-gray-bg)]'> 
+      <div className="flex-col items-center">
+        <LoginLogo />
 
-      <div className='mt-2'>
-        <LoginWelcomMessage />
-      </div>
+        <div className='mt-4'>
+          <LoginWelcomMessage />
+        </div>
 
-      <div className='mt-2'>
-        <SignupForm />
-      </div>
-
-      <div className='mt-2'>
-        <LoginLink />
+        <div className='mt-4'>
+          <SignupForm />
+        </div>
+        
+        <div className='mt-4'>
+          <LoginLink />
+        </div>
       </div>
     </div>
   )

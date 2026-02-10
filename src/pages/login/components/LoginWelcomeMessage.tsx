@@ -8,7 +8,7 @@ const MESSAGE: string[] = [
     "안녕하세요!",
   ];
 
-const LoginWelcomMessage = () => {
+const LoginWelcomeMessage = () => {
   const [message, setMessage] = useState(MESSAGE[0]);
 
     useEffect(() => {
@@ -35,4 +35,4 @@ const LoginWelcomMessage = () => {
     );
   };
   
-  export default LoginWelcomMessage;
+  export default LoginWelcomeMessage;

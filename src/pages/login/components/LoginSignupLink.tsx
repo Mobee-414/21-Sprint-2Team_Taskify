@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const LoginSignupLink = () => {
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex justify-center items-center gap-2 text-center">
       <div>
         회원이 아니신가요?
       </div>
