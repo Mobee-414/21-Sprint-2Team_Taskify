@@ -1,4 +1,5 @@
 import { useCardDetail } from "@/hooks/useCardDetail";
+import { CardDetailType } from "@/types/card.type";
 import BaseModal from "@/components/common/BaseModal";
 import Header from "./Header";
 import SideInfo from "./SideInfo";
@@ -9,7 +10,7 @@ interface CardDetailModalProps {
   onClose: () => void;
   cardId: number;
   columnTitle: string;
-  handleCardFormOpen: () => void;
+  handleCardFormOpen: (data: CardDetailType) => void;
   handleCardDeleteModalOpen: (title: string) => void;
 }
 
@@ -21,7 +22,10 @@ export default function CardDetailModal({
   handleCardFormOpen,
   handleCardDeleteModalOpen,
 }: CardDetailModalProps) {
-  const { control, isValid, handleSubmit, onSubmit } = useCardDetail(cardId);
+  const { control, isValid, handleSubmit, onSubmit, cardDetailData, tagList } =
+    useCardDetail(cardId);
+
+  if (!cardDetailData) return;
 
   return (
     <BaseModal
@@ -34,9 +38,9 @@ export default function CardDetailModal({
     >
       <div className="w-full">
         <Header
-          title={"카드 제목"}
+          title={cardDetailData.title}
           onClose={onClose}
-          handleCardFormOpen={handleCardFormOpen}
+          handleCardFormOpen={() => handleCardFormOpen(cardDetailData)}
           handleCardDeleteModalOpen={handleCardDeleteModalOpen}
         />
 
@@ -47,9 +51,16 @@ export default function CardDetailModal({
             isValid={isValid}
             handleSubmit={handleSubmit}
             onSubmit={onSubmit}
+            tagList={tagList}
+            title={cardDetailData.title}
+            description={cardDetailData.description}
+            imageUrl={cardDetailData.imageUrl}
           />
 
-          <SideInfo />
+          <SideInfo
+            assignee={cardDetailData.assignee}
+            dueDate={cardDetailData.dueDate}
+          />
         </div>
       </div>
     </BaseModal>

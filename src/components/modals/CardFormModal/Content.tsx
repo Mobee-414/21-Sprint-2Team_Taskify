@@ -4,28 +4,66 @@ import {
   FieldErrors,
   UseFormHandleSubmit,
 } from "react-hook-form";
+import { ChangeEvent, RefObject } from "react";
+import { DatepickerProps, TagItem } from "@/types/card.type";
 import { CardFormValues } from "@/hooks/useCardForm";
+import TagInput from "@/components/common/TagInput";
+import ImageInput from "@/components/common/ImageInput";
 import { Input } from "@/components/common/Input";
+import DatePickerInput from "@/components/common/DatePickerInput";
+import "react-datepicker/dist/react-datepicker.css";
+
+interface FormProps {
+  control: Control<CardFormValues>;
+  errors: FieldErrors<CardFormValues>;
+}
+
+interface TagsProps {
+  tagList: TagItem[];
+  handleKeyDown: (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    currentTags: string[],
+    onChange: (value: string[]) => void,
+  ) => void;
+}
+
+interface imageProps {
+  fileInputRef: RefObject<HTMLInputElement | null>;
+  previewUrl: string | null;
+  handleImageButtonClick: () => void;
+  handleFileChange: (
+    e: ChangeEvent<HTMLInputElement>,
+    onChange: (value: File) => void,
+  ) => void;
+}
 
 interface ContentProps {
   mode: "create" | "edit";
-  control: Control<CardFormValues>;
-  errors: FieldErrors<CardFormValues>;
-  isValid: boolean;
+  formProps: FormProps;
   handleSubmit: UseFormHandleSubmit<CardFormValues>;
   onSubmit: (data: CardFormValues) => void;
   onClose: () => void;
+  datepickerProps: DatepickerProps;
+  tagsProps: TagsProps;
+  imageProps: imageProps;
 }
 
 export default function Content({
   mode,
-  control,
-  errors,
-  isValid,
+  formProps,
   handleSubmit,
   onSubmit,
   onClose,
+  datepickerProps,
+  tagsProps,
+  imageProps,
 }: ContentProps) {
+  const { control, errors } = formProps;
+  const { datepickerRef, handleDateChange } = datepickerProps;
+  const { tagList, handleKeyDown } = tagsProps;
+  const { fileInputRef, previewUrl, handleImageButtonClick, handleFileChange } =
+    imageProps;
+
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -38,7 +76,8 @@ export default function Content({
                 <div>
                   <label htmlFor={field.name}>상태</label>
                 </div>
-                <div>드롭다운 추가</div>
+                {/* TODO: StatusDropdown 작업 예정 */}
+                {/* <StatusDropdown /> */}
               </div>
             )}
           />
@@ -52,7 +91,13 @@ export default function Content({
               <div>
                 <label htmlFor={field.name}>담당자</label>
               </div>
-              <div>드롭다운 추가</div>
+              {/* TODO: AssigneeDropdown 작업 예정 */}
+              {/* <AssigneeDropdown
+                users={assigneeList}
+                selectedUserId={selectedUserId}
+                onChange={handleAssigneeChange}
+                placeholder="담당자를 지정해주세요"
+              /> */}
             </div>
           )}
         />
@@ -101,14 +146,12 @@ export default function Content({
           name="dueDate"
           control={control}
           render={({ field }) => (
-            <div>
-              <div>
-                <label htmlFor={field.name}>마감일</label>
-              </div>
-              <div>
-                {/* TODO: [DatePicker] 라이브러리 도입 및 마감일 선택 기능 구현 예정 */}
-              </div>
-            </div>
+            <DatePickerInput
+              datepickerRef={datepickerRef}
+              field={field}
+              error={errors.dueDate?.message}
+              handleDateChange={handleDateChange}
+            />
           )}
         />
 
@@ -116,14 +159,12 @@ export default function Content({
           name="tags"
           control={control}
           render={({ field }) => (
-            <div>
-              <div>
-                <label htmlFor={field.name}>태그</label>
-              </div>
-              <div>
-                {/* TODO: [HashTag] 태그 입력 UI 및 생성/삭제 로직 추가 예정 */}
-              </div>
-            </div>
+            <TagInput
+              tagList={tagList}
+              field={field}
+              error={errors.tags?.message}
+              handleKeyDown={handleKeyDown}
+            />
           )}
         />
 
@@ -131,14 +172,14 @@ export default function Content({
           name="imageUrl"
           control={control}
           render={({ field }) => (
-            <div>
-              <label htmlFor={field.name}>
-                이미지
-                <div>
-                  {/* TODO: [Image] 이미지 업로드 미리보기 및 파일 핸들링 기능 추가 예정 */}
-                </div>
-              </label>
-            </div>
+            <ImageInput
+              fileInputRef={fileInputRef}
+              field={field}
+              error={errors.imageUrl?.message as string}
+              previewUrl={previewUrl}
+              handleFileChange={handleFileChange}
+              handleImageButtonClick={handleImageButtonClick}
+            />
           )}
         />
 

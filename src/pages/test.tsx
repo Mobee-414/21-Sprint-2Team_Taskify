@@ -6,6 +6,7 @@ import CardDetailModal from "@/components/modals/CardDetailModal";
 import CardFormModal from "@/components/modals/CardFormModal";
 import InviteModal from "@/components/modals/InviteModal";
 import ConfirmModal from "@/components/modals/ConfirmModal";
+import { CardDetailType } from "@/types/card.type";
 
 export default function ModalTestPage() {
   const [openSmall, setOpenSmall] = useState(false);
@@ -27,27 +28,40 @@ export default function ModalTestPage() {
   };
 
   // 할일 생성수정 모달
-  const TARGET_COLUMNID_ID = 1; // 해당 상수가 쓰인곳은 칼럼 아이디로 변경 필요
-  const TARGET_CARD_ID = 1; // 해당 상수가 쓰인곳은 카드 아이디로 변경 필요
+  const TARGET_COLUMNID_ID = 58310; // 해당 상수가 쓰인곳은 칼럼 아이디로 변경 필요
+  const TARGET_CARD_ID = 14879; // 해당 상수가 쓰인곳은 카드 아이디로 변경 필요
   const [isCardFormModalOpen, setIsCardFormModalOpen] = useState(false);
   const [CardModalMode, setCardModalMode] = useState<"create" | "edit">(
     "create",
   );
   const [columnId, setColumnId] = useState<number | null>(null);
-  const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
+  const [selectedCardData, setSelectedCardData] =
+    useState<CardDetailType | null>(null);
 
   const handleCardFormOpen = (
     mode: "create" | "edit",
     columnId: number,
-    cardId?: number,
+    data?: CardDetailType,
   ) => {
     setColumnId(columnId);
-    if (mode === "edit" && cardId) {
-      setSelectedCardId(cardId);
+    if (mode === "edit" && data) {
+      setSelectedCardData(data);
       setIsCardDetailModalOpen(false);
     }
     setCardModalMode(mode);
     setIsCardFormModalOpen(true);
+  };
+
+  const handleCardFormClose = () => {
+    setIsCardFormModalOpen(false);
+    setSelectedCardData(null);
+  };
+
+  // 카드 생성수정 완료되면 새 카드 추가
+  const [cards, setCards] = useState<CardDetailType[]>([]);
+  const addCardLocally = (newCard: CardDetailType) => {
+    setCards((prev) => [newCard, ...prev]);
+    setSelectedCardData(null);
   };
 
   // 초대하기 모달
@@ -100,16 +114,21 @@ export default function ModalTestPage() {
       >
         할일 상세보기
       </button>
-      <CardDetailModal
-        isOpen={isCardDetailModalOpen}
-        onClose={() => setIsCardDetailModalOpen(false)}
-        cardId={TARGET_CARD_ID}
-        columnTitle={"테스트"}
-        handleCardFormOpen={() =>
-          handleCardFormOpen("edit", TARGET_COLUMNID_ID, TARGET_CARD_ID)
-        }
-        handleCardDeleteModalOpen={(title) => handleCardDeleteModalOpen(title)}
-      />
+
+      {isCardDetailModalOpen && (
+        <CardDetailModal
+          isOpen={isCardDetailModalOpen}
+          onClose={() => setIsCardDetailModalOpen(false)}
+          cardId={TARGET_CARD_ID}
+          columnTitle={"테스트"}
+          handleCardFormOpen={(data) =>
+            handleCardFormOpen("edit", TARGET_COLUMNID_ID, data)
+          }
+          handleCardDeleteModalOpen={(title) =>
+            handleCardDeleteModalOpen(title)
+          }
+        />
+      )}
 
       {/* 할일 삭제 모달 */}
       <ConfirmModal
@@ -128,13 +147,15 @@ export default function ModalTestPage() {
         할일 생성
       </button>
 
-      {columnId !== null && (
+      {CardFormModal && columnId && (
         <CardFormModal
+          key={selectedCardData?.id || "create"}
           isOpen={isCardFormModalOpen}
-          onClose={() => setIsCardFormModalOpen(false)}
+          onClose={handleCardFormClose}
           mode={CardModalMode}
           columnId={columnId}
-          cardId={selectedCardId}
+          initialData={selectedCardData}
+          onSuccess={addCardLocally}
         />
       )}
 

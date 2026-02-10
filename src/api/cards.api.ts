@@ -1,14 +1,30 @@
-import axiosInstance from "./axios";
+import axios from "./axios";
+import { CardCreateType } from "@/types/card.type";
 
+export const getCard = async (cardId: number) => {
+  return await axios.get(`/cards/${cardId}`);
+};
 
-export const getCards = async (columnId: number, cursorId?: number | null) => {
+export const postCardImage = async (image: File, columnId: number) => {
+  const formData = new FormData();
+  formData.append("image", image);
 
-  const response = await axiosInstance.get(`/cards`, {
-    params: {
-      columnId,
-      cursorId,
-      size: 10, // 한 번에 가져올 카드 개수
-    },
-  });
+  const response = await axios.post(
+    `/columns/${columnId}/card-image`,
+    formData
+  );
+
+  return response.data;
+};
+
+export const postCards = async (data: CardCreateType) => {
+  const response = await axios.post("/cards", data);
+
+  return response.data;
+};
+
+export const putCards = async (cardId: number, data: CardCreateType) => {
+  const response = await axios.put(`/cards/${cardId}`, data);
+
   return response.data;
 };
