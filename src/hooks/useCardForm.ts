@@ -2,7 +2,7 @@ import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CardDetailType, TagItem } from "@/types/card.type";
+import { CardDetailType, SyncCardListType, TagItem } from "@/types/card.type";
 import { DatePicker } from "react-datepicker";
 import { formatToApiDate } from "@/utils/formatDate";
 import { getTagColor } from "@/utils/getTagColor";
@@ -15,7 +15,7 @@ import { Column } from "@/types/column.type";
 
 export function useCardForm(
   onClose: () => void,
-  onSuccess: (newCard: CardDetailType) => void,
+  onSuccess: SyncCardListType,
   columnId: number,
   initialData?: CardDetailType | null,
 ) {
@@ -25,11 +25,12 @@ export function useCardForm(
 
   const {
     control,
-    formState: { errors, isDirty },
+    formState: { errors, isValid, isDirty },
+    setValue,
     handleSubmit: handleSubmit,
   } = useForm<CardFormValues>({
     resolver: zodResolver(CardFormSchema),
-    mode: "onChange",
+    mode: "all",
     defaultValues: {
       dashboardId: dashboardId,
       columnId: initialData?.columnId || columnId,
@@ -85,6 +86,12 @@ export function useCardForm(
       if (!res || !res.data) return;
       const nextMemberList: MemberType[] = res.data.members;
       setMemberList(nextMemberList);
+
+      if (!initialData && nextMemberList.length > 0) {
+        setValue("assigneeUserId", nextMemberList[0].userId, {
+          shouldValidate: true,
+        });
+      }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const serverMessage = error.response?.data?.message;
@@ -96,7 +103,7 @@ export function useCardForm(
       console.error("담당자 목록 조회 실패:", error);
       return;
     }
-  }, []);
+  }, [dashboardId, initialData, setValue]);
 
   // 마감일 날짜 선택 및 변경
   const handleDateChange = (
@@ -186,15 +193,17 @@ export function useCardForm(
       }
 
       let result;
-      if (!data.cardId) {
+      const isEdit = data.cardId;
+      if (!isEdit) {
         const { cardId, ...payload } = finalData;
         result = await onCreate(payload);
       } else if (data.cardId && isDirty) {
         result = await onUpdate(finalData);
       }
+
       if (result) {
-        onSuccess(result);
-        console.log(result);
+        const type = isEdit ? "edit" : "create";
+        onSuccess(type, result, data.cardId ?? undefined);
       }
       onClose();
     } catch (error) {
@@ -231,6 +240,8 @@ export function useCardForm(
   return {
     control,
     errors,
+    isValid,
+    isDirty,
     handleSubmit,
     onSubmit,
     columnList,
