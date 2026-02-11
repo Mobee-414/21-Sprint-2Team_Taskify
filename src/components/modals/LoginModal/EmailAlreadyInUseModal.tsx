@@ -1,7 +1,7 @@
 "use client";
 
 import BaseModal from "@/components/common/BaseModal";
-import ButtonCheckCancel from "@/components/common/Button/ButtonCheckCancel";
+import ButtonModal from "@/components/common/Button/ButtonModal";
 
 interface EmailAlreadyInUseModalProps {
   isOpen: boolean;
@@ -40,7 +40,7 @@ export default function EmailAlreadyInUseModal({
           >
             이미 사용중인 이메일 입니다.
           </div>
-          <ButtonCheckCancel
+          <ButtonModal
             onClick={onClose}
             className="
             flex justify-center items-center
@@ -57,7 +57,7 @@ export default function EmailAlreadyInUseModal({
             >
               확인
             </span>
-          </ButtonCheckCancel>
+          </ButtonModal>
         </div>
       </div>
     </BaseModal>

@@ -1,7 +1,7 @@
 "use client";
 
 import BaseModal from "@/components/common/BaseModal";
-import ButtonCheckCancel from "@/components/common/Button/ButtonCheckCancel";
+import ButtonModal from "@/components/common/Button/ButtonModal";
 
 interface NoticeModalProps {
   isOpen: boolean;
@@ -16,20 +16,15 @@ export default function NoticeModal({
 }: NoticeModalProps) {
   return (
     <BaseModal isOpen={isOpen} onClose={onClose} width={368} radius="md">
-      <div
-        className={`
-          flex w-full flex-col items-center
-          overflow-y-auto}
-        `}
-      >
+      <div className="flex w-full flex-col items-center overflow-y-auto">
         <div
           className="
-        w-full
-        h-[144px]
-        flex flex-col justify-center items-center
-        max-md:w-full
-        max-md:h-[172px]
-      "
+            w-full
+            h-[144px]
+            flex flex-col justify-center items-center
+            max-md:w-full
+            max-md:h-[172px]
+          "
         >
           <div
             className="
@@ -43,7 +38,7 @@ export default function NoticeModal({
           >
             {message}
           </div>
-          <ButtonCheckCancel
+          <ButtonModal
             onClick={onClose}
             className="
             flex justify-center items-center
@@ -60,7 +55,7 @@ export default function NoticeModal({
             >
               확인
             </span>
-          </ButtonCheckCancel>
+          </ButtonModal>
         </div>
       </div>
     </BaseModal>

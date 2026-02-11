@@ -1,7 +1,7 @@
 "use client";
 
 import BaseModal from "@/components/common/BaseModal";
-import ButtonCheckCancel from "@/components/common/Button/ButtonCheckCancel";
+import ButtonModal from "@/components/common/Button/ButtonModal";
 
 interface LogoutConfirmModalProps {
   isOpen: boolean;
@@ -41,7 +41,7 @@ export default function LogoutConfirmModal({
           >
             로그아웃 되었습니다.
           </div>
-          <ButtonCheckCancel
+          <ButtonModal
             onClick={onClose}
             className="
             flex justify-center items-center
@@ -58,7 +58,7 @@ export default function LogoutConfirmModal({
             >
               확인
             </span>
-          </ButtonCheckCancel>
+          </ButtonModal>
         </div>
       </div>
     </BaseModal>
