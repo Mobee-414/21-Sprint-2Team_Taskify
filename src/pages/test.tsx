@@ -119,8 +119,6 @@ export default function ModalTestPage() {
         onClose={() => setOpenSmall(false)}
         width={280}
         radius="sm"
-        padding="lg"
-        gap="sm"
       >
         <div className="text-black">작은 모달 테스트</div>
       </BaseModal>
@@ -131,8 +129,6 @@ export default function ModalTestPage() {
         onClose={() => setOpenLarge(false)}
         width={420}
         radius="md"
-        padding="md"
-        gap="lg"
       >
         <div className="text-black">큰 모달 테스트</div>
       </BaseModal>

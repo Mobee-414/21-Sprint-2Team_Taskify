@@ -51,15 +51,8 @@ export default function CardFormModal({
   };
 
   return (
-    <BaseModal
-      isOpen={isOpen}
-      onClose={onClose}
-      width={730}
-      radius="md"
-      padding="lg"
-      gap="md"
-    >
-      <div className="w-full">
+    <BaseModal isOpen={isOpen} onClose={onClose} width={730} radius="md">
+      <div className="overflow-y-auto">
         <Header mode={mode} />
 
         <Content
