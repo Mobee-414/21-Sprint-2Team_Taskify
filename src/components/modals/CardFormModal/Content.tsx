@@ -5,13 +5,18 @@ import {
   UseFormHandleSubmit,
 } from "react-hook-form";
 import { ChangeEvent, RefObject } from "react";
+import { CardFormValues } from "@/types/card.schema";
 import { DatepickerProps, TagItem } from "@/types/card.type";
-import { CardFormValues } from "@/hooks/useCardForm";
-import TagInput from "@/components/common/TagInput";
-import ImageInput from "@/components/common/ImageInput";
+import { MemberType } from "@/types/user.type";
+import { Column } from "@/types/column.type";
 import { Input } from "@/components/common/Input";
+import { StatusDropdown } from "@/components/dropdown/feature/StatusDropdown";
+import { AssigneeDropdown } from "@/components/dropdown/feature/Assignee";
+import { Dropdown } from "@/components/dropdown/Dropdown";
 import DatePickerInput from "@/components/common/DatePickerInput";
 import "react-datepicker/dist/react-datepicker.css";
+import TagInput from "@/components/common/TagInput";
+import ImageInput from "@/components/common/ImageInput";
 
 interface FormProps {
   control: Control<CardFormValues>;
@@ -43,6 +48,8 @@ interface ContentProps {
   handleSubmit: UseFormHandleSubmit<CardFormValues>;
   onSubmit: (data: CardFormValues) => void;
   onClose: () => void;
+  columnList: Column[];
+  memberList: MemberType[];
   datepickerProps: DatepickerProps;
   tagsProps: TagsProps;
   imageProps: imageProps;
@@ -54,6 +61,8 @@ export default function Content({
   handleSubmit,
   onSubmit,
   onClose,
+  columnList,
+  memberList,
   datepickerProps,
   tagsProps,
   imageProps,
@@ -76,8 +85,13 @@ export default function Content({
                 <div>
                   <label htmlFor={field.name}>상태</label>
                 </div>
-                {/* TODO: StatusDropdown 작업 예정 */}
-                {/* <StatusDropdown /> */}
+                <StatusDropdown
+                  columnList={columnList}
+                  selectedColumnId={field.value}
+                  onChange={(id: number) => {
+                    field.onChange(id);
+                  }}
+                />
               </div>
             )}
           />
@@ -91,13 +105,16 @@ export default function Content({
               <div>
                 <label htmlFor={field.name}>담당자</label>
               </div>
-              {/* TODO: AssigneeDropdown 작업 예정 */}
-              {/* <AssigneeDropdown
-                users={assigneeList}
-                selectedUserId={selectedUserId}
-                onChange={handleAssigneeChange}
-                placeholder="담당자를 지정해주세요"
-              /> */}
+              <Dropdown>
+                <AssigneeDropdown
+                  users={memberList}
+                  selectedUserId={field.value}
+                  onChange={(id: number) => {
+                    field.onChange(id);
+                  }}
+                  placeholder="담당자를 지정해주세요"
+                />
+              </Dropdown>
             </div>
           )}
         />

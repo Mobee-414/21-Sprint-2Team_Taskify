@@ -14,3 +14,11 @@ export const updateColumn = async (columnId: number, title: string) => {
   });
   return response.data;
 };
+
+export const getColumns = async (dashboardId: number) => {
+  return await axiosInstance.get("/columns", {
+    params: {
+      dashboardId,
+    },
+  });
+};
