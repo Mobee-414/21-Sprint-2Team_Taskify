@@ -90,7 +90,7 @@ export default function EditColumnModal({
         <div
           className={`
           flex w-full flex-col items-center
-          overflow-y-auto}
+          overflow-y-auto
         `}
         >
           <form

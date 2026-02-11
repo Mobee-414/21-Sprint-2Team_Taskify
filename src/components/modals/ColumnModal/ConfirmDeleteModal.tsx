@@ -16,7 +16,7 @@ export default function ConfirmDeleteModal({
       <div
         className={`
           flex w-full flex-col items-center
-          overflow-y-auto}
+          overflow-y-auto
         `}
       >
         <div className="flex flex-col items-center w-full py-4">
