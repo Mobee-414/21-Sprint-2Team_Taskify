@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { InternalAxiosRequestConfig } from "axios";
+import type { InternalAxiosRequestConfig} from "axios";
 
 const NEXT_PUBLIC_TEAM_ID = "21-2";
 const NEXT_PUBLIC_API_BASE_URL = `https://sp-taskify-api.vercel.app/${NEXT_PUBLIC_TEAM_ID}`;

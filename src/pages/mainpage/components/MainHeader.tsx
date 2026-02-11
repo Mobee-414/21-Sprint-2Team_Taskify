@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 const MainHeader = () => {
   return (
@@ -13,12 +14,17 @@ const MainHeader = () => {
         />
 
         <div className="flex gap-9">
-          <button className="text-lg font-regular text-[var(--color-black-pure)]">
+          <Link 
+            href="/login"
+            className="text-lg font-regular text-[var(--color-black-pure)]"
+          >
             로그인
-          </button>
-          <button className="text-lg font-regular text-[var(--color-black-pure)]">
+          </Link>
+          <Link 
+            href="signup"
+            className="text-lg font-regular text-[var(--color-black-pure)]">
             회원가입
-          </button>
+          </Link>
         </div>
       </div>
     </header>

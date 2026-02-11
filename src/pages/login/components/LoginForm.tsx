@@ -1,11 +1,11 @@
 import { Controller } from "react-hook-form";
-import { useExample } from "@/hooks/useExample";
+import { useLogin } from "@/hooks/useLogin";
 import { Input } from "@/components/common/Input";
 import LoginButton from "@/components/common/Button/ButtonLogin";
 
 
 const LoginForm = () => {
-  const { control, errors, isValid, handleSubmit, onSubmit } = useExample();
+  const { control, errors, isValid, handleSubmit, onSubmit } = useLogin();
 
   return (
     <div>
@@ -13,6 +13,7 @@ const LoginForm = () => {
         <Controller
           name="email"
           control={control}
+          defaultValue=""
           render={({ field }) => (
             <Input
               label="이메일"
@@ -31,6 +32,7 @@ const LoginForm = () => {
         <Controller
           name="password" 
           control={control}
+          defaultValue=""
           render={({ field }) => (
             <Input
               label="비밀번호"
@@ -45,13 +47,18 @@ const LoginForm = () => {
             />
           )}
         />
-        </div>  
-      </form>
-      <div className='mt-4'>      
-        <LoginButton variant="secondary" fontSize="lg">
+        </div>
+
+        <div className='mt-4'>      
+        <LoginButton 
+          variant={isValid ? "primary" : "secondary"}
+          fontSize="lg" 
+          disabled={!isValid}
+        >
           로그인
         </LoginButton>
-      </div>
+      </div>  
+      </form>
     </div>
   );
 }
