@@ -14,22 +14,22 @@ export default function ConfirmModal({
   children,
 }: ConfirmModalProps) {
   return (
-    <BaseModal
-      isOpen={isOpen}
-      onClose={onClose}
-      width={730}
-      radius="md"
-      padding="md"
-      gap="lg"
-    >
-      {children}
-      <div>
-        <button type="button" onClick={onClose}>
-          취소
-        </button>
-        <button type="button" onClick={onClick}>
-          삭제
-        </button>
+    <BaseModal isOpen={isOpen} onClose={onClose} width={730} radius="md">
+      <div
+        className={`
+          flex w-full flex-col items-center
+          overflow-y-auto}
+        `}
+      >
+        {children}
+        <div>
+          <button type="button" onClick={onClose}>
+            취소
+          </button>
+          <button type="button" onClick={onClick}>
+            삭제
+          </button>
+        </div>
       </div>
     </BaseModal>
   );

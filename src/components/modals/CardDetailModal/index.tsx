@@ -28,15 +28,8 @@ export default function CardDetailModal({
   if (!cardDetailData) return;
 
   return (
-    <BaseModal
-      isOpen={isOpen}
-      onClose={onClose}
-      width={730}
-      radius="md"
-      padding="lg"
-      gap="md"
-    >
-      <div className="w-full">
+    <BaseModal isOpen={isOpen} onClose={onClose} width={730} radius="md">
+      <div className="overflow-y-auto">
         <Header
           title={cardDetailData.title}
           onClose={onClose}
