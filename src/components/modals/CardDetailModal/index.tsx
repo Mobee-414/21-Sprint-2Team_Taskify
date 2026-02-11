@@ -1,4 +1,5 @@
 import { useCardDetail } from "@/hooks/useCardDetail";
+import { CardDetailType } from "@/types/card.type";
 import BaseModal from "@/components/common/BaseModal";
 import Header from "./Header";
 import SideInfo from "./SideInfo";
@@ -9,8 +10,8 @@ interface CardDetailModalProps {
   onClose: () => void;
   cardId: number;
   columnTitle: string;
-  handleCardFormOpen: () => void;
-  handleCardDeleteModalOpen: (title: string) => void;
+  handleCardFormOpen: (data: CardDetailType) => void;
+  handleCardDeleteModalOpen: (id: number, title: string) => void;
 }
 
 export default function CardDetailModal({
@@ -39,8 +40,10 @@ export default function CardDetailModal({
         <Header
           title={cardDetailData.title}
           onClose={onClose}
-          handleCardFormOpen={handleCardFormOpen}
-          handleCardDeleteModalOpen={handleCardDeleteModalOpen}
+          handleCardFormOpen={() => handleCardFormOpen(cardDetailData)}
+          handleCardDeleteModalOpen={() =>
+            handleCardDeleteModalOpen(cardDetailData.id, cardDetailData.title)
+          }
         />
 
         <div className="flex justify-between">

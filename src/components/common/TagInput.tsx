@@ -1,6 +1,6 @@
 import { ControllerRenderProps } from "react-hook-form";
 import { TagItem } from "@/types/card.type";
-import { CardFormValues } from "@/hooks/useCardForm";
+import { CardFormValues } from "@/types/card.schema";
 import { useId } from "react";
 
 interface TagInputProps {

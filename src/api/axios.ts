@@ -10,7 +10,7 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-  if(typeof window !== "undefined") {
+  if (typeof window !== "undefined") {
     const token = (localStorage.getItem("accessToken") ?? "").trim();
     if (token) config.headers.Authorization = `Bearer ${token}`;
   }

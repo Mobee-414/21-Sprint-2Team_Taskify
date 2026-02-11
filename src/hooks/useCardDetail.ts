@@ -35,7 +35,7 @@ export function useCardDetail(cardId: number) {
         }
 
         console.error("카드 상세 조회 실패:", error);
-        throw error;
+        return;
       }
     },
     [],

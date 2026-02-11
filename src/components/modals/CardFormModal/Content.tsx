@@ -4,20 +4,23 @@ import {
   FieldErrors,
   UseFormHandleSubmit,
 } from "react-hook-form";
-import { CardFormValues } from "@/hooks/useCardForm";
-import "react-datepicker/dist/react-datepicker.css";
-import { Input } from "@/components/common/Input";
-import DatePickerInput from "@/components/common/DatePickerInput";
-import { DatepickerProps, TagItem } from "@/types/card.type";
 import { ChangeEvent, RefObject } from "react";
-import Image from "next/image";
+import { CardFormValues } from "@/types/card.schema";
+import { DatepickerProps, TagItem } from "@/types/card.type";
+import { MemberType } from "@/types/user.type";
+import { Column } from "@/types/column.type";
+import { Input } from "@/components/common/Input";
+import { StatusDropdown } from "@/components/dropdown/feature/StatusDropdown";
+import { AssigneeDropdown } from "@/components/dropdown/feature/Assignee";
+import { Dropdown } from "@/components/dropdown/Dropdown";
+import DatePickerInput from "@/components/common/DatePickerInput";
+import "react-datepicker/dist/react-datepicker.css";
 import TagInput from "@/components/common/TagInput";
 import ImageInput from "@/components/common/ImageInput";
 
 interface FormProps {
   control: Control<CardFormValues>;
   errors: FieldErrors<CardFormValues>;
-  isValid: boolean;
 }
 
 interface TagsProps {
@@ -45,6 +48,8 @@ interface ContentProps {
   handleSubmit: UseFormHandleSubmit<CardFormValues>;
   onSubmit: (data: CardFormValues) => void;
   onClose: () => void;
+  columnList: Column[];
+  memberList: MemberType[];
   datepickerProps: DatepickerProps;
   tagsProps: TagsProps;
   imageProps: imageProps;
@@ -56,11 +61,13 @@ export default function Content({
   handleSubmit,
   onSubmit,
   onClose,
+  columnList,
+  memberList,
   datepickerProps,
   tagsProps,
   imageProps,
 }: ContentProps) {
-  const { control, errors, isValid } = formProps;
+  const { control, errors } = formProps;
   const { datepickerRef, handleDateChange } = datepickerProps;
   const { tagList, handleKeyDown } = tagsProps;
   const { fileInputRef, previewUrl, handleImageButtonClick, handleFileChange } =
@@ -78,7 +85,13 @@ export default function Content({
                 <div>
                   <label htmlFor={field.name}>상태</label>
                 </div>
-                <div>드롭다운 추가</div>
+                <StatusDropdown
+                  columnList={columnList}
+                  selectedColumnId={field.value}
+                  onChange={(id: number) => {
+                    field.onChange(id);
+                  }}
+                />
               </div>
             )}
           />
@@ -92,7 +105,16 @@ export default function Content({
               <div>
                 <label htmlFor={field.name}>담당자</label>
               </div>
-              <div>드롭다운 추가</div>
+              <Dropdown>
+                <AssigneeDropdown
+                  users={memberList}
+                  selectedUserId={field.value}
+                  onChange={(id: number) => {
+                    field.onChange(id);
+                  }}
+                  placeholder="담당자를 지정해주세요"
+                />
+              </Dropdown>
             </div>
           )}
         />
@@ -157,7 +179,7 @@ export default function Content({
             <TagInput
               tagList={tagList}
               field={field}
-              error={errors.dueDate?.message}
+              error={errors.tags?.message}
               handleKeyDown={handleKeyDown}
             />
           )}

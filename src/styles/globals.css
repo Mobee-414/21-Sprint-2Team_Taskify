@@ -1,6 +1,9 @@
 @import "tailwindcss";
 
 @theme {
+  /* 스타일 */
+  --font-pretendard: "Pretendard", sans-serif;
+
   /* 사이즈 */
   --font-size-4xl: 48px;
   --font-size-3xl: 32px;
@@ -61,8 +64,18 @@
   --color-white: #ffffff;
 }
 
+@layer base {
+  body {
+    font-family: var(--font-pretendard), sans-serif !important;
+  }
+
+  * {
+    font-family: inherit;
+  }
+}
+
 @layer utilities {
-   .text-4xl {
+  .text-4xl {
     font-size: var(--font-size-4xl);
     line-height: var(--line-height-4xl);
   }
@@ -151,3 +164,34 @@
     }
   }
 }
+
+/* 사이드바 스크롤바 커스텀 */
+.sidebar-scroll {
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  scrollbar-width: none;
+}
+
+.sidebar-scroll::-webkit-scrollbar {
+  width: 8px;             
+}
+
+.sidebar-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(120, 116, 134, 0);     
+  transition: background-color 1800ms ease; 
+}
+
+.sidebar-scroll.is-scrolling::-webkit-scrollbar-thumb {
+  background: rgba(120, 116, 134, 0.45);
+}
+
+.sidebar-scroll.is-scrolling {
+  scrollbar-width: auto;
+  scrollbar-color: rgba(120, 116, 134, 0.45) transparent;
+}
+

@@ -1,5 +1,20 @@
 import axios from "./axios";
-import type { SignupResponse, LoginResponse } from '@/types/auth.type';
+
+export type User = {
+  id: number;
+  email: string;
+  nickname: string;
+  profileImageUrl: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type SignupResponse = User;
+
+export type LoginResponse = {
+  user: User;
+  accessToken: string;
+};
 
 export async function signup(params: {
   email: string;

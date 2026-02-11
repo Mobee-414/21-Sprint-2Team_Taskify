@@ -1,4 +1,5 @@
 import DatePicker from "react-datepicker";
+import { AssigneeUser } from "./user.type";
 
 export interface DatepickerProps {
   datepickerRef: React.RefObject<DatePicker | null>;
@@ -14,18 +15,36 @@ export interface TagItem {
   fontColor: string;
 }
 
-export interface CardDetailType {
-  id: number;
+export interface CardDefaultType {
   title: string;
   description: string;
-  tags: string[];
   dueDate: string;
-  assignee: {
-    profileImageUrl: string;
-    nickname: string;
-    id: number;
-  };
+  tags: string[];
   imageUrl: string;
+}
+
+export interface CardDetailType extends CardDefaultType {
+  id: number;
+  assignee: AssigneeUser;
   teamId: string;
   columnId: number;
+  createdAt: string;
+  updatedAt: string;
 }
+
+export interface CardCreateType extends CardDefaultType {
+  assigneeUserId: number;
+  dashboardId: number;
+  columnId: number;
+}
+
+export interface CardUpdateType extends CardDefaultType {
+  columnId: number;
+  assigneeUserId: number;
+}
+
+export type SyncCardListType = (
+  action: "create" | "edit" | "delete",
+  cardData?: CardDetailType,
+  cardId?: number,
+) => void;
