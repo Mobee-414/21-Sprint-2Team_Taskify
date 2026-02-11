@@ -80,7 +80,7 @@ export default function CreateColumnModal({
       <div
         className={`
           flex w-full flex-col items-center
-          overflow-y-auto}
+          overflow-y-auto
         `}
       >
         <form

@@ -51,7 +51,7 @@ export default function CreateDashboardModal({ onClose, onCreated }: Props) {
       <div
         className={`
           flex w-full flex-col items-center
-          overflow-y-auto}
+          overflow-y-auto
         `}
       >
         <div className="flex w-[520px] h-[280px] flex-col gap-[24px]">
