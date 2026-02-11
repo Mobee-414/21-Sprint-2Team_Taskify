@@ -1,7 +1,7 @@
-import axios from "./axios";
+import axiosInstance from "./axios";
 
 export const getMembers = async (dashboardId: number) => {
-  return await axios.get("/members", {
+  return await axiosInstance.get("/members", {
     params: {
       dashboardId,
     },
