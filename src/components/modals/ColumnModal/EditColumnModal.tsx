@@ -86,45 +86,55 @@ export default function EditColumnModal({
 
   return (
     <>
-      <BaseModal isOpen={isOpen} onClose={onClose} width={540} padding="lg">
-        <form onSubmit={handleSubmit(onSubmit)} className="w-full flex flex-col gap-8">
-          <h2 className="text-2xl font-bold text-black-dark text-left w-full">
-            컬럼
-          </h2>
+      <BaseModal isOpen={isOpen} onClose={onClose} width={540}>
+        <div
+          className={`
+          flex w-full flex-col items-center
+          overflow-y-auto}
+        `}
+        >
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="w-full flex flex-col gap-8"
+          >
+            <h2 className="text-2xl font-bold text-black-dark text-left w-full">
+              컬럼
+            </h2>
 
-          <div className="w-full">
-            <Controller
-              name="columnTitle"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  label="이름"
-                  placeholder="컬럼 이름을 입력하세요"
-                  field={field}
-                  labelSize="labelFixed"
-                  error={errors.columnTitle?.message}
-                />
-              )}
-            />
-          </div>
-          <div className="flex justify-between items-center w-full mt-4">
-            <button
-              type="button"
-              onClick={() => setIsConfirmOpen(true)}
-              className="text-gray-medium underline text-sm hover:text-red-point"
-            >
-              삭제
-            </button>
+            <div className="w-full">
+              <Controller
+                name="columnTitle"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    label="이름"
+                    placeholder="컬럼 이름을 입력하세요"
+                    field={field}
+                    labelSize="labelFixed"
+                    error={errors.columnTitle?.message}
+                  />
+                )}
+              />
+            </div>
+            <div className="flex justify-between items-center w-full mt-4">
+              <button
+                type="button"
+                onClick={() => setIsConfirmOpen(true)}
+                className="text-gray-medium underline text-sm hover:text-red-point"
+              >
+                삭제
+              </button>
 
-            <button
-              type="button"
-              onClick={handleSubmit(handleUpdate)}
-              className="bg-violet-main text-white px-12 py-4 rounded-[8px] font-bold"
-            >
-              변경
-            </button>
-          </div>
-        </form>
+              <button
+                type="button"
+                onClick={handleSubmit(handleUpdate)}
+                className="bg-violet-main text-white px-12 py-4 rounded-[8px] font-bold"
+              >
+                변경
+              </button>
+            </div>
+          </form>
+        </div>
       </BaseModal>
 
       <ConfirmDeleteModal
