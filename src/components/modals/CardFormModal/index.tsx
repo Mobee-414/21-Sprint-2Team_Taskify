@@ -1,4 +1,4 @@
-import { CardDetailType } from "@/types/card.type";
+import { CardDetailType, SyncCardListType } from "@/types/card.type";
 import BaseModal from "@/components/common/BaseModal";
 import { useCardForm } from "@/hooks/useCardForm";
 import Header from "./Header";
@@ -10,7 +10,7 @@ interface CardFormModalProps {
   mode: "create" | "edit";
   columnId: number;
   initialData?: CardDetailType | null;
-  onSuccess: (newCard: CardDetailType) => void;
+  onSuccess: SyncCardListType;
 }
 
 export default function CardFormModal({
@@ -24,6 +24,8 @@ export default function CardFormModal({
   const {
     control,
     errors,
+    isValid,
+    isDirty,
     handleSubmit,
     onSubmit,
     columnList,
@@ -38,7 +40,7 @@ export default function CardFormModal({
     handleFileChange,
   } = useCardForm(onClose, onSuccess, columnId, initialData);
 
-  const formProps = { control, errors };
+  const formProps = { control, errors, isValid, isDirty };
   const datepickerProps = { datepickerRef, handleDateChange };
   const tagsProps = { tagList, handleKeyDown };
   const imageProps = {

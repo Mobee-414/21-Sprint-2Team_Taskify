@@ -21,6 +21,8 @@ import ImageInput from "@/components/common/ImageInput";
 interface FormProps {
   control: Control<CardFormValues>;
   errors: FieldErrors<CardFormValues>;
+  isValid: boolean;
+  isDirty: boolean;
 }
 
 interface TagsProps {
@@ -67,7 +69,7 @@ export default function Content({
   tagsProps,
   imageProps,
 }: ContentProps) {
-  const { control, errors } = formProps;
+  const { control, errors, isValid, isDirty } = formProps;
   const { datepickerRef, handleDateChange } = datepickerProps;
   const { tagList, handleKeyDown } = tagsProps;
   const { fileInputRef, previewUrl, handleImageButtonClick, handleFileChange } =
@@ -205,9 +207,13 @@ export default function Content({
             취소
           </button>
           {mode === "create" ? (
-            <button type="submit">생성</button>
+            <button type="submit" className={`${isValid ? "" : "disabled"}`}>
+              생성
+            </button>
           ) : (
-            <button type="submit">수정</button>
+            <button type="submit" disabled={!isDirty}>
+              수정
+            </button>
           )}
         </div>
       </form>
