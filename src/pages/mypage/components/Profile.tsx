@@ -27,10 +27,17 @@ const Profile = () => {
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+     const file = e.target.files?.[0];
     if (!file) return;
+
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+    }
+
     const url = URL.createObjectURL(file);
     setPreviewUrl(url);
+
+    e.target.value = '';
   };
 
   const onSubmit = (data: ProfileFormValues) => {
@@ -43,9 +50,13 @@ const Profile = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex gap-[24px]">
           {/* 이미지 업로드 */}
-          <div
+          <button
+            type = "button"
             onClick={handleImageClick}
-            className="w-[160px] h-[160px] bg-gray-light rounded-[8px] flex items-center justify-center cursor-pointer flex-shrink-0 overflow-hidden"
+            className="
+              w-[160px] h-[160px] bg-gray-light rounded-[8px] 
+              flex items-center justify-center cursor-pointer flex-shrink-0 overflow-hidden"
+            aria-label="프로필 이미지 업로드"
           >
             {previewUrl ? (
               <Image
@@ -63,7 +74,7 @@ const Profile = () => {
                 height={160}
               />
             )}
-          </div>
+          </button>
 
           {/* 숨겨진 파일 input */}
           <input
@@ -105,7 +116,9 @@ const Profile = () => {
             </div>
             <BaseButton
               type="submit"
-              className="w-[252px] h-[54px] md:w-[276px] lg:w-[400px] bg-violet-main text-white rounded-[8px] text-lg font-semibold"
+              className="
+                w-[252px] h-[54px] md:w-[276px] lg:w-[400px] 
+                bg-violet-main text-white rounded-[8px] text-lg font-semibold"
             >
               저장
             </BaseButton>
