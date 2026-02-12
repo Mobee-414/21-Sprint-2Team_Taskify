@@ -1,3 +1,4 @@
+'use client';
 import { Controller } from "react-hook-form";
 import { useLogin } from "@/hooks/useLogin";
 import { Input } from "@/components/common/Input";
