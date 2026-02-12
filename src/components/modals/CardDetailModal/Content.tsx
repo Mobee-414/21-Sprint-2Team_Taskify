@@ -57,8 +57,9 @@ export default function Content({
             tagList.map((tag, index) => (
               <span
                 className="
-                  text-xs font-regular 
-                  px-[6px] py-[4px] md:px-[9.5px] py-[5px] 
+                  flex justify-center items-center
+                  text-xs-tight font-regular 
+                  px-[6px] py-[4px] md:px-[9.5px] md:py-[5px] 
                   rounded-[4px]
                   "
                 key={index}
@@ -72,7 +73,7 @@ export default function Content({
             ))}
         </div>
       </div>
-      <div className="text-xs md:text-md font-regular text-black-pure mb-[32px] md:mb-[16px]">
+      <div className="text-xs-tight md:text-md font-regular text-black-pure mb-[32px] md:mb-[16px]">
         {description}
       </div>
       <div className="relative w-full h-[168px] md:h-[246px] mb-[24px]">
