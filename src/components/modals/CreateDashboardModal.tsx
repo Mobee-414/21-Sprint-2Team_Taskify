@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import BaseModal from "@/components/common/BaseModal";
-import { createDashboard, Dashboard } from "@/api/dashboards.api";
+import { createDashboard } from "@/api/dashboards.api";
+import type { Dashboard } from "@/types/dashboard.type";
 import { Input } from "@/components/common/Input";
 import { useForm, Controller } from "react-hook-form";
 
@@ -48,16 +49,9 @@ export default function CreateDashboardModal({ onClose, onCreated }: Props) {
 
   return (
     <BaseModal isOpen={true} onClose={onClose} width={584} radius="md">
-      <div
-        className={`
-          flex w-full flex-col items-center
-          overflow-y-auto
-        `}
-      >
+      <div className="p-[32px]">
         <div className="flex w-[520px] h-[280px] flex-col gap-[24px]">
-          <h2 className="text-[24px] font-bold text-[#333236]">
-            새로운 대시보드
-          </h2>
+          <h2 className="text-2xl font-bold text-black-medium">새로운 대시보드</h2>
 
           <Controller
             name="title"
@@ -107,16 +101,16 @@ export default function CreateDashboardModal({ onClose, onCreated }: Props) {
               onClick={onClose}
               disabled={loading}
               className="
-              flex items-center justify-center
-              w-[254px] h-[54px]
-              px-[46px] py-[14px]
-              rounded-[8px]
-              border border-gray-base
-              text-[16px] font-medium text-[#787486]
-              hover:bg-gray-surface
-              cursor-pointer
-              disabled:opacity-40 disabled:cursor-not-allowed
-            "
+                flex items-center justify-center
+                w-[254px] h-[54px]
+                px-[46px] py-[14px]
+                rounded-[8px]
+                border border-gray-base
+                text-lg font-medium text-gray-dark
+                hover:bg-gray-surface
+                cursor-pointer
+                disabled:opacity-40 disabled:cursor-not-allowed
+              "
             >
               취소
             </button>
@@ -126,16 +120,16 @@ export default function CreateDashboardModal({ onClose, onCreated }: Props) {
               onClick={handleSubmit(onSubmit)}
               disabled={!canSubmit || loading}
               className="
-              flex items-center justify-center
-              w-[254px] h-[54px]
-              px-[46px] py-[14px]
-              rounded-[8px]
-              bg-violet-main
-              text-[16px] font-medium text-white
-              hover:opacity-90
-              cursor-pointer
-              disabled:opacity-40 disabled:cursor-not-allowed
-            "
+                flex items-center justify-center
+                w-[254px] h-[54px]
+                px-[46px] py-[14px]
+                rounded-[8px]
+                bg-violet-main
+                text-lg font-medium text-white
+                hover:opacity-90
+                cursor-pointer
+                disabled:opacity-40 disabled:cursor-not-allowed
+              "
             >
               {loading ? "생성 중..." : "생성"}
             </button>
