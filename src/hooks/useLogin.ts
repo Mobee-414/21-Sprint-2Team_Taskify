@@ -1,8 +1,11 @@
+'use client'
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { login } from '@/api/auth.api';
 import axios from 'axios';
+import { useRouter } from 'next/router';
+import { useAuth } from '@/contexts/AuthProvider';
 
 // 스키마
 const LoginSchema = z.object({
@@ -20,6 +23,8 @@ type LoginValues = z.infer<typeof LoginSchema>;
 
 // 훅
 export function useLogin() {
+  const router = useRouter();
+  const { setUser } = useAuth();
   const {
     control,
     formState: { errors, isValid },
@@ -40,6 +45,10 @@ export function useLogin() {
 
       // accessToken 저장
       localStorage.setItem("accessToken", res.accessToken); // 로그인 성공시 토큰 저장
+
+      setUser(res.user); // 전역 user 저장
+
+      router.push('/'); // 페이지 이동
 
       console.log("로그인 성공:", res.user);
       return res.user;
