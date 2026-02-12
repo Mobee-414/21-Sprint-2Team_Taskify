@@ -27,7 +27,6 @@ export default function ButtonModalClose({ onClick }: ModalCloseButtonProps) {
           width={36}
           height={36}
           className="w-[24px] h-[24px] md:w-[36px] md:h-[36px] object-contain"
-          priority
         />
       </picture>
     </button>
