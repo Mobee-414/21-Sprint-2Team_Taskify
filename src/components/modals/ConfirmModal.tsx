@@ -38,7 +38,7 @@ export default function ConfirmModal({
           <ButtonModal
             type="button"
             fontSize={"lg"}
-            className={`w-full h-[54px]`}
+            className="w-full h-[54px]"
             onClick={onClick}
           >
             삭제
