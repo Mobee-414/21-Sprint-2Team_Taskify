@@ -10,7 +10,7 @@ interface CreateColumnModalProps {
   onClose: () => void;
   dashboardId: number;
   onSuccess: () => void;
-  existingColumns: { title: string}[];
+  existingColumns: { title: string }[];
 }
 
 interface ColumnFormValues {
@@ -22,7 +22,7 @@ export default function CreateColumnModal({
   onClose,
   dashboardId,
   onSuccess,
-  existingColumns
+  existingColumns,
 }: CreateColumnModalProps) {
   const {
     control,
@@ -42,7 +42,7 @@ export default function CreateColumnModal({
 
   const onSubmit = async (data: ColumnFormValues) => {
     const isDuplicate = existingColumns.some(
-      (col) => col.title === data.columnTitle
+      (col) => col.title === data.columnTitle,
     );
     if (isDuplicate) {
       setError("columnTitle", {
@@ -77,44 +77,51 @@ export default function CreateColumnModal({
 
   return (
     <BaseModal isOpen={isOpen} onClose={onClose} width={540}>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col w-full gap-8"
+      <div
+        className={`
+          flex w-full flex-col items-center
+          overflow-y-auto
+        `}
       >
-        <h2 className="text-2xl font-bold text-black-medium">새 컬럼 생성</h2>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col w-full gap-8"
+        >
+          <h2 className="text-2xl font-bold text-black-medium">새 컬럼 생성</h2>
 
-        <Controller
-          name="columnTitle"
-          control={control}
-          rules={{ required: "컬럼 이름을 입력해주세요." }}
-          render={({ field }) => (
-            <Input
-              label="이름"
-              field={field}
-              placeholder="새로운 프로젝트"
-              error={errors.columnTitle?.message}
-              labelSize="labelLg"
-              inputSize="inputMd"
-            />
-          )}
-        />
+          <Controller
+            name="columnTitle"
+            control={control}
+            rules={{ required: "컬럼 이름을 입력해주세요." }}
+            render={({ field }) => (
+              <Input
+                label="이름"
+                field={field}
+                placeholder="새로운 프로젝트"
+                error={errors.columnTitle?.message}
+                labelSize="labelLg"
+                inputSize="inputMd"
+              />
+            )}
+          />
 
-        <div className="flex justify-end gap-3">
-          <button
-            type="button"
-            onClick={onClose}
-            className="flex-1 py-3 text-gray-medium border border-gray-light rounded-md font-medium"
-          >
-            취소
-          </button>
-          <button
-            type="submit"
-            className="flex-1 py-3 text-white bg-violet-main rounded-md font-medium"
-          >
-            생성
-          </button>
-        </div>
-      </form>
+          <div className="flex justify-end gap-3">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 py-3 text-gray-medium border border-gray-light rounded-md font-medium"
+            >
+              취소
+            </button>
+            <button
+              type="submit"
+              className="flex-1 py-3 text-white bg-violet-main rounded-md font-medium"
+            >
+              생성
+            </button>
+          </div>
+        </form>
+      </div>
     </BaseModal>
   );
 }

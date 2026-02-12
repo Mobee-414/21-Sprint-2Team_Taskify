@@ -4,6 +4,7 @@ import type { ButtonHTMLAttributes, MouseEventHandler, ReactNode } from "react";
 import clsx from "clsx";
 
 type ButtonVariant = "primary" | "secondary";
+type FontSize = "sm" | "md" | "lg";
 
 interface BaseButtonProps extends Omit<
   ButtonHTMLAttributes<HTMLButtonElement>,
@@ -11,36 +12,36 @@ interface BaseButtonProps extends Omit<
 > {
   children?: ReactNode;
   disabled?: boolean;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
   type?: "button" | "submit" | "reset";
-  variant?: ButtonVariant;
   className?: string;
   loading?: boolean;
-  onClick?: MouseEventHandler<HTMLButtonElement>;
+  variant?: ButtonVariant;
+  fontSize?: FontSize;
 }
 
-// 버튼 타입 정의
+// 버튼 타입
 const variantMap: Record<ButtonVariant, string> = {
-  primary: `
-    bg-violet-main
-    text-white
-    font-medium
-    hover:bg-purple-deep
-    disabled:bg-gray-base
-  `,
-  secondary: `
-    bg-white
-    hover:bg-gray-bg
-    text-violet-main
-  `,
+  primary: "font-semibold text-white bg-violet-main hover:bg-purple-deep",
+  secondary:
+    "font-medium text-gray-dark bg-white hover:bg-gray-bg border border-gray-base",
 };
 
-export default function ButtonInputDelete({
+// 폰트 사이즈
+const fontSizeMap: Record<FontSize, string> = {
+  sm: "text-sm",
+  md: "text-md",
+  lg: "text-lg",
+};
+
+export default function ButtonModal({
   children,
   disabled,
-  type = "button",
-  variant = "primary",
-  className,
   onClick,
+  type = "button",
+  className,
+  variant = "primary",
+  fontSize = "md",
   ...rest
 }: BaseButtonProps) {
   return (
@@ -49,9 +50,12 @@ export default function ButtonInputDelete({
       disabled={disabled}
       onClick={onClick}
       className={clsx(
-        "flex items-center justify-center",
-        "rounded-[4px] border border-gray-base",
+        "flex items-center justify-center gap-[10px]",
+        "rounded-[8px]",
+        (disabled || className?.includes("disabled")) &&
+          "!bg-gray-base !text-white opacity-70",
         variantMap[variant],
+        fontSizeMap[fontSize],
         className,
       )}
       {...rest}
