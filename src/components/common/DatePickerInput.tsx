@@ -1,8 +1,8 @@
+import { useId } from "react";
 import DatePicker from "react-datepicker";
 import { ControllerRenderProps } from "react-hook-form";
 import { DatepickerProps } from "@/types/card.type";
-import { CardFormValues } from "@/hooks/useCardForm";
-import { useId } from "react";
+import { CardFormValues } from "@/types/card.schema";
 
 interface DatePickerInputProps extends DatepickerProps {
   field: ControllerRenderProps<CardFormValues, "dueDate">;
