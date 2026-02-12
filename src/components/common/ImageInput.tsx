@@ -1,7 +1,7 @@
-import { CardFormValues } from "@/hooks/useCardForm";
-import Image from "next/image";
 import { ChangeEvent, useId } from "react";
 import { ControllerRenderProps } from "react-hook-form";
+import { CardFormValues } from "@/types/card.schema";
+import Image from "next/image";
 
 interface ImageInputProps {
   fileInputRef: React.RefObject<HTMLInputElement | null>;
