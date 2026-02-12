@@ -82,7 +82,7 @@ export default function Content({
             fill
             className="object-cover rounded-[6px]"
             src={imageUrl}
-            alt="${title} 이미지"
+            alt={`${title} 이미지`}
           />
         )}
       </div>
