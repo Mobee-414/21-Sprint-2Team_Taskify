@@ -18,9 +18,12 @@ export function KebabMenuDropdown({ onEdit, onDelete }: Props) {
       <DropdownTrigger>
         <Image
           src="/icons/kebab_more_vert.svg"
-          width={28}
-          height={28}
-          className="w-[28px] h-[28px] cursor-pointer hover:opacity-70 transition"
+          width={20}
+          height={20}
+          className="
+          w-[20px] md:w-[28px] h-[20px] md:h-[28px] 
+          cursor-pointer hover:opacity-70 transition
+          "
           alt="menu"
         />
       </DropdownTrigger>
@@ -28,13 +31,14 @@ export function KebabMenuDropdown({ onEdit, onDelete }: Props) {
       <DropdownMenu
         align="end"
         className="
+          flex flex-col
+          justify-center
           w-[93px] h-[82px]
-          bg-[var(--color-white)]
+          px-[6px] py-[7px]
+          bg-white
           border border-gray-200
           rounded-xl
           shadow-[0_4px_12px_rgba(0,0,0,0.08)]
-          flex flex-col
-          justify-center
         "
       >
         <DropdownItem
@@ -42,10 +46,10 @@ export function KebabMenuDropdown({ onEdit, onDelete }: Props) {
           className="
             h-1/2
             flex items-center justify-center
-            text-sm
-            text-[var(--color-black-pure)]
-            hover:bg-[var(--color-violet-light)]
-            hover:text-[var(--color-violet-main)]
+            text-md
+            text--black-medium
+            hover:bg-violet-light
+            hover:text-violet-main
           "
         >
           수정하기
@@ -56,10 +60,10 @@ export function KebabMenuDropdown({ onEdit, onDelete }: Props) {
           className="
             h-1/2
             flex items-center justify-center
-            text-sm
-            text-[var(--color-black-pure)]
-            hover:bg-[var(--color-violet-light)]
-            hover:text-[var(--color-violet-main)]
+            text-md
+            text-black-medium
+            hover:bg-violet-light
+            hover:text-violet-main
           "
         >
           삭제하기
