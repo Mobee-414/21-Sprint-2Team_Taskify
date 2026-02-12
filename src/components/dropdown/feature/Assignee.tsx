@@ -42,7 +42,7 @@ function AssigneeTrigger({
         cursor-pointer
       `}
     >
-      <Avatar nickname={label} imageUrl={imageUrl} size={26} />
+      <Avatar nickname={label} imageUrl={imageUrl} />
 
       <span className="ml-[6px] text-lg font-regular text-[var(--color-black-medium)]">
         {label}
@@ -120,7 +120,6 @@ export function AssigneeDropdown({
                 <Avatar
                   nickname={user.nickname}
                   imageUrl={user.profileImageUrl}
-                  size={26}
                 />
 
                 <span className="ml-[6px] text-lg font-regular text-[var(--color-black-medium)]">

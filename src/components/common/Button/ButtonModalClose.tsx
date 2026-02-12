@@ -26,7 +26,7 @@ export default function ButtonModalClose({ onClick }: ModalCloseButtonProps) {
           alt="닫기"
           width={36}
           height={36}
-          className="w-[24px] h-[24px] md:w-[36px] md:h-[36px] object-contain"
+          className="w-[24px] h-[24px] md:w-[32px] md:h-[32px] object-contain"
         />
       </picture>
     </button>
