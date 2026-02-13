@@ -38,8 +38,8 @@ function ProfileAvatar({
 
   return (
     <div
-      className="flex h-[38px] w-[38px] items-center justify-center rounded-full text-white font-semibold"
-      style={{ backgroundColor: color ?? "#A3C4A2" }}
+      className="flex h-[38px] w-[38px] items-center justify-center rounded-full bg-gray-base text-white font-semibold"
+      style={{ backgroundColor: color ?? "var(--color-gray-medium)" }}
     >
       {nickname?.[0] ?? "?"}
     </div>
@@ -60,11 +60,11 @@ function ProfileTrigger({
   return (
     <button type="button" className="flex items-center cursor-pointer">
       <ProfileAvatar nickname={nickname} imageUrl={imageUrl} color={color} />
-      <span className="ml-[12px] text-[16px] font-medium text-[#333236]">
+      <span className="ml-[12px] text-lg font-medium text-black-medium">
         {nickname}
       </span>
       <span
-        className={`ml-[8px] text-[#787486] transition-transform ${
+        className={`ml-[8px] text-gray-dark transition-transform ${
           open ? "rotate-180" : ""
         }`}
         aria-hidden
@@ -104,7 +104,7 @@ export default function ProfileDropdown({
             w-[140px]
             rounded-[6px]
             bg-white
-            border border-gray-200
+            border border-gray-light
             overflow-hidden
           "
         >
@@ -114,7 +114,7 @@ export default function ProfileDropdown({
               group
               h-[44px]
               !px-0 !py-0
-              hover:bg-[#F1EFFD]
+              hover:bg-violet-light
               cursor-pointer
             "
           >
@@ -122,9 +122,9 @@ export default function ProfileDropdown({
               className="
                 flex h-full items-center justify-center
                 text-center px-[16px]
-                text-[16px] font-medium
-                text-[#333236]
-                group-hover:text-[#5534DA]
+                text-lg font-medium
+                text-black-medium
+                group-hover:text-violet-main
                 transition-colors
               "
             >
@@ -138,7 +138,7 @@ export default function ProfileDropdown({
               group
               h-[44px]
               !px-0 !py-0
-              hover:bg-[#F1EFFD]
+              hover:bg-violet-light
               cursor-pointer
             "
           >
@@ -146,9 +146,9 @@ export default function ProfileDropdown({
               className="
                 flex h-full items-center justify-center
                 text-center px-[16px]
-                text-[16px] font-medium
-                text-[#333236]
-                group-hover:text-[#5534DA]
+                text-lg font-medium
+                text-black-medium
+                group-hover:text-violet-main
                 transition-colors
               "
             >
@@ -162,7 +162,7 @@ export default function ProfileDropdown({
               group
               h-[44px]
               !px-0 !py-0
-              hover:bg-[#F1EFFD]
+              hover:bg-violet-light
               cursor-pointer
             "
           >
@@ -170,9 +170,9 @@ export default function ProfileDropdown({
               className="
                 flex h-full items-center justify-center
                 text-center px-[16px]
-                text-[16px] font-medium
-                text-[#333236]
-                group-hover:text-[#5534DA]
+                text-lg font-medium
+                text-black-medium
+                group-hover:text-violet-main
                 transition-colors
               "
             >

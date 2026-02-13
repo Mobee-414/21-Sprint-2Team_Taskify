@@ -1,25 +1,10 @@
 import axios from "./axios";
-
-export type Dashboard = {
-  id: number;
-  title: string;
-  color: string; 
-  createdAt: string;
-  updatedAt: string;
-  createdByMe: boolean;
-  userId: number;
-};
-
-export type DashboardsResponse = {
-  cursorId: number | null;
-  totalCount: number;
-  dashboards: Dashboard[];
-};
+import type { Dashboard, DashboardsResponse } from "@/types/dashboard.type";
 
 export async function getDashboards(params: {
   navigationMethod: "pagination" | "infiniteScroll";
-  page?: number;     
-  size?: number;     
+  page?: number;
+  size?: number;
   cursorId?: number;
 }): Promise<DashboardsResponse> {
   const { navigationMethod, page, size, cursorId } = params;
@@ -62,7 +47,7 @@ export async function getDashboard(dashboardId: number): Promise<Dashboard> {
 
 export async function updateDashboard(
   dashboardId: number,
-  params: { title?: string; color?: string },
+  params: { title?: string; color?: string }
 ): Promise<Dashboard> {
   const res = await axios.put<Dashboard>(`/dashboards/${dashboardId}`, params);
   return res.data;

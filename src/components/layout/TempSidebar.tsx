@@ -3,18 +3,16 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 
 import CreateDashboardModal from "@/components/modals/CreateDashboardModal";
-import {
-  Dashboard,
-  DashboardsResponse,
-  getDashboardsPagination,
-} from "@/api/dashboards.api";
+import { getDashboardsPagination } from "@/api/dashboards.api";
+import type { Dashboard, DashboardsResponse } from "@/types/dashboard.type";
 import useInfiniteScroll from "@/hooks/useInfiniteScroll";
+import Tooltip from "../common/Tooltip";
 
 const PAGE_SIZE = 10;
 
 type SidebarProps = {
-  refreshKey: number;               
-  onCreatedGlobal?: () => void;     
+  refreshKey: number;
+  onCreatedGlobal?: () => void;
 };
 
 export default function Sidebar({ refreshKey, onCreatedGlobal }: SidebarProps) {
@@ -79,7 +77,9 @@ export default function Sidebar({ refreshKey, onCreatedGlobal }: SidebarProps) {
         cursorId: res.cursorId,
         totalCount: res.totalCount,
         dashboards:
-          nextPage === 1 ? res.dashboards : [...prev.dashboards, ...res.dashboards],
+          nextPage === 1
+            ? res.dashboards
+            : [...prev.dashboards, ...res.dashboards],
       }));
 
       setPage(nextPage);
@@ -153,12 +153,18 @@ export default function Sidebar({ refreshKey, onCreatedGlobal }: SidebarProps) {
             className="flex items-center gap-2 cursor-pointer"
           >
             <Image src="/icons/logo.svg" alt="로고" width={27} height={24} priority />
-            <Image src="/icons/Taskify.svg" alt="Taskify" width={80} height={22} priority />
+            <Image
+              src="/icons/Taskify.svg"
+              alt="Taskify"
+              width={80}
+              height={22}
+              priority
+            />
           </button>
         </div>
 
         <div className="flex items-center justify-between mb-[24px] shrink-0">
-          <span className="text-[12px] font-semibold text-[#787486]">Dash Boards</span>
+          <span className="text-xs font-semibold text-gray-dark">Dash Boards</span>
 
           <button
             onClick={() => setIsCreateOpen(true)}
@@ -186,18 +192,24 @@ export default function Sidebar({ refreshKey, onCreatedGlobal }: SidebarProps) {
                   onClick={() => handleSelect(d.id)}
                   type="button"
                   className={[
-                    "flex w-full items-center h-[44px] gap-[16px] rounded-md transition-colors cursor-pointer",
+                    "flex w-full items-center h-[44px] gap-[16px] rounded-md transition-colors cursor-pointer px-2",
                     d.id === activeId
                       ? "bg-violet-light text-violet-main"
                       : "text-gray-medium hover:bg-gray-light",
                   ].join(" ")}
                 >
-                  <span className="h-[8px] w-[8px] rounded-full" style={{ backgroundColor: d.color }} />
+                  <span
+                    className="h-[8px] w-[8px] rounded-full shrink-0"
+                    style={{ backgroundColor: d.color }}
+                  />
 
-                  <span className="flex items-center text-[18px] font-medium text-current">
-                    {d.title}
+                  <span className="flex items-center min-w-0 text-2lg font-medium text-current">
+                    <Tooltip content={d.title} placement="right" onlyWhenTruncated>
+                      <span className="truncate">{d.title}</span>
+                    </Tooltip>
+
                     {d.createdByMe && (
-                      <span className="ml-[10px]">
+                      <span className="ml-[10px] shrink-0">
                         <Image src="/icons/crown.svg" alt="owner" width={18} height={18} />
                       </span>
                     )}
@@ -209,7 +221,7 @@ export default function Sidebar({ refreshKey, onCreatedGlobal }: SidebarProps) {
 
           <div ref={sentinelRef} className="h-6" />
 
-          {loading && <div className="py-2 text-xs text-[#787486]">불러오는 중...</div>}
+          {loading && <div className="py-2 text-xs text-gray-dark">불러오는 중...</div>}
         </div>
       </aside>
 

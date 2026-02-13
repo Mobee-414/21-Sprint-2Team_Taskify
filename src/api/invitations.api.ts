@@ -1,21 +1,6 @@
 import { InviteValues } from "@/hooks/useInvite";
 import axios from "./axios";
-
-export type Invitation = {
-  id: number;
-  inviter: { nickname: string; email: string; id: number };
-  teamId: string;
-  dashboard: { title: string; id: number };
-  invitee: { nickname: string; email: string; id: number };
-  inviteAccepted: boolean;
-  createdAt: string;
-  updatedAt: string;
-};
-
-export type InvitationsResponse = {
-  cursorId: number | null;
-  invitations: Invitation[];
-};
+import type { Invitation, InvitationsResponse } from "@/types/invitation.type";
 
 const USE_MOCK = process.env.NEXT_PUBLIC_USE_MOCK === "true";
 
@@ -32,7 +17,7 @@ function makeMockInvitations(count = 30): Invitation[] {
   ];
 
   const topics = [
-    "프로덕트 디자인",
+    "프로덕트 디자인 안녕하세요안녕하세요안녕하세요",
     "프론트엔드 개발",
     "스프린트 플래닝",
     "OKR 관리",
@@ -79,9 +64,7 @@ export async function getReceivedInvitations(params: {
     const keyword = (title ?? "").trim().toLowerCase();
 
     const filtered = keyword
-      ? mockInvitations.filter((x) =>
-          x.dashboard.title.toLowerCase().includes(keyword)
-        )
+      ? mockInvitations.filter((x) => x.dashboard.title.toLowerCase().includes(keyword))
       : mockInvitations;
 
     const start = Math.max(0, cursorId ?? 0);
@@ -120,18 +103,11 @@ export async function respondInvitation(params: {
   return { success: true };
 }
 
-export async function postInvitations(
-  dashboardId: number,
-  data: InviteValues
-): Promise<unknown> {
+export async function postInvitations(dashboardId: number, data: InviteValues): Promise<unknown> {
   const res = await axios.post(`/dashboards/${dashboardId}/invitations`, data);
   return res.data;
 }
 
-/**
- *   개발 편의용: 목업 초대장 추가 함수
- *   window.__addMockInvites?.(20)
- */
 declare global {
   interface Window {
     __addMockInvites?: (count?: number) => void;
@@ -140,12 +116,16 @@ declare global {
 
 if (USE_MOCK && typeof window !== "undefined") {
   window.__addMockInvites = (count = 20) => {
-    const base = mockInvitations.length ? mockInvitations[mockInvitations.length - 1].id + 1 : 1000;
+    const base = mockInvitations.length
+      ? mockInvitations[mockInvitations.length - 1].id + 1
+      : 1000;
+
     const extra = makeMockInvitations(count).map((x, idx) => ({
       ...x,
       id: base + idx,
       dashboard: { ...x.dashboard, id: base + 1000 + idx },
     }));
+
     mockInvitations = [...mockInvitations, ...extra];
   };
 }
