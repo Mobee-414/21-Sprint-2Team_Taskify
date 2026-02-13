@@ -52,7 +52,7 @@ export default function Content({
         >
           {columnTitle}
         </div>
-        <div className="flex gap-[8px] md:gap-[6px]">
+        <div className="flex flex-wrap gap-[8px] md:gap-[6px]">
           {tagList.length > 0 &&
             tagList.map((tag, index) => (
               <span

@@ -107,7 +107,12 @@ export function Input<T extends FieldValues>({
         )}
       </div>
       {error && (
-        <div className={clsx(FONT_SIZE_VARIANTS[errorSize], "text-red-point")}>
+        <div
+          className={clsx(
+            FONT_SIZE_VARIANTS[errorSize],
+            "font-regular text-red-point",
+          )}
+        >
           {error}
         </div>
       )}
