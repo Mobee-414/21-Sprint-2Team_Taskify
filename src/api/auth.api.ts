@@ -1,5 +1,5 @@
 import axios from "./axios";
-import type { User } from "./users.api";
+import type { AuthUser } from "@/types/user.type";
 
 export type LoginParams = {
   email: string;
@@ -7,7 +7,7 @@ export type LoginParams = {
 };
 
 export type LoginResponse = {
-  user: User;
+  user: AuthUser;
   accessToken: string;
 };
 // login
