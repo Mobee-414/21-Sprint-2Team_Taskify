@@ -29,7 +29,7 @@ export default function Content({
   tagList,
 }: ContentProps) {
   return (
-    <div className="order-2 md:order-1">
+    <div className="order-2 md:order-1 flex-grow">
       <div className="flex gap-[24px] md:gap-[40px] mb-[16px]">
         <div
           className="
@@ -52,7 +52,7 @@ export default function Content({
         >
           {columnTitle}
         </div>
-        <div className="flex gap-[8px] md:gap-[6px]">
+        <div className="flex flex-wrap gap-[8px] md:gap-[6px]">
           {tagList.length > 0 &&
             tagList.map((tag, index) => (
               <span

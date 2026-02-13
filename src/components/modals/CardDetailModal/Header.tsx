@@ -37,7 +37,7 @@ export default function Header({
       <div
         className="
           order-1 md:order-2 
-          flex justify-end content-center 
+          flex justify-end content-center md:justify-center md: items-center
           gap-[16px] md:gap-[24px] 
           w-full md:w-auto
           "

@@ -29,7 +29,7 @@ export function Dropdown({ children, onOpenChange }: Props) {
 
   return (
     <DropdownContext.Provider value={{ open, toggle, close }}>
-      <div ref={ref} className="relative flex justify-center items-center">
+      <div ref={ref} className="relative">
         {children}
       </div>
     </DropdownContext.Provider>
