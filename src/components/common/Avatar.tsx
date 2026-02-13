@@ -20,20 +20,18 @@ const getAvatarColor = (nickname: string) => {
 export default function Avatar({
   nickname,
   imageUrl,
-  size = 26,
+  className,
 }: {
   nickname: string;
   imageUrl: string | null;
-  size?: number;
+  className?: string;
 }) {
   if (imageUrl) {
     return (
       <Image
         src={imageUrl}
         alt={nickname}
-        width={size}
-        height={size}
-        className="rounded-full object-cover"
+        className={`${className} rounded-full object-cover`}
       />
     );
   }
@@ -41,10 +39,8 @@ export default function Avatar({
   const color = getAvatarColor(nickname);
   return (
     <div
-      className="flex items-center justify-center rounded-full text-[var(--color-white)]"
+      className={`${className} flex items-center justify-center rounded-full text-white`}
       style={{
-        width: size,
-        height: size,
         backgroundColor: color ?? "#A3C4A2",
         fontSize: 14,
         fontWeight: 600,

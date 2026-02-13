@@ -52,9 +52,8 @@ export default function ButtonModal({
       className={clsx(
         "flex items-center justify-center gap-[10px]",
         "rounded-[8px]",
-        disabled && "cursor-not-allowed",
         (disabled || className?.includes("disabled")) &&
-          "!bg-gray-base !cursor-not-allowed !text-white opacity-70",
+          "!bg-gray-base !text-white opacity-70",
         variantMap[variant],
         fontSizeMap[fontSize],
         className,
