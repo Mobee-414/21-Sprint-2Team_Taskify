@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { login } from "@/api/auth.api";
+import { signup, login } from "@/api/auth.api";
 import { AxiosError } from "axios";
 
 const HeroSection = () => {
