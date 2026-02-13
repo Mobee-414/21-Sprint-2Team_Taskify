@@ -29,7 +29,7 @@ export default function Content({
   tagList,
 }: ContentProps) {
   return (
-    <div className="order-2 md:order-1">
+    <div className="order-2 md:order-1 flex-grow">
       <div className="flex gap-[24px] md:gap-[40px] mb-[16px]">
         <div
           className="
