@@ -32,7 +32,13 @@ export default function ModalTestPage() {
   const [selectedCardData, setSelectedCardData] =
     useState<CardDetailType | null>(null);
 
+  // addCardLocally -> syncCardList 교체 필요(카드 생성수정삭제 동시)
   const [cards, setCards] = useState<CardDetailType[]>([]);
+  const addCardLocally = (newCard: CardDetailType) => {
+    setCards((prev) => [newCard, ...prev]);
+    setSelectedCardData(null);
+  };
+
   const syncCardList = (
     type: "create" | "edit" | "delete",
     card?: CardDetailType | undefined,
@@ -181,7 +187,7 @@ export default function ModalTestPage() {
           mode={CardModalMode}
           columnId={columnId}
           initialData={selectedCardData}
-          onSuccess={syncCardList}
+          onSuccess={addCardLocally}
         />
       )}
 

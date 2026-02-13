@@ -1,63 +1,46 @@
-'use client';
+"use client";
 
-import type {
-  ButtonHTMLAttributes,
-  MouseEventHandler,
-  ReactNode,
-} from 'react';
-import clsx from 'clsx';
+import type { ButtonHTMLAttributes, MouseEventHandler, ReactNode } from "react";
+import clsx from "clsx";
 
-type ButtonVariant = 'primary' | 'secondary';
-type ButtonBorderLine = 'none' | 'gray';
+type ButtonVariant = "primary" | "secondary";
 
-interface BaseButtonProps extends Omit <
-    ButtonHTMLAttributes<HTMLButtonElement>,
-    'type' | 'disabled' | 'onClick'
-  >
-{
+interface BaseButtonProps extends Omit<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  "type" | "disabled" | "onClick"
+> {
   children?: ReactNode;
   disabled?: boolean;
-  onClick?: MouseEventHandler<HTMLButtonElement>;
-  type?: 'button' | 'submit' | 'reset';
+  type?: "button" | "submit" | "reset";
+  variant?: ButtonVariant;
   className?: string;
   loading?: boolean;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
+}
 
-  variant?: ButtonVariant;
-  borderline?: ButtonBorderLine;
-
-};
-
-// 버튼
+// 버튼 타입 정의
 const variantMap: Record<ButtonVariant, string> = {
   primary: `
-    bg-[var(--color-violet-main)]
-    text-[var(--color-white)]
-    font-[var(--font-weight-medium)]
-    hover:bg-[var(--color-purple-deep)]
-    disabled:bg-[var(--color-gray-base)]
+    bg-violet-main
+    text-white
+    font-medium
+    hover:bg-purple-deep
+    disabled:bg-gray-base
   `,
   secondary: `
-    bg-[var(--color-white)]
-    hover:bg-[var(--color-gray-bg)]
-    text-[color:var(--color-violet-main)]
+    bg-white
+    hover:bg-gray-bg
+    text-violet-main
   `,
-};
-
-// 테두리
-const borderMap: Record<ButtonBorderLine, string> = {
-  none: 'border-none',
-  gray: 'border border-[var(--color-gray-base)]',
 };
 
 export default function ButtonInputDelete({
   children,
   disabled,
-  onClick,
-  type = 'button',
+  type = "button",
+  variant = "primary",
   className,
-
-  variant = 'primary',
-  borderline = 'gray',
+  onClick,
   ...rest
 }: BaseButtonProps) {
   return (
@@ -66,13 +49,9 @@ export default function ButtonInputDelete({
       disabled={disabled}
       onClick={onClick}
       className={clsx(
-        'flex items-center justify-center ',
-        'rounded-[4px]',
-        disabled && 'cursor-not-allowed',
-
+        "flex items-center justify-center",
+        "rounded-[4px] border border-gray-base",
         variantMap[variant],
-        borderMap[borderline],
-
         className,
       )}
       {...rest}

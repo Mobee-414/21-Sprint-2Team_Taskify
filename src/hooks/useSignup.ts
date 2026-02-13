@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signup } from '@/api/auth.api';
+import { signup } from '@/api/users.api';
 import axios from 'axios';
 
 // 스키마

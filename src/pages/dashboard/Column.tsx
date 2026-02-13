@@ -1,5 +1,10 @@
-import { getCards } from "@/api/cards.api";
-import { Card } from "@/types/card.type";
+import axiosInstance from "@/api/axios";
+import CardDetailModal from "@/components/modals/CardDetailModal";
+import CardFormModal from "@/components/modals/CardFormModal";
+import ConfirmModal from "@/components/modals/ConfirmModal";
+import { useCardDelete } from "@/hooks/useCardDelete";
+import { CardDetailType, SyncCardListType } from "@/types/card.type";
+import { getTagColor } from "@/utils/getTagColor";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 
@@ -7,19 +12,83 @@ interface ColumnProps {
   id: number;
   title: string;
   onEditClick: () => void;
+  onAddCard: () => void;
+  refreshTrigger: number;
+  onSuccess?: () => void;
 }
 
-export default function Column({ id, title, onEditClick }: ColumnProps) {
-  const [cards, setCards] = useState<Card[]>([]);
+export default function Column({
+  id,
+  title,
+  onEditClick,
+  onAddCard,
+  refreshTrigger,
+  onSuccess,
+}: ColumnProps) {
+  const [cards, setCards] = useState<CardDetailType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingCardData, setEditingCardData] = useState<CardDetailType | null>(
+    null
+  );
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+
+  const { mutate: deleteMutate } = useCardDelete(selectedCardId || 0, (action, data, cardId) => {
+    syncCardList("delete", undefined, cardId);
+    setIsDeleteConfirmOpen(false);
+    setIsDetailOpen(false);
+  });
+
+  const handleCardClick = async (cardId: number) => {
+    setSelectedCardId(cardId);
+    setIsDetailOpen(true);
+  };
+
+  const handleEditOpen = (data: CardDetailType) => {
+    setEditingCardData(data);
+    setIsDetailOpen(false);
+    setIsEditModalOpen(true);
+  };
+
+  const syncCardList: SyncCardListType = useCallback(
+    (action, cardData, cardId) => {
+      switch (action) {
+        case "create":
+          if (cardData) setCards((prev) => [cardData, ...prev]);
+          break;
+
+        case "edit":
+          if (cardData) {
+            if (cardData.columnId !== id) {
+              setCards((prev) =>
+                prev.filter((item) => item.id !== cardData.id)
+              );
+            } else {
+              setCards((prev) =>
+                prev.map((item) => (item.id === cardData.id ? cardData : item))
+              );
+            }
+          }
+          break;
+
+        case "delete":
+          if (cardId)
+            setCards((prev) => prev.filter((item) => item.id !== cardId));
+          break;
+      }
+    },
+    [id]
+  );
 
   const fetchCards = useCallback(async () => {
     try {
       setIsLoading(true);
-      const data = await getCards(id);
-      setCards(data.cards);
+      const res = await axiosInstance.get(`/cards?columnId=${id}`);
+      setCards(res.data.cards || []);
     } catch (error) {
-      console.log("카드 로딩 실패:", error);
+      console.error("카드 로딩 실패", error);
     } finally {
       setIsLoading(false);
     }
@@ -27,10 +96,10 @@ export default function Column({ id, title, onEditClick }: ColumnProps) {
 
   useEffect(() => {
     fetchCards();
-  }, [fetchCards]);
+  }, [fetchCards, refreshTrigger]);
 
   return (
-    <div className="w-full lg:min-w-[354px] flex flex-col gap-4 p-3">
+    <div className="w-full lg:max-w-[354px] flex flex-col gap-4 p-3">
       <div className="flex justify-between items-center px-1">
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-violet-main" />
@@ -45,7 +114,10 @@ export default function Column({ id, title, onEditClick }: ColumnProps) {
       </div>
 
       {/* 할 일 추가 버튼 */}
-      <button className="w-full py-2 bg-white border border-gray-light rounded-md text-violet-main font-bold flex justify-center items-center">
+      <button
+        className="w-full py-2 bg-white border border-gray-light rounded-md text-violet-main font-bold flex justify-center items-center hover:cursor-pointer hover:bg-gray-50 transition"
+        onClick={onAddCard}
+      >
         <Image
           src="/icons/add_box_purple.svg"
           alt="할일 추가"
@@ -54,26 +126,115 @@ export default function Column({ id, title, onEditClick }: ColumnProps) {
         />
       </button>
 
-      {/* 카드 추가 연결 시 렌더링 테스트 예정 */}
-      <div className="flex-1 flex flex-col gap-3 overflow-y-auto pr-1">
-        {isLoading ? (
-          <div className="text-center py-10 text-gray-medium">...</div>
-        ) : cards.length > 0 ? (
-          cards.map((card) => (
-            <div
-              key={card.id}
-              className="bg-white rounded-lg shadow-som p-4 hover:ring-1 hover:ring-violet-main cursor-pointer"
-            >
-              <h3 className="font-bold text-black-dark mb-2">{card.title}</h3>
-              <p className="text -sm text-gray-medium line-clamp-2">
-                {card.description}
-              </p>
+      {/* 카드 리스트 */}
+      {cards.map((card) => (
+        <div
+          key={card.id}
+          onClick={() => handleCardClick(card.id)}
+          className="bg-white rounded-lg border border-gray-light p-4 flex flex-col gap-3 hover:ring-1 hover:ring-violet-main transition-all cursor-pointer shadow-sm"
+        >
+          {card.imageUrl && (
+            <div className="relative w-full h-32 overflow-hidden rounded">
+              <Image
+                src={card.imageUrl}
+                alt={card.title}
+                fill
+                className="object-cover"
+              />
             </div>
-          ))
-        ) : (
-          <div></div>
-        )}
-      </div>
+          )}
+          {/* 카드 제목 */}
+          <h3 className="text-base font-medium text-black-dark leading-snug">
+            {card.title}
+          </h3>
+          {/* 카드 태그 */}
+          <div className="flex flex-col gap-3">
+            <div className="flex flex-wrap gap-1.5">
+              {card.tags.map((tag, index) => {
+                const tagStyle = getTagColor(tag);
+                return (
+                  <span
+                    key={index}
+                    className="px-2 py-1 rounded text-md md:text-xs"
+                    style={{
+                      backgroundColor: tagStyle.bgColor,
+                      color: tagStyle.fontColor,
+                    }}
+                  >
+                    {tagStyle.name}
+                  </span>
+                );
+              })}
+            </div>
+            {/* 마감일 */}
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-1.5 text-md md:text-xs text-gray-medium">
+                <Image
+                  src="/icons/calender.svg"
+                  alt="달력"
+                  width={18}
+                  height={18}
+                />
+                <span>{card.dueDate.split(" ")[0]}</span>
+              </div>
+
+              {card.assignee && (
+                <div className="w-24 h-24">
+                  {card.assignee.profileImageUrl ? (
+                    <Image
+                      src={card.assignee.profileImageUrl}
+                      alt={card.assignee.nickname}
+                      width={24}
+                      height={24}
+                    />
+                  ) : (
+                    card.assignee.nickname[0].toUpperCase()
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      ))}
+
+      {isDetailOpen && selectedCardId && (
+        <CardDetailModal
+          isOpen={isDetailOpen}
+          onClose={() => {
+            setIsDetailOpen(false);
+            setSelectedCardId(null);
+          }}
+          cardId={selectedCardId}
+          columnTitle={title}
+          handleCardFormOpen={handleEditOpen}
+          handleCardDeleteModalOpen={() => setIsDeleteConfirmOpen(true)}
+        />
+      )}
+
+      {isDeleteConfirmOpen && (
+        <ConfirmModal
+          isOpen={isDeleteConfirmOpen}
+          onClose={() => setIsDeleteConfirmOpen(false)}
+          onClick={() => deleteMutate()}
+        >
+          카드에 작성된 모든 내용이 삭제 됩니다.
+        </ConfirmModal>
+      )}
+
+      {isEditModalOpen && editingCardData && (
+        <CardFormModal
+          isOpen={isEditModalOpen}
+          onClose={() => setIsEditModalOpen(false)}
+          mode="edit"
+          columnId={id}
+          initialData={editingCardData}
+          onSuccess={(action, cardData) => {
+            syncCardList(action, cardData);
+            onSuccess?.();
+            setIsEditModalOpen(false);
+          }}
+        />
+      )}
     </div>
   );
 }
