@@ -1,6 +1,8 @@
 import axiosInstance from "@/api/axios";
 import CardDetailModal from "@/components/modals/CardDetailModal";
 import CardFormModal from "@/components/modals/CardFormModal";
+import ConfirmModal from "@/components/modals/ConfirmModal";
+import { useCardDelete } from "@/hooks/useCardDelete";
 import { CardDetailType, SyncCardListType } from "@/types/card.type";
 import { getTagColor } from "@/utils/getTagColor";
 import Image from "next/image";
@@ -12,6 +14,7 @@ interface ColumnProps {
   onEditClick: () => void;
   onAddCard: () => void;
   refreshTrigger: number;
+  onSuccess?: () => void;
 }
 
 export default function Column({
@@ -20,6 +23,7 @@ export default function Column({
   onEditClick,
   onAddCard,
   refreshTrigger,
+  onSuccess,
 }: ColumnProps) {
   const [cards, setCards] = useState<CardDetailType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -29,6 +33,13 @@ export default function Column({
   const [editingCardData, setEditingCardData] = useState<CardDetailType | null>(
     null
   );
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+
+  const { mutate: deleteMutate } = useCardDelete(selectedCardId || 0, (action, data, cardId) => {
+    syncCardList("delete", undefined, cardId);
+    setIsDeleteConfirmOpen(false);
+    setIsDetailOpen(false);
+  });
 
   const handleCardClick = async (cardId: number) => {
     setSelectedCardId(cardId);
@@ -49,10 +60,17 @@ export default function Column({
           break;
 
         case "edit":
-          if (cardData)
-            setCards((prev) =>
-              prev.map((item) => (item.id === cardData.id ? cardData : item))
-            );
+          if (cardData) {
+            if (cardData.columnId !== id) {
+              setCards((prev) =>
+                prev.filter((item) => item.id !== cardData.id)
+              );
+            } else {
+              setCards((prev) =>
+                prev.map((item) => (item.id === cardData.id ? cardData : item))
+              );
+            }
+          }
           break;
 
         case "delete":
@@ -61,7 +79,7 @@ export default function Column({
           break;
       }
     },
-    []
+    [id]
   );
 
   const fetchCards = useCallback(async () => {
@@ -182,14 +200,25 @@ export default function Column({
       {isDetailOpen && selectedCardId && (
         <CardDetailModal
           isOpen={isDetailOpen}
-          onClose={() => setIsDetailOpen(false)}
+          onClose={() => {
+            setIsDetailOpen(false);
+            setSelectedCardId(null);
+          }}
           cardId={selectedCardId}
           columnTitle={title}
           handleCardFormOpen={handleEditOpen}
-          handleCardDeleteModalOpen={(id) =>
-            syncCardList("delete", undefined, id)
-          }
+          handleCardDeleteModalOpen={() => setIsDeleteConfirmOpen(true)}
         />
+      )}
+
+      {isDeleteConfirmOpen && (
+        <ConfirmModal
+          isOpen={isDeleteConfirmOpen}
+          onClose={() => setIsDeleteConfirmOpen(false)}
+          onClick={() => deleteMutate()}
+        >
+          카드에 작성된 모든 내용이 삭제 됩니다.
+        </ConfirmModal>
       )}
 
       {isEditModalOpen && editingCardData && (
@@ -199,7 +228,11 @@ export default function Column({
           mode="edit"
           columnId={id}
           initialData={editingCardData}
-          onSuccess={syncCardList}
+          onSuccess={(action, cardData) => {
+            syncCardList(action, cardData);
+            onSuccess?.();
+            setIsEditModalOpen(false);
+          }}
         />
       )}
     </div>

@@ -86,6 +86,7 @@ export default function Dashboard() {
               onEditClick={() => handleEditClick(column)}
               onAddCard={() => handleAddCardOpen(column.id)}
               refreshTrigger={refreshTrigger}
+              onSuccess={handleSuccess}
             />
           ))}
 
