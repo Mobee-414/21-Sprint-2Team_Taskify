@@ -5,14 +5,15 @@ import ConfirmModal from "@/components/modals/ConfirmModal";
 import { getTagColor } from "@/utils/getTagColor";
 import { useColumn } from "@/hooks/useColumn";
 import Avatar from "@/components/common/Avatar";
+import { SyncCardListType } from "@/types/card.type";
+import { useEffect } from "react";
 
 interface ColumnProps {
   id: number;
   title: string;
   onEditClick: () => void;
   onAddCard: () => void;
-  refreshTrigger: number;
-  onSuccess?: () => void;
+  registerCreateHandler?: (handler: SyncCardListType) => void;
 }
 
 export default function Column({
@@ -20,8 +21,7 @@ export default function Column({
   title,
   onEditClick,
   onAddCard,
-  refreshTrigger,
-  onSuccess,
+  registerCreateHandler
 }: ColumnProps) {
   const {
     cards,
@@ -30,6 +30,7 @@ export default function Column({
     isEditModalOpen,
     editingCardData,
     isDeleteConfirmOpen,
+    selectedCard,
     setIsDetailOpen,
     setSelectedCardId,
     setIsEditModalOpen,
@@ -38,7 +39,11 @@ export default function Column({
     handleEditOpen,
     syncCardList,
     deleteMutate,
-  } = useColumn({ id, refreshTrigger });
+  } = useColumn({ id });
+
+  useEffect(() => {
+    registerCreateHandler?.(syncCardList);
+  }, [registerCreateHandler, syncCardList]);
 
   return (
     <div className="w-full lg:max-w-[354px] flex flex-col gap-4 p-3">
@@ -148,9 +153,19 @@ export default function Column({
         <ConfirmModal
           isOpen={isDeleteConfirmOpen}
           onClose={() => setIsDeleteConfirmOpen(false)}
-          onClick={() => deleteMutate()}
+          onClick={() => {
+            deleteMutate();
+            setIsDeleteConfirmOpen(false);
+            setIsDetailOpen(false);
+            setSelectedCardId(null);
+          }}
         >
-          카드에 작성된 모든 내용이 삭제 됩니다.
+          <div className="flex flex-col gap-2">
+            <p className="font-semibold text-lg break-words">
+              {selectedCard?.title}
+            </p>
+            <p className="text-gray-medium">카드의 모든 내용이 삭제됩니다.</p>
+          </div>
         </ConfirmModal>
       )}
 
@@ -163,7 +178,6 @@ export default function Column({
           initialData={editingCardData}
           onSuccess={(action, cardData) => {
             syncCardList(action, cardData);
-            onSuccess?.();
             setIsEditModalOpen(false);
           }}
         />

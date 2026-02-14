@@ -9,17 +9,23 @@ import Header from "@/pages/dashboard/Header";
 import { useDashboardMembers } from "@/hooks/useDashboardMembers";
 import { useDashboardData } from "@/hooks/useDashboardData";
 import { useDashboardModals } from "@/hooks/useDashboardModals";
+import { useState } from "react";
+import { SyncCardListType } from "@/types/card.type";
 
 export default function Dashboard() {
   const router = useRouter();
   const { id } = router.query;
   const dashboardId = id ? Number(id) : null;
 
-  const { members, totalCount } =
-    useDashboardMembers(dashboardId || undefined);
+  const { data: memberData } = useDashboardMembers(dashboardId ?? undefined);
+  const members = memberData?.members ?? [];
+  const totalCount = memberData?.totalCount ?? 0;
 
-  const { columns, dashboardData, } =
-    useDashboardData(dashboardId);
+  const { columns, dashboardData, isLoading } = useDashboardData(dashboardId);
+
+  const [createHandler, setCreateHandler] = useState<
+    Record<number, SyncCardListType>
+  >({});
 
   const {
     isAddModalOpen,
@@ -34,16 +40,12 @@ export default function Dashboard() {
     openAddCard,
   } = useDashboardModals();
 
-  const handleSuccess = () => {
-    
-  };
-
-  if (!dashboardId) return null;
+  if (!dashboardId || isLoading) return null;
 
   return (
     <div className="flex min-h-screen w-full bg-gray-bg items-stretch">
       <aside className="shrink-0">
-        <Sidebar refreshKey={0} onCreatedGlobal={handleSuccess} />
+        <Sidebar refreshKey={0} />
       </aside>
 
       <div className="flex-1 flex flex-col">
@@ -52,9 +54,7 @@ export default function Dashboard() {
           isOwner={dashboardData?.createdByMe || false}
           members={members}
           totalCount={totalCount}
-          onEditClick={() =>
-            router.push(`/dashboard/${dashboardId}/edit`)
-          }
+          onEditClick={() => router.push(`/dashboard/${dashboardId}/edit`)}
         />
 
         <main className="flex-1 flex flex-col lg:flex-row bg-gray-bg divide-x divide-gray-light">
@@ -65,8 +65,12 @@ export default function Dashboard() {
               title={column.title}
               onEditClick={() => openEditColumn(column)}
               onAddCard={() => openAddCard(column.id)}
-              refreshTrigger={0}
-              onSuccess={handleSuccess}
+              registerCreateHandler={(handler) =>
+                setCreateHandler((prev) => ({
+                  ...prev,
+                  [column.id]: handler,
+                }))
+              }
             />
           ))}
 
@@ -92,8 +96,6 @@ export default function Dashboard() {
           isOpen={isAddModalOpen}
           onClose={() => setIsAddModalOpen(false)}
           dashboardId={dashboardId}
-          onSuccess={handleSuccess}
-          existingColumns={columns}
         />
       )}
 
@@ -102,8 +104,7 @@ export default function Dashboard() {
           isOpen={isEditModalOpen}
           onClose={() => setIsEditModalOpen(false)}
           column={selectedColumn}
-          onSuccess={handleSuccess}
-          existingColumns={columns}
+          dashboardId={dashboardId}
         />
       )}
 
@@ -113,8 +114,10 @@ export default function Dashboard() {
           onClose={() => setIsCardModalOpen(false)}
           mode="create"
           columnId={activeColumnId}
-          onSuccess={() => {
-            handleSuccess();
+          onSuccess={(action, cardData) => {
+            if (cardData) {
+              createHandler[cardData.columnId]?.(action, cardData);
+            }
             setIsCardModalOpen(false);
           }}
         />

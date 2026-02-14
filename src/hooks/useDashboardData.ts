@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "@/api/axios";
-import { getDashboard, } from "@/api/dashboards.api";
+import { getDashboard } from "@/api/dashboards.api";
 import { Dashboard as DashboardType } from "@/types/dashboard.type";
+
 interface ColumnType {
   id: number;
   title: string;
@@ -9,33 +10,32 @@ interface ColumnType {
 }
 
 export function useDashboardData(dashboardId: number | null) {
-  const [columns, setColumns] = useState<ColumnType[]>([]);
-  const [dashboardData, setDashboardData] = useState<DashboardType | null>(
-    null
-  );
+  const {
+    data: columns = [],
+    isLoading: columnsLoading,
+  } = useQuery<ColumnType[]>({
+    queryKey: ["columns", dashboardId],
+    queryFn: async () => {
+      const res = await axiosInstance.get(
+        `/columns?dashboardId=${dashboardId}`
+      );
+      return res.data.data;
+    },
+    enabled: !!dashboardId,
+  });
 
-  useEffect(() => {
-    if (!dashboardId) return;
-
-    const fetchData = async () => {
-      try {
-        const columnRes = await axiosInstance.get(
-          `/columns?dashboardId=${dashboardId}`
-        );
-        setColumns(columnRes.data.data);
-
-        const dashboardRes = await getDashboard(dashboardId);
-        setDashboardData(dashboardRes);
-      } catch (error) {
-        console.error("로딩 실패", error);
-      }
-    };
-
-    fetchData();
-  }, [dashboardId]);
+  const {
+    data: dashboardData = null,
+    isLoading: dashboardLoading,
+  } = useQuery<DashboardType>({
+    queryKey: ["dashboard", dashboardId],
+    queryFn: () => getDashboard(dashboardId!),
+    enabled: !!dashboardId,
+  });
 
   return {
     columns,
     dashboardData,
+    isLoading: columnsLoading || dashboardLoading,
   };
 }

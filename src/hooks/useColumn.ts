@@ -5,10 +5,9 @@ import { CardDetailType, SyncCardListType } from "@/types/card.type";
 
 interface UseColumnProps {
   id: number;
-  refreshTrigger: number;
 }
 
-export function useColumn({ id, refreshTrigger }: UseColumnProps) {
+export function useColumn({ id }: UseColumnProps) {
   const [cards, setCards] = useState<CardDetailType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -16,11 +15,13 @@ export function useColumn({ id, refreshTrigger }: UseColumnProps) {
   const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [editingCardData, setEditingCardData] =
-    useState<CardDetailType | null>(null);
+  const [editingCardData, setEditingCardData] = useState<CardDetailType | null>(
+    null
+  );
 
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
 
+  const selectedCard = cards.find((card) => card.id === selectedCardId);
 
   const syncCardList: SyncCardListType = useCallback(
     (action, cardData, cardId) => {
@@ -37,9 +38,7 @@ export function useColumn({ id, refreshTrigger }: UseColumnProps) {
               );
             } else {
               setCards((prev) =>
-                prev.map((item) =>
-                  item.id === cardData.id ? cardData : item
-                )
+                prev.map((item) => (item.id === cardData.id ? cardData : item))
               );
             }
           }
@@ -78,7 +77,7 @@ export function useColumn({ id, refreshTrigger }: UseColumnProps) {
 
   useEffect(() => {
     fetchCards();
-  }, [fetchCards, refreshTrigger]);
+  }, [fetchCards]);
 
   const handleCardClick = (cardId: number) => {
     setSelectedCardId(cardId);
@@ -99,6 +98,7 @@ export function useColumn({ id, refreshTrigger }: UseColumnProps) {
     isEditModalOpen,
     editingCardData,
     isDeleteConfirmOpen,
+    selectedCard,
     setIsDetailOpen,
     setSelectedCardId,
     setIsEditModalOpen,
