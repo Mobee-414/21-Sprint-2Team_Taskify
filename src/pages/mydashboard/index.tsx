@@ -3,7 +3,7 @@ import DashboardsLayout from "@/components/layout/DashboardsLayout";
 import MyDashboardsSection from "@/components/mydashboard/MyDashboardsSection";
 import InvitedDashboardsSection from "@/components/mydashboard/InvitedDashboardsSection";
 import CreateDashboardModal from "@/components/modals/CreateDashboardModal";
-import type { Dashboard } from "@/api/dashboards.api";
+import type { Dashboard } from "@/types/dashboard.type";
 
 export default function DashboardsPage() {
   const [refreshKey, setRefreshKey] = useState(0);

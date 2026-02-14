@@ -10,6 +10,7 @@ import Tooltip from "../common/Tooltip";
 import "@/styles/utility.module.css";
 
 const PAGE_SIZE = 10;
+const MY_DASHBOARD_PATH = "/mydashboard"; 
 
 type SidebarProps = {
   refreshKey: number;
@@ -85,13 +86,8 @@ export default function Sidebar({ refreshKey, onCreatedGlobal }: SidebarProps) {
 
       setPage(nextPage);
 
-      if (!hasInitializedActiveRef.current && res.dashboards.length > 0) {
+      if (!hasInitializedActiveRef.current) {
         hasInitializedActiveRef.current = true;
-
-        if (activeIdRef.current === null) {
-          const firstId = res.dashboards[0].id;
-          setActiveId(firstId);
-        }
       }
     } finally {
       setLoading(false);
@@ -117,10 +113,37 @@ export default function Sidebar({ refreshKey, onCreatedGlobal }: SidebarProps) {
     listScrollRef,
   );
 
+  useEffect(() => {
+    if (!router.isReady) return;
+
+    if (router.pathname === "/") {
+      router.replace(MY_DASHBOARD_PATH);
+    }
+  }, [router.isReady, router.pathname, router]);
+
+  useEffect(() => {
+    if (!router.isReady) return;
+
+    const idParam = router.query.id;
+    const id = Array.isArray(idParam) ? Number(idParam[0]) : Number(idParam);
+
+    if (Number.isFinite(id)) {
+      setActiveId(id);
+    }
+  }, [router.isReady, router.query.id]);
+
   const handleSelect = (id: number) => {
     setActiveId(id);
     router.push(`/dashboard/${id}`);
   };
+
+  useEffect(() => {
+  if (!router.isReady) return;
+
+  if (router.pathname === MY_DASHBOARD_PATH) {
+    setActiveId(null);
+  }
+}, [router.isReady, router.pathname]);
 
   const handleCreated = (created: Dashboard) => {
     setIsCreateOpen(false);
@@ -132,7 +155,6 @@ export default function Sidebar({ refreshKey, onCreatedGlobal }: SidebarProps) {
     }));
 
     setActiveId(created.id);
-
     onCreatedGlobal?.();
   };
 
@@ -167,6 +189,7 @@ export default function Sidebar({ refreshKey, onCreatedGlobal }: SidebarProps) {
               height={22}
               priority
             />
+
           </button>
         </div>
 
@@ -238,7 +261,6 @@ export default function Sidebar({ refreshKey, onCreatedGlobal }: SidebarProps) {
           </ul>
 
           <div ref={sentinelRef} className="h-6" />
-
           {loading && (
             <div className="py-2 text-xs text-gray-dark">불러오는 중...</div>
           )}
