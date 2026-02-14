@@ -31,7 +31,7 @@ export default function DescriptionInput({
             ${CARD_FORM_STYLES.INPUT} 
             px-[16px] py-[15px]
             placeholder-gray-medium placeholder:font-regular
-            ouline-none focus:outline-none
+            outline-none focus:outline-none
           `}
         />
       </div>

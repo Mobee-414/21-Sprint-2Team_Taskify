@@ -69,7 +69,7 @@ export default function CommentForm({
                       w-[calc(100%-90px)] md:w-[calc(100%-80px)] h-full 
                       text-xs-tight md:text-md font-regular text-black-medium
                       placeholder-gray-medium placeholder:font-regular
-                      ouline-none focus:outline-none
+                      outline-none focus:outline-none
                       "
                   placeholder="댓글 작성하기"
                 />
@@ -98,8 +98,8 @@ export default function CommentForm({
           </div>
         ) : (
           <>
-            {commentList.map((comment, index) => (
-              <li key={index} className="flex gap-[8px] md:gap-[12px]">
+            {commentList.map((comment) => (
+              <li key={comment.id} className="flex gap-[8px] md:gap-[12px]">
                 <Avatar
                   nickname={comment.author.nickname}
                   imageUrl={comment.author.profileImageUrl}
