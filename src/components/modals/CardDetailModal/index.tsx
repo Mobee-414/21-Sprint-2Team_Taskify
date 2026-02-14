@@ -22,8 +22,26 @@ export default function CardDetailModal({
   handleCardFormOpen,
   handleCardDeleteModalOpen,
 }: CardDetailModalProps) {
-  const { control, isValid, handleSubmit, onSubmit, cardDetailData, tagList } =
-    useCardDetail(cardId);
+  const {
+    cardDetailData,
+    tagList,
+    control,
+    isValid,
+    handleSubmit,
+    onSubmit,
+    commentList,
+    loading,
+    loadingMore,
+    sentinelRef,
+  } = useCardDetail(cardId);
+
+  const listProps = {
+    commentList,
+    loading,
+    loadingMore,
+    sentinelRef,
+  };
+  const formProps = { control, isValid };
 
   if (!cardDetailData) return;
 
@@ -42,14 +60,14 @@ export default function CardDetailModal({
         <div className="flex flex-col md:flex-row justify-between md:gap-[13px]">
           <Content
             columnTitle={columnTitle}
-            control={control}
-            isValid={isValid}
-            handleSubmit={handleSubmit}
-            onSubmit={onSubmit}
             tagList={tagList}
             title={cardDetailData.title}
             description={cardDetailData.description}
             imageUrl={cardDetailData.imageUrl}
+            listProps={listProps}
+            formProps={formProps}
+            handleSubmit={handleSubmit}
+            onSubmit={onSubmit}
           />
 
           <SideInfo
