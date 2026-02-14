@@ -1,32 +1,45 @@
-import { Control, Controller, UseFormHandleSubmit } from "react-hook-form";
-import { CardDetailValues } from "@/hooks/useCardDetail";
+import { Control, UseFormHandleSubmit } from "react-hook-form";
+import { CardCommentValues } from "@/hooks/useCardDetail";
 import { TagItem } from "@/types/card.type";
 import Image from "next/image";
-import ButtonInputDelete from "@/components/common/Button/ButtonInputDelete";
-import BaseButton from "@/components/common/Button/ButtonBase";
+import { CommentItem } from "@/types/comment.type";
+import CommentForm from "./CommentForm";
+import { RefObject } from "react";
+
+interface ListProps {
+  commentList: CommentItem[];
+  loading: boolean;
+  loadingMore: boolean;
+  sentinelRef: RefObject<HTMLDivElement | null>;
+}
+
+interface FormProps {
+  control: Control<CardCommentValues>;
+  isValid: boolean;
+}
 
 interface ContentProps {
   columnTitle: string;
-  control: Control<CardDetailValues>;
-  isValid: boolean;
-  handleSubmit: UseFormHandleSubmit<CardDetailValues>;
-  onSubmit: (data: CardDetailValues) => void;
   title: string;
   description: string;
   imageUrl: string;
   tagList: TagItem[];
+  listProps: ListProps;
+  formProps: FormProps;
+  handleSubmit: UseFormHandleSubmit<CardCommentValues>;
+  onSubmit: (data: CardCommentValues) => void;
 }
 
 export default function Content({
   columnTitle,
-  control,
-  isValid,
-  handleSubmit,
-  onSubmit,
   title,
   description,
   imageUrl,
   tagList,
+  listProps,
+  formProps,
+  handleSubmit,
+  onSubmit,
 }: ContentProps) {
   return (
     <div className="order-2 md:order-1 flex-grow">
@@ -87,94 +100,12 @@ export default function Content({
         )}
       </div>
 
-      <div className="h-[180px] md:h-[236px] overflow-y-auto mb-[16px] md:mb-[24px]">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Controller
-            name="content"
-            control={control}
-            render={({ field }) => (
-              <div>
-                <div className="mb-[4px]">
-                  <label
-                    className="text-md md:text-lg font-medium text-black-medium"
-                    htmlFor={field.name}
-                  >
-                    댓글
-                  </label>
-                </div>
-                <div
-                  className="
-                    relative
-                    h-[70px] md:h-[110px] 
-                    p-[12px_20px_12px_12px] md:p-[16px_12px_12px_16px]
-                    mb-[16px]
-                    border border-gray-base rounded-[6px]
-                    "
-                >
-                  <textarea
-                    {...field}
-                    id={field.name}
-                    className="
-                      resize-none 
-                      w-[calc(100%-90px)] md:w-[calc(100%-80px)] h-full 
-                      text-xs-tight md:text-md font-regular text-black-medium
-                      placeholder-gray-medium placeholder:font-regular
-                      ouline-none focus:outline-none
-                      "
-                    placeholder="댓글 작성하기"
-                  />
-                  <ButtonInputDelete
-                    type="submit"
-                    variant="secondary"
-                    disabled={!isValid}
-                    className="
-                      absolute right-[20px] bottom-[12px] md:right-[11px]
-                      w-[84px] h-[28px] md:w-[77px] md:h-[32px]
-                      text-xs-tight font-medium
-                      "
-                  >
-                    입력
-                  </ButtonInputDelete>
-                </div>
-              </div>
-            )}
-          />
-        </form>
-
-        <ul>
-          <li className="flex gap-[8px] md:gap-[12px]">
-            {/* TODO: 댓글 API 작업 시 프로필 이미지 부분 Avatar 공통 컴포넌트로 교체 예정 */}
-            <div>프로필 이미지</div>
-            <div className="pt-[6px] md:pt-0">
-              <div className="flex justify-center items-center gap-[8px] mb-[8px] md:mb-0">
-                <div className="text-xs md:text-md font-semibold text-black-medium">
-                  이름
-                </div>
-                <div className="text-[10px] md:text-xs font-regular text-gray-medium">
-                  0000.00.00 00:00
-                </div>
-              </div>
-              <div className="text-xs md:text-md font-regular text-black-medium mb-[8px] md:mb-[10px]">
-                내용
-              </div>
-              <div className="flex gap-[8px] md:gap-[12px]">
-                <BaseButton
-                  type="button"
-                  className="text-[10px] md:text-xs font-regular text-gray-medium underline"
-                >
-                  수정
-                </BaseButton>
-                <BaseButton
-                  type="button"
-                  className="text-[10px] md:text-xs font-regular text-gray-medium underline"
-                >
-                  삭제
-                </BaseButton>
-              </div>
-            </div>
-          </li>
-        </ul>
-      </div>
+      <CommentForm
+        listProps={listProps}
+        formProps={formProps}
+        handleSubmit={handleSubmit}
+        onSubmit={onSubmit}
+      />
     </div>
   );
 }

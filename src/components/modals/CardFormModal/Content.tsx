@@ -228,7 +228,7 @@ export default function Content({
             fontSize={"lg"}
             className={`w-full h-[54px] ${isValid ? "" : "disabled"}`}
           >
-            생성
+            수정
           </ButtonModal>
         )}
       </div>
