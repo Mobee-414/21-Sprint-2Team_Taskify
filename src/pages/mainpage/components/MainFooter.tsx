@@ -47,7 +47,7 @@ const MainFooter = () => {
       </div>
 
       <div className="hidden h-[64px] w-full max-w-[1760px] items-center justify-between px-4 text-md tablet:flex">
-        <span className="text-lg">© codeit · 2023</span>
+        <span className="text-lg">© codeit · 2026</span>
 
         <div className="flex gap-6">
           <a
