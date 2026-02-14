@@ -48,22 +48,55 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="flex flex-col items-center justify-center px-6 pt-[140px] text-center">
+    <section className="flex flex-col items-center justify-center px-4 pt-[140px] text-center">
       <Image
         src="/images/hero_section.png"
         alt="Hero Section Image"
         width={722}
         height={423}
         priority
-        className="mb-10 rounded-lg shadow-lg"
+        className="
+          mb-10 h-auto
+          w-[clamp(287px,70vw,722px)]
+          rounded-lg shadow-lg
+        "
       />
 
-      <h2 className="mb-[48.24px] text-[76px] font-bold">
-        새로운 일정 관리 <span className="text-[#5534DA]">Taskify</span>
+      <h2 className="mb-12 font-bold leading-tight">
+        <span
+          className="
+            block
+            tablet:inline
+            text-[40px]
+            tablet:text-[56px]
+            desktop:text-[76px]
+          "
+        >
+          새로운 일정 관리
+        </span>
+
+        <span
+          className="
+            block
+            tablet:inline tablet:ml-3
+            text-[42px]
+            tablet:text-[70px]
+            desktop:text-[90px]
+            text-[var(--color-violet-main)]
+          "
+        >
+          Taskify
+        </span>
       </h2>
 
       <button
-        className="mt-[125px] h-[54px] w-[280px] rounded-md bg-[#5534DA] text-[18px] font-medium text-white"
+        className="
+          h-[46px] w-[235px]
+          tablet:h-[54px] tablet:w-[280px]
+          rounded-md bg-[var(--color-violet-main)]
+          text-[14px] tablet:text-[18px]
+          font-medium text-white
+        "
         onClick={handleLogin}
       >
         로그인하기
