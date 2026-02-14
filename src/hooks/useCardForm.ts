@@ -3,6 +3,7 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CardDetailType, SyncCardListType, TagItem } from "@/types/card.type";
+import { useParams } from "next/navigation";
 import { DatePicker } from "react-datepicker";
 import { formatToApiDate } from "@/utils/formatDate";
 import { getTagColor } from "@/utils/getTagColor";
@@ -19,9 +20,8 @@ export function useCardForm(
   columnId: number,
   initialData?: CardDetailType | null,
 ) {
-  // const params = useParams();
-  // const dashboardId = params.dashboardId;
-  const dashboardId = 17279; // 임시 고정
+  const params = useParams();
+  const dashboardId = Number(params?.id) ?? null;
 
   const {
     control,
@@ -77,7 +77,7 @@ export function useCardForm(
       console.error("컬럼 목록 조회 실패:", error);
       return;
     }
-  }, []);
+  }, [dashboardId]);
 
   // 담당자 목록 가져오기 및 변경
   const getMemberList = useCallback(async () => {
