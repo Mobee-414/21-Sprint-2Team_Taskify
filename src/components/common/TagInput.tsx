@@ -55,7 +55,7 @@ export default function TagInput({
           ))}
         </div>
         <input
-          className="flex-grow ouline-none focus:outline-none"
+          className="flex-grow outline-none focus:outline-none"
           id={id}
           type="text"
           placeholder="입력 후 Enter"

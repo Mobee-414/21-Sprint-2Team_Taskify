@@ -38,7 +38,7 @@ export default function DatePickerInput({
         <DatePicker
           ref={datepickerRef}
           id={id}
-          className={`${CARD_FORM_STYLES.INPUT} !border-none !px-0 !py-0 ouline-none focus:outline-none`}
+          className={`${CARD_FORM_STYLES.INPUT} !border-none !px-0 !py-0 outline-none focus:outline-none`}
           placeholderText="날짜를 입력해 주세요"
           selected={field.value ? new Date(field.value) : null}
           onChange={(date: Date | null) =>
