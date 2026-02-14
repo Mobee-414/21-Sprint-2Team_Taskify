@@ -7,6 +7,7 @@ import { getDashboardsPagination } from "@/api/dashboards.api";
 import type { Dashboard, DashboardsResponse } from "@/types/dashboard.type";
 import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 import Tooltip from "../common/Tooltip";
+import "@/styles/utility.module.css";
 
 const PAGE_SIZE = 10;
 
@@ -59,7 +60,7 @@ export default function Sidebar({ refreshKey, onCreatedGlobal }: SidebarProps) {
 
   const hasMore = useMemo(
     () => data.dashboards.length < data.totalCount,
-    [data.dashboards.length, data.totalCount]
+    [data.dashboards.length, data.totalCount],
   );
 
   const fetchPage = useCallback(async (nextPage: number) => {
@@ -113,7 +114,7 @@ export default function Sidebar({ refreshKey, onCreatedGlobal }: SidebarProps) {
   const sentinelRef = useInfiniteScroll(
     onReachEnd,
     !loading && hasMore,
-    listScrollRef
+    listScrollRef,
   );
 
   const handleSelect = (id: number) => {
@@ -152,7 +153,13 @@ export default function Sidebar({ refreshKey, onCreatedGlobal }: SidebarProps) {
             type="button"
             className="flex items-center gap-2 cursor-pointer"
           >
-            <Image src="/icons/logo.svg" alt="로고" width={27} height={24} priority />
+            <Image
+              src="/icons/logo.svg"
+              alt="로고"
+              width={27}
+              height={24}
+              priority
+            />
             <Image
               src="/icons/Taskify.svg"
               alt="Taskify"
@@ -164,7 +171,9 @@ export default function Sidebar({ refreshKey, onCreatedGlobal }: SidebarProps) {
         </div>
 
         <div className="flex items-center justify-between mb-[24px] shrink-0">
-          <span className="text-xs font-semibold text-gray-dark">Dash Boards</span>
+          <span className="text-xs font-semibold text-gray-dark">
+            Dash Boards
+          </span>
 
           <button
             onClick={() => setIsCreateOpen(true)}
@@ -204,13 +213,22 @@ export default function Sidebar({ refreshKey, onCreatedGlobal }: SidebarProps) {
                   />
 
                   <span className="flex items-center min-w-0 text-2lg font-medium text-current">
-                    <Tooltip content={d.title} placement="right" onlyWhenTruncated>
+                    <Tooltip
+                      content={d.title}
+                      placement="right"
+                      onlyWhenTruncated
+                    >
                       <span className="truncate">{d.title}</span>
                     </Tooltip>
 
                     {d.createdByMe && (
                       <span className="ml-[10px] shrink-0">
-                        <Image src="/icons/crown.svg" alt="owner" width={18} height={18} />
+                        <Image
+                          src="/icons/crown.svg"
+                          alt="owner"
+                          width={18}
+                          height={18}
+                        />
                       </span>
                     )}
                   </span>
@@ -221,7 +239,9 @@ export default function Sidebar({ refreshKey, onCreatedGlobal }: SidebarProps) {
 
           <div ref={sentinelRef} className="h-6" />
 
-          {loading && <div className="py-2 text-xs text-gray-dark">불러오는 중...</div>}
+          {loading && (
+            <div className="py-2 text-xs text-gray-dark">불러오는 중...</div>
+          )}
         </div>
       </aside>
 

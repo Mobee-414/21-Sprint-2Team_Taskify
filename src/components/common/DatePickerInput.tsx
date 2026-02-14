@@ -5,6 +5,7 @@ import { DatepickerProps } from "@/types/card.type";
 import { CardFormValues } from "@/types/card.schema";
 import { CARD_FORM_STYLES } from "@/constants/cardFormStyles";
 import Image from "next/image";
+import "@/styles/utility.module.css";
 
 interface DatePickerInputProps extends DatepickerProps {
   field: ControllerRenderProps<CardFormValues, "dueDate">;

@@ -5,6 +5,7 @@ import ButtonAcceptReject from "@/components/common/Button/ButtonAcceptReject";
 import Tooltip from "@/components/common/Tooltip";
 import { useScrollFade } from "@/hooks/useScrollFade";
 import { useInvitedDashboards } from "@/hooks/useInvitedDashboards";
+import "@/styles/utility.module.css";
 
 export default function InvitedDashboardsSection({
   onAccepted,
@@ -28,7 +29,9 @@ export default function InvitedDashboardsSection({
 
   return (
     <section className="w-[1022px] h-[650px] rounded-[8px] bg-white px-[28px] py-[32px]">
-      <h2 className="text-2xl font-bold text-black-medium">초대받은 대시보드</h2>
+      <h2 className="text-2xl font-bold text-black-medium">
+        초대받은 대시보드
+      </h2>
 
       {!isSearching && isEmpty ? (
         <InvitedDashboardsEmpty message="아직 초대받은 대시보드가 없어요" />
@@ -37,7 +40,12 @@ export default function InvitedDashboardsSection({
           <div className="mt-[32px]">
             <div className="relative w-[966px]">
               <span className="pointer-events-none absolute left-[14px] top-1/2 -translate-y-1/2">
-                <Image src="/icons/search.svg" alt="검색" width={24} height={24} />
+                <Image
+                  src="/icons/search.svg"
+                  alt="검색"
+                  width={24}
+                  height={24}
+                />
               </span>
               <input
                 value={query}
@@ -53,9 +61,15 @@ export default function InvitedDashboardsSection({
           ) : (
             <div className="mt-[24px]">
               <div className="grid grid-cols-[280px_280px_280px] items-center">
-                <div className="pl-[48px] text-lg font-regular text-gray-medium">이름</div>
-                <div className="text-center text-lg font-regular text-gray-medium">초대자</div>
-                <div className="text-center text-lg font-regular text-gray-medium">수락 여부</div>
+                <div className="pl-[48px] text-lg font-regular text-gray-medium">
+                  이름
+                </div>
+                <div className="text-center text-lg font-regular text-gray-medium">
+                  초대자
+                </div>
+                <div className="text-center text-lg font-regular text-gray-medium">
+                  수락 여부
+                </div>
               </div>
 
               <div
@@ -76,7 +90,11 @@ export default function InvitedDashboardsSection({
                     className="grid grid-cols-[280px_280px_280px] items-center border-t border-gray-light h-[60px]"
                   >
                     <div className="min-w-0 pl-[48px] pr-[16px]">
-                      <Tooltip content={inv.dashboard.title} placement="right" onlyWhenTruncated>
+                      <Tooltip
+                        content={inv.dashboard.title}
+                        placement="right"
+                        onlyWhenTruncated
+                      >
                         <div className="block w-full min-w-0 truncate text-lg font-regular text-black-medium">
                           {inv.dashboard.title}
                         </div>
