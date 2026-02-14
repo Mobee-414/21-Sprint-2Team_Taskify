@@ -100,7 +100,11 @@ export function Input<T extends FieldValues>({
           >
             <Image
               fill
-              src={showPw ? "/icons/eye_open.svg" : "/icons/eye_close.svg"}
+              src={
+                showPw
+                  ? "/icons/common/eye_open.svg"
+                  : "/icons/common/eye_close.svg"
+              }
               alt=""
             />
           </button>
