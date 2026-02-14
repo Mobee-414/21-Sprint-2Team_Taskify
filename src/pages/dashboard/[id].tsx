@@ -1,80 +1,60 @@
 import Sidebar from "@/components/layout/TempSidebar";
-import Column from "./Column";
+import Column from "@/pages/dashboard/Column";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 import CreateColumnModal from "@/components/modals/ColumnModal/CreateColumnModal";
-import axiosInstance from "@/api/axios";
 import EditColumnModal from "@/components/modals/ColumnModal/EditColumnModal";
 import CardFormModal from "@/components/modals/CardFormModal";
 import { useRouter } from "next/router";
-import Header from "./Header";
-import { getDashboard, Dashboard as DashboardType } from "@/api/dashboards.api";
-
-interface ColumnType {
-  id: number;
-  title: string;
-  count: number;
-}
+import Header from "@/pages/dashboard/Header";
+import { useDashboardMembers } from "@/hooks/useDashboardMembers";
+import { useDashboardData } from "@/hooks/useDashboardData";
+import { useDashboardModals } from "@/hooks/useDashboardModals";
 
 export default function Dashboard() {
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isCardModalOpen, setIsCardModalOpen] = useState(false);
-  const [selectedColumn, setselectedColumn] = useState<ColumnType | null>(null);
-  const [activeColumnId, setActiveColumnId] = useState<number | null>(null);
-  const [columns, setColumns] = useState<ColumnType[]>([]);
-  const [refreshTrigger, setRefreshTrigger] = useState(0);
-  const [dashboardData, setDashboardData] = useState<DashboardType | null>(
-    null
-  );
-
   const router = useRouter();
   const { id } = router.query;
   const dashboardId = id ? Number(id) : null;
 
-  const handleEditClick = (column: ColumnType) => {
-    setselectedColumn(column);
-    setIsEditModalOpen(true);
+  const { members, totalCount } =
+    useDashboardMembers(dashboardId || undefined);
+
+  const { columns, dashboardData, } =
+    useDashboardData(dashboardId);
+
+  const {
+    isAddModalOpen,
+    setIsAddModalOpen,
+    isEditModalOpen,
+    setIsEditModalOpen,
+    isCardModalOpen,
+    setIsCardModalOpen,
+    selectedColumn,
+    activeColumnId,
+    openEditColumn,
+    openAddCard,
+  } = useDashboardModals();
+
+  const handleSuccess = () => {
+    
   };
 
-  const handleAddCardOpen = (columnId: number) => {
-    setActiveColumnId(columnId);
-    setIsCardModalOpen(true);
-  };
-
-  const handleSuccess = () => setRefreshTrigger((prev) => prev + 1);
-
-  useEffect(() => {
-    if (!router.isReady || !dashboardId) return;
-
-    console.log("대시보드 ID:", dashboardId);
-
-    const fetchColumns = async () => {
-      try {
-        const response = await axiosInstance.get(
-          `/columns?dashboardId=${dashboardId}`
-        );
-        setColumns(response.data.data);
-        const data = await getDashboard(dashboardId);
-        setDashboardData(data);
-      } catch (error) {
-        console.error("로딩 실패", error);
-      }
-    };
-
-    fetchColumns();
-  }, [router.isReady, dashboardId, refreshTrigger]);
+  if (!dashboardId) return null;
 
   return (
     <div className="flex min-h-screen w-full bg-gray-bg items-stretch">
       <aside className="shrink-0">
-        <Sidebar refreshKey={refreshTrigger} onCreatedGlobal={handleSuccess} />
+        <Sidebar refreshKey={0} onCreatedGlobal={handleSuccess} />
       </aside>
 
       <div className="flex-1 flex flex-col">
         <Header
           title={dashboardData?.title || "대시보드"}
           isOwner={dashboardData?.createdByMe || false}
+          members={members}
+          totalCount={totalCount}
+          onEditClick={() =>
+            router.push(`/dashboard/${dashboardId}/edit`)
+          }
         />
 
         <main className="flex-1 flex flex-col lg:flex-row bg-gray-bg divide-x divide-gray-light">
@@ -83,9 +63,9 @@ export default function Dashboard() {
               key={column.id}
               id={column.id}
               title={column.title}
-              onEditClick={() => handleEditClick(column)}
-              onAddCard={() => handleAddCardOpen(column.id)}
-              refreshTrigger={refreshTrigger}
+              onEditClick={() => openEditColumn(column)}
+              onAddCard={() => openAddCard(column.id)}
+              refreshTrigger={0}
               onSuccess={handleSuccess}
             />
           ))}
@@ -107,9 +87,8 @@ export default function Dashboard() {
         </main>
       </div>
 
-      {isAddModalOpen && dashboardId && (
+      {isAddModalOpen && (
         <CreateColumnModal
-          key={isAddModalOpen ? "open" : "closed"}
           isOpen={isAddModalOpen}
           onClose={() => setIsAddModalOpen(false)}
           dashboardId={dashboardId}
@@ -120,7 +99,6 @@ export default function Dashboard() {
 
       {selectedColumn && (
         <EditColumnModal
-          key={selectedColumn.id}
           isOpen={isEditModalOpen}
           onClose={() => setIsEditModalOpen(false)}
           column={selectedColumn}
@@ -129,12 +107,12 @@ export default function Dashboard() {
         />
       )}
 
-      {isCardModalOpen && activeColumnId && dashboardId && (
+      {isCardModalOpen && activeColumnId && (
         <CardFormModal
           isOpen={isCardModalOpen}
           onClose={() => setIsCardModalOpen(false)}
           mode="create"
-          columnId={Number(activeColumnId)}
+          columnId={activeColumnId}
           onSuccess={() => {
             handleSuccess();
             setIsCardModalOpen(false);

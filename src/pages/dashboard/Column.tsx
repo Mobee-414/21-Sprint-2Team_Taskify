@@ -1,12 +1,10 @@
-import axiosInstance from "@/api/axios";
+import Image from "next/image";
 import CardDetailModal from "@/components/modals/CardDetailModal";
 import CardFormModal from "@/components/modals/CardFormModal";
 import ConfirmModal from "@/components/modals/ConfirmModal";
-import { useCardDelete } from "@/hooks/useCardDelete";
-import { CardDetailType, SyncCardListType } from "@/types/card.type";
 import { getTagColor } from "@/utils/getTagColor";
-import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
+import { useColumn } from "@/hooks/useColumn";
+import Avatar from "@/components/common/Avatar";
 
 interface ColumnProps {
   id: number;
@@ -25,78 +23,22 @@ export default function Column({
   refreshTrigger,
   onSuccess,
 }: ColumnProps) {
-  const [cards, setCards] = useState<CardDetailType[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isDetailOpen, setIsDetailOpen] = useState(false);
-  const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [editingCardData, setEditingCardData] = useState<CardDetailType | null>(
-    null
-  );
-  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
-
-  const { mutate: deleteMutate } = useCardDelete(selectedCardId || 0, (action, data, cardId) => {
-    syncCardList("delete", undefined, cardId);
-    setIsDeleteConfirmOpen(false);
-    setIsDetailOpen(false);
-  });
-
-  const handleCardClick = async (cardId: number) => {
-    setSelectedCardId(cardId);
-    setIsDetailOpen(true);
-  };
-
-  const handleEditOpen = (data: CardDetailType) => {
-    setEditingCardData(data);
-    setIsDetailOpen(false);
-    setIsEditModalOpen(true);
-  };
-
-  const syncCardList: SyncCardListType = useCallback(
-    (action, cardData, cardId) => {
-      switch (action) {
-        case "create":
-          if (cardData) setCards((prev) => [cardData, ...prev]);
-          break;
-
-        case "edit":
-          if (cardData) {
-            if (cardData.columnId !== id) {
-              setCards((prev) =>
-                prev.filter((item) => item.id !== cardData.id)
-              );
-            } else {
-              setCards((prev) =>
-                prev.map((item) => (item.id === cardData.id ? cardData : item))
-              );
-            }
-          }
-          break;
-
-        case "delete":
-          if (cardId)
-            setCards((prev) => prev.filter((item) => item.id !== cardId));
-          break;
-      }
-    },
-    [id]
-  );
-
-  const fetchCards = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      const res = await axiosInstance.get(`/cards?columnId=${id}`);
-      setCards(res.data.cards || []);
-    } catch (error) {
-      console.error("카드 로딩 실패", error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [id]);
-
-  useEffect(() => {
-    fetchCards();
-  }, [fetchCards, refreshTrigger]);
+  const {
+    cards,
+    isDetailOpen,
+    selectedCardId,
+    isEditModalOpen,
+    editingCardData,
+    isDeleteConfirmOpen,
+    setIsDetailOpen,
+    setSelectedCardId,
+    setIsEditModalOpen,
+    setIsDeleteConfirmOpen,
+    handleCardClick,
+    handleEditOpen,
+    syncCardList,
+    deleteMutate,
+  } = useColumn({ id, refreshTrigger });
 
   return (
     <div className="w-full lg:max-w-[354px] flex flex-col gap-4 p-3">
@@ -113,7 +55,6 @@ export default function Column({
         </button>
       </div>
 
-      {/* 할 일 추가 버튼 */}
       <button
         className="w-full py-2 bg-white border border-gray-light rounded-md text-violet-main font-bold flex justify-center items-center hover:cursor-pointer hover:bg-gray-50 transition"
         onClick={onAddCard}
@@ -126,7 +67,6 @@ export default function Column({
         />
       </button>
 
-      {/* 카드 리스트 */}
       {cards.map((card) => (
         <div
           key={card.id}
@@ -143,11 +83,11 @@ export default function Column({
               />
             </div>
           )}
-          {/* 카드 제목 */}
+
           <h3 className="text-base font-medium text-black-dark leading-snug">
             {card.title}
           </h3>
-          {/* 카드 태그 */}
+
           <div className="flex flex-col gap-3">
             <div className="flex flex-wrap gap-1.5">
               {card.tags.map((tag, index) => {
@@ -166,7 +106,7 @@ export default function Column({
                 );
               })}
             </div>
-            {/* 마감일 */}
+
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-1.5 text-md md:text-xs text-gray-medium">
                 <Image
@@ -179,18 +119,11 @@ export default function Column({
               </div>
 
               {card.assignee && (
-                <div className="w-24 h-24">
-                  {card.assignee.profileImageUrl ? (
-                    <Image
-                      src={card.assignee.profileImageUrl}
-                      alt={card.assignee.nickname}
-                      width={24}
-                      height={24}
-                    />
-                  ) : (
-                    card.assignee.nickname[0].toUpperCase()
-                  )}
-                </div>
+                <Avatar
+                  nickname={card.assignee.nickname}
+                  imageUrl={card.assignee.profileImageUrl}
+                  className="w-6 h-6"
+                />
               )}
             </div>
           </div>
