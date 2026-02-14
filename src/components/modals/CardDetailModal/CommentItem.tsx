@@ -6,8 +6,8 @@ import { formatToDisplayDate } from "@/utils/formatDate";
 import { ChangeEvent, useState } from "react";
 
 interface CommentActionProps {
-  onUpdate: (commentId: number, content: string) => void;
-  onDelete: (commentId: number) => void;
+  onUpdate: (commentId: number, content: string) => Promise<void>;
+  onDelete: (commentId: number) => Promise<void>;
 }
 
 interface CommentItemProps {
@@ -29,8 +29,17 @@ export default function CommentItem({
     setEditContent(e.target.value);
   };
 
+  const handleSave = async () => {
+    try {
+      await onUpdate(comment.id, editContent);
+      setIsEditing(false);
+    } catch (error) {
+      console.log("컴포넌트 단에서 실패 감지: 창을 닫지 않음");
+    }
+  };
+
   return (
-    <li key={comment.id} className="flex gap-[8px] md:gap-[12px]">
+    <li className="flex gap-[8px] md:gap-[12px]">
       <Avatar
         nickname={comment.author.nickname}
         imageUrl={comment.author.profileImageUrl}
@@ -67,10 +76,7 @@ export default function CommentItem({
                 <BaseButton
                   type="button"
                   className="text-[10px] md:text-xs font-regular text-gray-medium underline"
-                  onClick={async () => {
-                    await onUpdate(comment.id, editContent);
-                    setIsEditing(false);
-                  }}
+                  onClick={handleSave}
                 >
                   저장
                 </BaseButton>

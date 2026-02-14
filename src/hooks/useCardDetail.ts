@@ -159,7 +159,7 @@ export function useCardDetail(cardId: number) {
         alert("예상치 못한 에러가 발생했습니다.");
       }
       console.error("댓글 추가 실패:", error);
-      return;
+      throw error;
     }
   };
 
@@ -186,7 +186,7 @@ export function useCardDetail(cardId: number) {
         alert("예상치 못한 에러가 발생했습니다.");
       }
       console.error("댓글 수정 실패:", error);
-      return;
+      throw error;
     }
   };
 
@@ -212,7 +212,7 @@ export function useCardDetail(cardId: number) {
       }
 
       console.error("댓글 삭제 조회 실패:", error);
-      return;
+      throw error;
     }
   };
 
