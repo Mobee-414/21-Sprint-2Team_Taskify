@@ -8,7 +8,8 @@ import EditColumnModal from "@/components/modals/ColumnModal/EditColumnModal";
 import CardFormModal from "@/components/modals/CardFormModal";
 import { useRouter } from "next/router";
 import Header from "./Header";
-import { getDashboard, Dashboard as DashboardType } from "@/api/dashboards.api";
+import { getDashboard } from "@/api/dashboards.api";
+import type { Dashboard as DashboardType } from "@/types/dashboard.type";
 
 interface ColumnType {
   id: number;

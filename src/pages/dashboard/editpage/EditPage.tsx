@@ -1,0 +1,277 @@
+"use client";
+
+import { useCallback, useEffect, useMemo, useState } from "react";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { useForm } from "react-hook-form";
+
+import Header from "@/pages/dashboard/Header";
+import Sidebar from "@/components/layout/TempSidebar";
+import InviteModal from "@/components/modals/InviteModal";
+
+import DashboardInfoSection from "./component/DashboardInfoSection";
+import MembersSection from "./component/MembersSection";
+import InvitationsSection from "./component/InvitationsSection";
+
+import type { Member } from "@/api/members.v2.api";
+import type { Invitation } from "@/types/invitation.type";
+import type { Dashboard } from "@/types/dashboard.type";
+
+import { getDashboard, updateDashboard, deleteDashboard } from "@/api/dashboards.api";
+
+type FormValues = { title: string };
+
+const SIDEBAR_W = 300;
+
+export default function EditPage() {
+  const router = useRouter();
+
+  const dashboardId = useMemo(() => {
+    const idParam = router.query.id;
+    const raw = Array.isArray(idParam) ? idParam[0] : idParam;
+    const n = Number(raw);
+    return Number.isFinite(n) ? n : null;
+  }, [router.query.id]);
+
+  const { control, handleSubmit, watch, reset, getValues } = useForm<FormValues>({
+    defaultValues: { title: "" },
+    mode: "onChange",
+  });
+
+  const titleValue = (watch("title") ?? "").trim();
+
+  const [dashboard, setDashboard] = useState<Dashboard | null>(null);
+  const [dashboardLoading, setDashboardLoading] = useState(false);
+  const [dashboardError, setDashboardError] = useState<string | null>(null);
+
+  const [selectedColor, setSelectedColor] = useState("#7AC555");
+  const [updating, setUpdating] = useState(false);
+
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  useEffect(() => {
+    if (!router.isReady) return;
+    if (!dashboardId) return;
+
+    let alive = true;
+
+    (async () => {
+      setDashboardLoading(true);
+      setDashboardError(null);
+      try {
+        const data = await getDashboard(dashboardId);
+        if (!alive) return;
+
+        setDashboard(data);
+        setSelectedColor(data.color);
+        reset({ title: data.title });
+      } catch {
+        if (!alive) return;
+        setDashboardError("대시보드 정보를 불러오지 못했습니다.");
+      } finally {
+        if (alive) setDashboardLoading(false);
+      }
+    })();
+
+    return () => {
+      alive = false;
+    };
+  }, [router.isReady, dashboardId, reset]);
+
+  const canUpdate = useMemo(() => {
+    if (!dashboard) return false;
+    if (updating || dashboardLoading) return false;
+    if (!titleValue) return false;
+
+    const titleChanged = titleValue !== (dashboard.title ?? "");
+    const colorChanged = selectedColor !== (dashboard.color ?? "");
+
+    return titleChanged || colorChanged;
+  }, [dashboard, titleValue, selectedColor, updating, dashboardLoading]);
+
+  const onSubmitUpdate = useCallback(
+    async (values?: FormValues) => {
+      if (!dashboardId) return;
+
+      const rawTitle = values?.title ?? getValues("title");
+      const nextTitle = rawTitle.trim();
+      if (!nextTitle) return;
+
+      setUpdating(true);
+      try {
+        const updated = await updateDashboard(dashboardId, {
+          title: nextTitle,
+          color: selectedColor,
+        });
+
+        setDashboard(updated);
+        setSelectedColor(updated.color);
+        reset({ title: updated.title });
+
+        setRefreshKey((k) => k + 1);
+      } finally {
+        setUpdating(false);
+      }
+    },
+    [dashboardId, selectedColor, reset, getValues]
+  );
+
+  const [members, setMembers] = useState<Member[]>([]);
+  const [membersLoading] = useState(false);
+  const [membersPage, setMembersPage] = useState(1);
+  const membersTotalPages = 1;
+
+  const onPrevMembers = useCallback(() => {
+    setMembersPage((p) => Math.max(1, p - 1));
+  }, []);
+
+  const onNextMembers = useCallback(() => {
+    setMembersPage((p) => Math.min(membersTotalPages, p + 1));
+  }, [membersTotalPages]);
+
+  const onDeleteMember = useCallback(async (memberId: number) => {
+    setMembers((prev) => prev.filter((m) => m.id !== memberId));
+  }, []);
+
+  const [invites, setInvites] = useState<Invitation[]>([]);
+  const [invitesLoading] = useState(false);
+  const [invitesHasNext] = useState(false);
+
+  const fetchInvites = useCallback(async () => {}, []);
+
+  const [inviteOpen, setInviteOpen] = useState(false);
+  const onOpenInvite = useCallback(() => setInviteOpen(true), []);
+  const onCloseInvite = useCallback(() => setInviteOpen(false), []);
+
+  const onCancelInvite = useCallback(async (invitationId: number) => {
+    setInvites((prev) => prev.filter((x) => x.id !== invitationId));
+  }, []);
+
+  const handleGoBack = useCallback(() => {
+    const from = router.query.from;
+    const target =
+      typeof from === "string" && from.startsWith("/") ? from : null;
+
+    if (target) {
+      router.replace(target);
+      return;
+    }
+
+    if (!dashboardId) return;
+    router.replace(`/dashboard/${dashboardId}`);
+  }, [router, dashboardId]);
+
+  const onDeleteDashboard = useCallback(async () => {
+    if (!dashboardId) return;
+
+    const ok = window.confirm("정말 삭제할까요?");
+    if (!ok) return;
+
+    await deleteDashboard(dashboardId);
+
+    router.replace("/mydashboard");
+  }, [dashboardId, router]);
+
+
+  if (!router.isReady) return null;
+
+  if (!dashboardId) {
+    return (
+      <div className="min-h-screen bg-gray-bg flex items-center justify-center">
+        <p className="text-black-medium">잘못된 접근입니다.</p>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <aside
+        className="fixed left-0 top-0 z-40 h-screen overflow-y-auto"
+        style={{ width: SIDEBAR_W }}
+      >
+        <Sidebar refreshKey={refreshKey} />
+      </aside>
+
+      <div className="min-h-screen bg-gray-bg" style={{ paddingLeft: SIDEBAR_W }}>
+        <div className="flex min-w-0 flex-col">
+          <Header title={watch("title") ?? ""} />
+
+          <main className="min-w-0">
+            <div className="ml-[40px] mt-[20px]">
+              <button
+                type="button"
+                onClick={handleGoBack}
+                className="flex items-center gap-[6px]"
+              >
+                <Image
+                  src="/icons/arrow_forward.svg"
+                  alt="돌아가기"
+                  width={20}
+                  height={20}
+                />
+                <span className="text-lg font-medium text-black-medium">
+                  돌아가기
+                </span>
+              </button>
+            </div>
+
+            {dashboardError && (
+              <div className="ml-[40px] mt-[12px] text-red-500 text-sm">
+                {dashboardError}
+              </div>
+            )}
+
+            <div className="ml-[40px] mt-[34px] flex flex-col gap-[16px]">
+              <DashboardInfoSection
+                control={control}
+                handleSubmit={handleSubmit}
+                selectedColor={selectedColor}
+                onSelectColor={setSelectedColor}
+                onSubmitUpdate={onSubmitUpdate}
+                canUpdate={canUpdate}
+                updating={updating || dashboardLoading}
+              />
+
+              <MembersSection
+                members={members}
+                loading={membersLoading}
+                page={membersPage}
+                totalPages={membersTotalPages}
+                onPrev={onPrevMembers}
+                onNext={onNextMembers}
+                onDelete={onDeleteMember}
+              />
+
+              <InvitationsSection
+                invites={invites}
+                loading={invitesLoading}
+                hasNext={invitesHasNext}
+                onLoadMore={fetchInvites}
+                onOpenInvite={onOpenInvite}
+                onCancel={onCancelInvite}
+              />
+
+              <button
+                type="button"
+                onClick={onDeleteDashboard}
+                className="
+                  mt-[8px] mb-[57px]
+                  h-[52px] w-[284px]
+                  rounded-[8px]
+                  bg-white
+                  text-lg font-medium text-black-medium
+                  border border-gray-base
+                  hover:bg-gray-surface
+                "
+              >
+                대시보드 삭제하기
+              </button>
+            </div>
+          </main>
+        </div>
+
+        <InviteModal isOpen={inviteOpen} onClose={onCloseInvite} />
+      </div>
+    </>
+  );
+}
