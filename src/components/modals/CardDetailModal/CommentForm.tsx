@@ -37,7 +37,7 @@ export default function CommentForm({
 
   return (
     <div
-      className={`flex flex-col ${commentList.length > 0 && "gap-[16px]"} max-h-[180px] md:max-h-[236px] overflow-y-auto`}
+      className={`flex flex-col ${commentList.length > 0 ? "gap-[16px]" : ""} max-h-[180px] md:max-h-[236px] overflow-y-auto`}
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <Controller
@@ -145,9 +145,9 @@ export default function CommentForm({
         />
 
         {loadingMore && (
-          <div className="py-[10px] text-center text-xs text-gray-medium">
+          <li className="py-[10px] text-center text-xs text-gray-medium">
             더 불러오는 중...
-          </div>
+          </li>
         )}
       </ul>
     </div>
