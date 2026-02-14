@@ -13,7 +13,7 @@ export default function SideInfo({ assignee, dueDate }: SideInfoProps) {
       className="
       order-1 md:order-2
       flex md:flex-col md:gap-[16px]
-      h-[fit-content] 
+      h-[fit-content] md:min-w-[181px]
       px-[16px] py-[9px]  md:py-[14.5px]
       mb-[16px] md:mb-0
       border border-gray-base rounded-[8px]

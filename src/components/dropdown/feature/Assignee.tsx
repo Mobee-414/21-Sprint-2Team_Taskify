@@ -33,18 +33,28 @@ function AssigneeTrigger({
       type="button"
       className={`
         flex items-center
-        w-[217px] h-[48px]
+        w-full
+        px-[8px] py-[11px]
         rounded-[6px]
-        bg-[var(--color-white)]
-        px-4
+        bg-white
         border-[1px]
-        ${open ? "border-[var(--color-violet-main)]" : "border-gray-200"}
+        ${open ? "border-violet-main" : "border-gray-200"}
         cursor-pointer
       `}
     >
-      <Avatar nickname={label} imageUrl={imageUrl} />
+      <Avatar
+        nickname={label}
+        imageUrl={imageUrl}
+        className="w-[26px] h-[26px]"
+      />
 
-      <span className="ml-[6px] text-lg font-regular text-[var(--color-black-medium)]">
+      <span
+        className="
+        text-md font-regular text-black-medium 
+        ml-[6px] 
+        whitespace-nowrap overflow-hidden overflow-ellipsis
+      "
+      >
         {label}
       </span>
 
@@ -88,23 +98,22 @@ export function AssigneeDropdown({
 
       <DropdownMenu
         className="
+          w-full
           mt-[2px]
-          w-[217px]
           rounded-xl
-          bg-[var(--color-white)]
+          bg-white
           border border-gray-200
           shadow-[0_6px_18px_rgba(0,0,0,0.12)]
           overflow-hidden
         "
       >
         {users.map((user) => {
-          const isSelected = user.userId === selectedUser.id;
-
+          const isSelected = user.userId === selectedUser.userId;
           return (
             <DropdownItem
               key={user.id}
               onClick={() => onChange(user.userId)}
-              className="!px-0 !py-0 h-[48px] hover:bg-gray-50"
+              className="w-full px-[8px] py-[11px] hover:bg-gray-50"
             >
               <div className="flex items-center h-full w-full pl-[16px] pr-[16px]">
                 <Image
@@ -120,9 +129,10 @@ export function AssigneeDropdown({
                 <Avatar
                   nickname={user.nickname}
                   imageUrl={user.profileImageUrl}
+                  className="w-[26px] h-[26px]"
                 />
 
-                <span className="ml-[6px] text-lg font-regular text-[var(--color-black-medium)]">
+                <span className="text-md font-regular text-black-medium ml-[6px] ">
                   {user.nickname}
                 </span>
               </div>

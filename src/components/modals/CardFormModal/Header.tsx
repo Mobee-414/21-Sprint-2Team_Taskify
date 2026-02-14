@@ -4,8 +4,13 @@ interface HeaderProps {
 
 export default function Header({ mode }: HeaderProps) {
   return (
-    <div>
-      <h2>{mode === "create" ? "할 일 생성" : "할 일 수정"}</h2>
-    </div>
+    <h2
+      className="
+      text-lg md:text-2xl font-bold text-black-medium 
+      mb-[32px]
+    "
+    >
+      {mode === "create" ? "할 일 생성" : "할 일 수정"}
+    </h2>
   );
 }
