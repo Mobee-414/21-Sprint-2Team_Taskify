@@ -22,26 +22,10 @@ export default function CardDetailModal({
   handleCardFormOpen,
   handleCardDeleteModalOpen,
 }: CardDetailModalProps) {
-  const {
-    cardDetailData,
-    tagList,
-    control,
-    isValid,
-    handleSubmit,
-    onSubmit,
-    commentList,
-    loading,
-    loadingMore,
-    sentinelRef,
-  } = useCardDetail(cardId);
+  const { cardProps, listProps, formProps, commentActions } =
+    useCardDetail(cardId);
 
-  const listProps = {
-    commentList,
-    loading,
-    loadingMore,
-    sentinelRef,
-  };
-  const formProps = { control, isValid };
+  const { cardDetailData, tagList } = cardProps;
 
   if (!cardDetailData) return;
 
@@ -66,8 +50,7 @@ export default function CardDetailModal({
             imageUrl={cardDetailData.imageUrl}
             listProps={listProps}
             formProps={formProps}
-            handleSubmit={handleSubmit}
-            onSubmit={onSubmit}
+            commentActions={commentActions}
           />
 
           <SideInfo

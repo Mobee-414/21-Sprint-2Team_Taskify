@@ -1,13 +1,13 @@
 import { Control, UseFormHandleSubmit } from "react-hook-form";
-import { CardCommentValues } from "@/hooks/useCardDetail";
 import { TagItem } from "@/types/card.type";
 import Image from "next/image";
-import { CommentItem } from "@/types/comment.type";
+import { CommentItemType } from "@/types/comment.type";
 import CommentForm from "./CommentForm";
 import { RefObject } from "react";
+import { CardCommentValues } from "@/types/card.schema";
 
 interface ListProps {
-  commentList: CommentItem[];
+  commentList: CommentItemType[];
   loading: boolean;
   loadingMore: boolean;
   sentinelRef: RefObject<HTMLDivElement | null>;
@@ -16,6 +16,13 @@ interface ListProps {
 interface FormProps {
   control: Control<CardCommentValues>;
   isValid: boolean;
+  handleSubmit: UseFormHandleSubmit<CardCommentValues>;
+  onSubmit: (data: CardCommentValues) => void;
+}
+
+interface CommentActionProps {
+  onUpdate: (commentId: number, content: string) => void;
+  onDelete: (commentId: number) => void;
 }
 
 interface ContentProps {
@@ -26,8 +33,7 @@ interface ContentProps {
   tagList: TagItem[];
   listProps: ListProps;
   formProps: FormProps;
-  handleSubmit: UseFormHandleSubmit<CardCommentValues>;
-  onSubmit: (data: CardCommentValues) => void;
+  commentActions: CommentActionProps;
 }
 
 export default function Content({
@@ -38,8 +44,7 @@ export default function Content({
   tagList,
   listProps,
   formProps,
-  handleSubmit,
-  onSubmit,
+  commentActions,
 }: ContentProps) {
   return (
     <div className="order-2 md:order-1 flex-grow">
@@ -103,8 +108,7 @@ export default function Content({
       <CommentForm
         listProps={listProps}
         formProps={formProps}
-        handleSubmit={handleSubmit}
-        onSubmit={onSubmit}
+        commentActions={commentActions}
       />
     </div>
   );

@@ -47,3 +47,11 @@ export const CardFormSchema = z.object({
     }),
 });
 export type CardFormValues = z.infer<typeof CardFormSchema>;
+
+export const CardCommentSchema = z.object({
+  cardId: z.number(),
+  columnId: z.number(),
+  dashboardId: z.number(),
+  content: z.string().min(1),
+});
+export type CardCommentValues = z.infer<typeof CardCommentSchema>;

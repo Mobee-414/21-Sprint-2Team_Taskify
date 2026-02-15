@@ -1,14 +1,12 @@
-import Avatar from "@/components/common/Avatar";
-import BaseButton from "@/components/common/Button/ButtonBase";
 import ButtonInputDelete from "@/components/common/Button/ButtonInputDelete";
-import { CardCommentValues } from "@/hooks/useCardDetail";
-import { CommentItem } from "@/types/comment.type";
-import { formatToDisplayDate } from "@/utils/formatDate";
+import { CommentItemType } from "@/types/comment.type";
 import { RefObject } from "react";
 import { Control, Controller, UseFormHandleSubmit } from "react-hook-form";
+import CommentItem from "./CommentItem";
+import { CardCommentValues } from "@/types/card.schema";
 
 interface ListProps {
-  commentList: CommentItem[];
+  commentList: CommentItemType[];
   loading: boolean;
   loadingMore: boolean;
   sentinelRef: RefObject<HTMLDivElement | null>;
@@ -17,24 +15,28 @@ interface ListProps {
 interface FormProps {
   control: Control<CardCommentValues>;
   isValid: boolean;
+  handleSubmit: UseFormHandleSubmit<CardCommentValues>;
+  onSubmit: (data: CardCommentValues) => void;
+}
+
+interface CommentActionProps {
+  onUpdate: (commentId: number, content: string) => void;
+  onDelete: (commentId: number) => void;
 }
 
 interface CommentProps {
   listProps: ListProps;
   formProps: FormProps;
-  handleSubmit: UseFormHandleSubmit<CardCommentValues>;
-  onSubmit: (data: CardCommentValues) => void;
+  commentActions: CommentActionProps;
 }
 
 export default function CommentForm({
   listProps,
   formProps,
-  handleSubmit,
-  onSubmit,
+  commentActions,
 }: CommentProps) {
-  const { control, isValid } = formProps;
+  const { control, isValid, handleSubmit, onSubmit } = formProps;
   const { commentList, loading, loadingMore, sentinelRef } = listProps;
-
   return (
     <div
       className={`flex flex-col ${commentList.length > 0 ? "gap-[16px]" : ""} max-h-[180px] md:max-h-[236px] overflow-y-auto`}
@@ -99,41 +101,11 @@ export default function CommentForm({
         ) : (
           <>
             {commentList.map((comment) => (
-              <li key={comment.id} className="flex gap-[8px] md:gap-[12px]">
-                <Avatar
-                  nickname={comment.author.nickname}
-                  imageUrl={comment.author.profileImageUrl}
-                  className="min-w-[26px] h-[26px] md:min-w-[34px] md:h-[34px]"
-                />
-                <div className="pt-[6px] md:pt-0">
-                  <div className="flex items-center gap-[8px] mb-[8px] md:mb-0">
-                    <div className="text-xs md:text-md font-semibold text-black-medium">
-                      {comment.author.nickname}
-                    </div>
-                    <div className="text-[10px] md:text-xs font-regular text-gray-medium">
-                      {formatToDisplayDate(comment.updatedAt)}
-                    </div>
-                  </div>
-                  <div className="text-xs md:text-md font-regular text-black-medium mb-[8px] md:mb-[10px]">
-                    {comment.content}
-                  </div>
-                  <div className="flex gap-[8px] md:gap-[12px]">
-                    {/* TODO: 내가 쓴 댓글일때만 노출되도록 작업 예정 */}
-                    <BaseButton
-                      type="button"
-                      className="text-[10px] md:text-xs font-regular text-gray-medium underline"
-                    >
-                      수정
-                    </BaseButton>
-                    <BaseButton
-                      type="button"
-                      className="text-[10px] md:text-xs font-regular text-gray-medium underline"
-                    >
-                      삭제
-                    </BaseButton>
-                  </div>
-                </div>
-              </li>
+              <CommentItem
+                key={comment.id}
+                comment={comment}
+                commentActions={commentActions}
+              />
             ))}
           </>
         )}

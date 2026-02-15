@@ -1,14 +1,20 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import useDebounce from "@/hooks/useDebounce";
 import useInfiniteScroll from "@/hooks/useInfiniteScroll";
-import { getReceivedInvitations, respondInvitation } from "@/api/invitations.api";
+import {
+  getReceivedInvitations,
+  respondInvitation,
+} from "@/api/invitations.api";
 import type { Invitation } from "@/types/invitation.type";
 import { useIsMountedRef } from "@/hooks/useIsMountedRef";
 
 const SIZE = 10;
 
-export function useInvitedDashboards(params: { onAccepted: () => void }) {
-  const { onAccepted } = params;
+export function useInvitedDashboards(params: {
+  teamId: string;
+  onAccepted: () => void;
+}) {
+  const { teamId, onAccepted } = params;
 
   const [query, setQuery] = useState("");
   const debounced = useDebounce(query, 300);
@@ -23,10 +29,13 @@ export function useInvitedDashboards(params: { onAccepted: () => void }) {
   const mountedRef = useIsMountedRef();
 
   useEffect(() => {
+    if (!teamId) return;
+
     (async () => {
       setLoading(true);
       try {
         const data = await getReceivedInvitations({
+          teamId,
           size: SIZE,
           cursorId: null,
           title: debounced,
@@ -36,19 +45,20 @@ export function useInvitedDashboards(params: { onAccepted: () => void }) {
 
         setItems(data.invitations);
         setCursorId(data.cursorId);
-        setHasNext(Boolean(data.cursorId) && data.invitations.length > 0);
+        setHasNext(Boolean(data.cursorId));
       } finally {
         if (mountedRef.current) setLoading(false);
       }
     })();
-  }, [debounced, mountedRef]);
+  }, [teamId, debounced, mountedRef]);
 
   const loadMore = useCallback(async () => {
-    if (!hasNext || loadingMore) return;
+    if (!teamId || !hasNext || loadingMore) return;
 
     setLoadingMore(true);
     try {
       const data = await getReceivedInvitations({
+        teamId,
         size: SIZE,
         cursorId,
         title: debounced,
@@ -58,11 +68,11 @@ export function useInvitedDashboards(params: { onAccepted: () => void }) {
 
       setItems((prev) => [...prev, ...data.invitations]);
       setCursorId(data.cursorId);
-      setHasNext(Boolean(data.cursorId) && data.invitations.length > 0);
+      setHasNext(Boolean(data.cursorId));
     } finally {
       if (mountedRef.current) setLoadingMore(false);
     }
-  }, [hasNext, loadingMore, cursorId, debounced, mountedRef]);
+  }, [teamId, hasNext, loadingMore, cursorId, debounced, mountedRef]);
 
   const sentinelRef = useInfiniteScroll(
     loadMore,
@@ -84,8 +94,15 @@ export function useInvitedDashboards(params: { onAccepted: () => void }) {
     setItems((prev) => prev.filter((x) => x.id !== invitationId));
   }, []);
 
-  const isSearching = useMemo(() => debounced.trim().length > 0, [debounced]);
-  const isEmpty = useMemo(() => !loading && items.length === 0, [loading, items.length]);
+  const isSearching = useMemo(
+    () => debounced.trim().length > 0,
+    [debounced]
+  );
+
+  const isEmpty = useMemo(
+    () => !loading && items.length === 0,
+    [loading, items.length]
+  );
 
   return {
     query,

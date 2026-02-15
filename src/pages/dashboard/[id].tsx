@@ -11,6 +11,15 @@ import { useDashboardData } from "@/hooks/useDashboardData";
 import { useDashboardModals } from "@/hooks/useDashboardModals";
 import { useState } from "react";
 import { SyncCardListType } from "@/types/card.type";
+import Header from "./Header";
+import { getDashboard } from "@/api/dashboards.api";
+import type { Dashboard as DashboardType } from "@/types/dashboard.type";
+
+interface ColumnType {
+  id: number;
+  title: string;
+  count: number;
+}
 
 export default function Dashboard() {
   const router = useRouter();

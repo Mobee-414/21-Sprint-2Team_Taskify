@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useRouter } from "next/router";
 import ProfileDropdown from "@/components/dropdown/feature/Profile";
 import InviteModal from "@/components/modals/InviteModal";
 import { useState } from "react";
@@ -30,12 +33,12 @@ export default function Header({
   return (
     <header
       className="
-      flex h-[70px] 
-      items-center 
-      justify-between 
-      border-b border-gray-base 
-      bg-white 
-      pl-[40px] pr-[80px]
+        flex h-[70px]
+        items-center
+        justify-between
+        border-b border-gray-base
+        bg-white
+        pl-[40px] pr-[80px]
       "
     >
       <div className="flex items-center">
@@ -50,6 +53,7 @@ export default function Header({
           />
         )}
       </div>
+
       <div className="flex items-center">
         {isOwner && (
           <button
@@ -88,12 +92,7 @@ export default function Header({
           "
         >
           <span className="ml-[16px] mr-[8px] flex items-center">
-            <Image
-              src="/icons/add_box.svg"
-              alt="초대하기"
-              width={20}
-              height={20}
-            />
+            <Image src="/icons/add_box.svg" alt="초대하기" width={20} height={20} />
           </span>
           초대하기
         </button>
@@ -122,18 +121,14 @@ export default function Header({
         </div>
 
         <div className="w-[36px]" />
-
         <div className="h-[40px] w-px bg-gray-base" />
-
         <div className="w-[36px]" />
 
         <ProfileDropdown
           nickname="배유철"
           profileImageUrl={null}
           avatarColor="#7AC555"
-          onLogout={() => {
-            console.log("logout");
-          }}
+          onLogout={() => console.log("logout")}
         />
       </div>
 
