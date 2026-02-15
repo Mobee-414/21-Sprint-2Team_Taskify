@@ -20,12 +20,12 @@ export default function ConfirmModal({
         className={`
           flex w-full flex-col items-center
           overflow-y-auto
-          px-[16px] py-[24px] md:px-[24px]
-          text-lg md:text-xl font-medium text-black-medium text-center
+          px-[16px] py-[24px] tablet:px-[24px]
+          text-lg tablet:text-xl font-medium text-black-medium text-center
         `}
       >
         {children}
-        <div className="flex gap-[7px] w-full md:gap-[8px] mt-[32px] md:mt-[40px]">
+        <div className="flex gap-[7px] w-full tablet:gap-[8px] mt-[32px] tablet:mt-[40px]">
           <ButtonModal
             type="button"
             variant="secondary"

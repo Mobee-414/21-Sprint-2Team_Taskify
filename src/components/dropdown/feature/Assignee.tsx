@@ -50,7 +50,7 @@ function AssigneeTrigger({
 
       <span
         className="
-        text-md font-regular text-black-medium 
+        text-md tablet:text-lg font-regular text-black-medium 
         ml-[6px] 
         whitespace-nowrap overflow-hidden overflow-ellipsis
       "
@@ -132,7 +132,7 @@ export function AssigneeDropdown({
                   className="w-[26px] h-[26px]"
                 />
 
-                <span className="text-md font-regular text-black-medium ml-[6px] ">
+                <span className="text-md tablet:text-lg font-regular text-black-medium ml-[6px] ">
                   {user.nickname}
                 </span>
               </div>

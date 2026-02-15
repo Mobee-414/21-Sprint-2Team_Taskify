@@ -83,7 +83,7 @@ export default function Content({
       className="flex flex-col gap-[32px]"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="flex flex-col md:flex-row md:justify-between md:gap-[32px]">
+      <div className="flex flex-col tablet:flex-row tablet:justify-between tablet:gap-[32px]">
         {mode === "edit" && (
           <div className="flex-1">
             <Controller
@@ -203,7 +203,7 @@ export default function Content({
         )}
       />
 
-      <div className="flex gap-[7px] md:gap-[8px]">
+      <div className="flex gap-[7px] tablet:gap-[8px]">
         <ButtonModal
           type="button"
           variant="secondary"

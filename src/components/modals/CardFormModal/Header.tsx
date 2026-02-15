@@ -6,7 +6,7 @@ export default function Header({ mode }: HeaderProps) {
   return (
     <h2
       className="
-      text-lg md:text-2xl font-bold text-black-medium 
+      text-lg tablet:text-2xl font-bold text-black-medium 
       mb-[32px]
     "
     >
