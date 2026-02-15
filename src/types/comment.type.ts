@@ -1,4 +1,4 @@
-export interface CommentItem {
+export interface CommentItemType {
   id: number;
   content: string;
   createdAt: string;
@@ -13,5 +13,12 @@ export interface CommentItem {
 
 export interface CommentType {
   cursorId: number | null;
-  comments: CommentItem[];
+  comments: CommentItemType[];
+}
+
+export interface CommentCreateType {
+  content: string;
+  cardId: number;
+  columnId: number;
+  dashboardId: number;
 }
