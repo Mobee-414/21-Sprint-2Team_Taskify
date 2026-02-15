@@ -161,10 +161,7 @@ export default function Column({
           }}
         >
           <div className="flex flex-col gap-2">
-            <p className="font-semibold text-lg break-words">
-              {selectedCard?.title}
-            </p>
-            <p className="text-gray-medium">카드의 모든 내용이 삭제됩니다.</p>
+            <p className="text-black-medium">카드의 모든 내용이 삭제됩니다.</p>
           </div>
         </ConfirmModal>
       )}
