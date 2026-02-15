@@ -1,4 +1,5 @@
 import { createColumn } from "@/api/columns.api";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm, Controller } from "react-hook-form";
 import BaseModal from "../../common/BaseModal";
 import { Input } from "../../common/Input";
@@ -9,8 +10,6 @@ interface CreateColumnModalProps {
   isOpen: boolean;
   onClose: () => void;
   dashboardId: number;
-  onSuccess: () => void;
-  existingColumns: { title: string }[];
 }
 
 interface ColumnFormValues {
@@ -21,9 +20,9 @@ export default function CreateColumnModal({
   isOpen,
   onClose,
   dashboardId,
-  onSuccess,
-  existingColumns,
 }: CreateColumnModalProps) {
+  const queryClient = useQueryClient();
+
   const {
     control,
     handleSubmit,
@@ -40,10 +39,27 @@ export default function CreateColumnModal({
     }
   }, [isOpen, reset]);
 
+  const mutation = useMutation({
+    mutationFn: (title: string) => createColumn(title, dashboardId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["columns", dashboardId],
+      });
+      onClose();
+      reset();
+    },
+  });
+
   const onSubmit = async (data: ColumnFormValues) => {
-    const isDuplicate = existingColumns.some(
-      (col) => col.title === data.columnTitle,
+    const columnsCache =
+      queryClient.getQueryData<{ id: number; title: string; count: number }[]>([
+        "columns",
+        dashboardId,
+      ]) ?? [];
+    const isDuplicate = columnsCache.some(
+      (col) => col.title === data.columnTitle
     );
+
     if (isDuplicate) {
       setError("columnTitle", {
         type: "manual",
@@ -53,10 +69,7 @@ export default function CreateColumnModal({
     }
 
     try {
-      await createColumn(data.columnTitle, dashboardId);
-      reset();
-      onSuccess();
-      onClose();
+      await mutation.mutateAsync(data.columnTitle);
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         if (
@@ -70,19 +83,13 @@ export default function CreateColumnModal({
           return;
         }
       }
-      console.log("원인: ", error);
       alert("컬럼 생성에 실패했습니다.");
     }
   };
 
   return (
     <BaseModal isOpen={isOpen} onClose={onClose} width={540}>
-      <div
-        className={`
-          flex w-full flex-col items-center
-          overflow-y-auto
-        `}
-      >
+      <div className="flex w-full flex-col items-center overflow-y-auto">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col w-full gap-8"

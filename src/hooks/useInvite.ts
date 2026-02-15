@@ -15,7 +15,7 @@ export type InviteValues = z.infer<typeof InviteSchema>;
 export function useInvite(onClose: () => void) {
   // const params = useParams();
   // const dashboardId = params.dashboardId;
-  const dashboardId = 17279; // 임시 고정
+  const dashboardId = 17390; // 임시 고정
 
   const {
     control,
