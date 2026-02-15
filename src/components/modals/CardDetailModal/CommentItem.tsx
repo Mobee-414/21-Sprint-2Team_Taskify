@@ -33,8 +33,8 @@ export default function CommentItem({
     try {
       await onUpdate(comment.id, editContent);
       setIsEditing(false);
-    } catch (error) {
-      console.log("컴포넌트 단에서 실패 감지: 창을 닫지 않음");
+    } catch {
+      console.log("댓글 저장 실패");
     }
   };
 

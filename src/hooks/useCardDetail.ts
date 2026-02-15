@@ -16,6 +16,7 @@ import { useIsMountedRef } from "@/hooks/useIsMountedRef";
 import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 import { useParams } from "next/navigation";
 import { CardCommentSchema, CardCommentValues } from "@/types/card.schema";
+import { handleApiError } from "@/utils/handleError";
 
 const SIZE = 5;
 
@@ -39,15 +40,7 @@ export function useCardDetail(cardId: number) {
         setCardDetailData(nextCard);
         setColumnId(nextCard.columnId);
       } catch (error) {
-        if (axios.isAxiosError(error)) {
-          const serverMessage = error.response?.data?.message;
-          alert(serverMessage || "서버 응답 오류가 발생했습니다.");
-        } else {
-          alert("예상치 못한 에러가 발생했습니다.");
-        }
-
-        console.error("카드 상세 조회 실패:", error);
-        return;
+        handleApiError(error, "카드 상세 조회 실패:");
       }
     },
     [],
@@ -152,14 +145,7 @@ export function useCardDetail(cardId: number) {
         resetField("content");
       }
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const serverMessage = error.response?.data?.message;
-        alert(serverMessage || "서버 응답 오류가 발생했습니다.");
-      } else {
-        alert("예상치 못한 에러가 발생했습니다.");
-      }
-      console.error("댓글 추가 실패:", error);
-      throw error;
+      handleApiError(error, "댓글 추가 실패:");
     }
   };
 
@@ -179,14 +165,7 @@ export function useCardDetail(cardId: number) {
         );
       }
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const serverMessage = error.response?.data?.message;
-        alert(serverMessage || "서버 응답 오류가 발생했습니다.");
-      } else {
-        alert("예상치 못한 에러가 발생했습니다.");
-      }
-      console.error("댓글 수정 실패:", error);
-      throw error;
+      handleApiError(error, "댓글 수정 실패:");
     }
   };
 
@@ -204,15 +183,7 @@ export function useCardDetail(cardId: number) {
         return res;
       }
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const serverMessage = error.response?.data?.message;
-        alert(serverMessage || "서버 응답 오류가 발생했습니다.");
-      } else {
-        alert("예상치 못한 에러가 발생했습니다.");
-      }
-
-      console.error("댓글 삭제 조회 실패:", error);
-      throw error;
+      handleApiError(error, "댓글 삭제 조회 실패:");
     }
   };
 

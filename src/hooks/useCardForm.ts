@@ -13,6 +13,7 @@ import { getMembers } from "@/api/members.api";
 import { MemberType } from "@/types/user.type";
 import { getColumns } from "@/api/columns.api";
 import { Column } from "@/types/column.type";
+import { handleApiError } from "@/utils/handleError";
 
 export function useCardForm(
   onClose: () => void,
@@ -67,15 +68,7 @@ export function useCardForm(
         alert(serverMessage || "데이터를 가져오는 데 실패했습니다.");
       }
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const serverMessage = error.response?.data?.message;
-        alert(serverMessage || "서버 응답 오류가 발생했습니다.");
-      } else {
-        alert("예상치 못한 에러가 발생했습니다.");
-      }
-
-      console.error("컬럼 목록 조회 실패:", error);
-      return;
+      handleApiError(error, "컬럼 목록 조회 실패:");
     }
   }, [dashboardId]);
 
@@ -93,15 +86,7 @@ export function useCardForm(
         });
       }
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const serverMessage = error.response?.data?.message;
-        alert(serverMessage || "서버 응답 오류가 발생했습니다.");
-      } else {
-        alert("예상치 못한 에러가 발생했습니다.");
-      }
-
-      console.error("담당자 목록 조회 실패:", error);
-      return;
+      handleApiError(error, "담당자 목록 조회 실패:");
     }
   }, [dashboardId, initialData, setValue]);
 
@@ -207,14 +192,7 @@ export function useCardForm(
       }
       onClose();
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const serverMessage = error.response?.data?.message;
-        alert(serverMessage || "서버 응답 오류가 발생했습니다.");
-      } else {
-        alert("예상치 못한 에러가 발생했습니다.");
-      }
-      console.error("할 일 저장 실패:", error);
-      return;
+      handleApiError(error, "할 일 저장 실패:");
     }
   };
 
