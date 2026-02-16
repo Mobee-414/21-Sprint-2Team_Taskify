@@ -19,7 +19,7 @@ const LoginSchema = z.object({
     .min(8, "비밀번호를 8자 이상 입력해주세요."),
 });
 
-type LoginValues = z.infer<typeof LoginSchema>;
+export type LoginValues = z.infer<typeof LoginSchema>;
 
 // 훅
 export function useLogin() {
@@ -45,13 +45,14 @@ export function useLogin() {
 
       // accessToken 저장
       localStorage.setItem("accessToken", res.accessToken); // 로그인 성공시 토큰 저장
-
+      localStorage.setItem("user", JSON.stringify(res.user)); 
       setUser(res.user); // 전역 user 저장
 
-      router.push('/'); // 페이지 이동
+      router.push( '/mydashboard'); // 로그인 성공 시 마이대시보드 페이지 이동
 
       console.log("로그인 성공:", res.user);
       return res.user;
+
     } catch (error) {
       if (axios.isAxiosError(error)) {
         return {
