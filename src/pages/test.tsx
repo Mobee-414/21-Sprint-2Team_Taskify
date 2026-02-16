@@ -8,6 +8,7 @@ import InviteModal from "@/components/modals/InviteModal";
 import ConfirmModal from "@/components/modals/ConfirmModal";
 import { CardDetailType } from "@/types/card.type";
 import { useCardDelete } from "@/hooks/useCardDelete";
+import { showToast } from "@/contexts/ToastProvider";
 
 export default function ModalTestPage() {
   const [openSmall, setOpenSmall] = useState(false);
@@ -113,7 +114,20 @@ export default function ModalTestPage() {
         큰 모달
       </button>
 
-      {/* 작은 모달 */}
+      <button
+        className="rounded bg-orange-500 px-4 py-2 text-white"
+        onClick={() => showToast.success("완료메세지 쏼라쏼라!")}
+      >
+        토스트 완료 메세지
+      </button>
+
+      <button
+        className="rounded bg-orange-500 px-4 py-2 text-white"
+        onClick={() => showToast.error("에러메세지 쏼라쏼라!")}
+      >
+        토스트 에러 메세지
+      </button>
+
       <BaseModal
         isOpen={openSmall}
         onClose={() => setOpenSmall(false)}
