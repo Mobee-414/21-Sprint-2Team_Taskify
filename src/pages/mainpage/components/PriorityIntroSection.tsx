@@ -10,7 +10,7 @@ const PriorityIntroSection = () => {
         ref={ref}
         className={`
           relative overflow-hidden rounded-[8px]
-          bg-[var(--color-gray-surface)]
+          bg-gray-surface
           transition-all duration-700 ease-out
           ${isVisible ? "translate-y-0 opacity-100" : "translate-y-16 opacity-0"}
 
@@ -34,7 +34,7 @@ const PriorityIntroSection = () => {
         >
           <p
             className="
-              font-medium text-[var(--color-black-light)]
+              font-medium text-black-light
               text-[18px] tablet:text-[22px]
             "
           >
@@ -46,7 +46,7 @@ const PriorityIntroSection = () => {
               mt-[61px] tablet:mt-[100px]
               text-[36px] tablet:text-[48px]
               font-bold leading-tight
-              text-[var(--color-black-pure)]
+              text-black-pure
             "
           >
             일의 우선순위를<br />
@@ -74,7 +74,6 @@ const PriorityIntroSection = () => {
               fill
               className="object-cover"
               sizes="(min-width: 1920px) 594px, (min-width: 768px) 519.39px, 296.11px"
-              priority={false}
             />
           </div>
         </div>

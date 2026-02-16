@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/router";
 import ProfileDropdown from "@/components/dropdown/feature/Profile";
 import InviteModal from "@/components/modals/InviteModal";
 import { useState } from "react";

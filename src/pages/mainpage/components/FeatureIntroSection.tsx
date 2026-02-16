@@ -10,7 +10,7 @@ const FeatureIntroSection = () => {
         ref={ref}
         className={`
           relative overflow-hidden rounded-[8px]
-          bg-[var(--color-gray-surface)]
+          bg-gray-surface
           transition-all duration-700 ease-out
           ${isVisible ? "translate-y-0 opacity-100" : "translate-y-16 opacity-0"}
 
@@ -41,7 +41,6 @@ const FeatureIntroSection = () => {
               fill
               className="object-cover"
               sizes="(min-width: 1920px) 436px, (min-width: 768px) 360.44px, 217.13px"
-              priority={false}
             />
           </div>
         </div>
@@ -62,7 +61,7 @@ const FeatureIntroSection = () => {
         >
           <p
             className="
-              font-medium text-[var(--color-black-light)]
+              font-medium text-black-light
               text-[18px] tablet:text-[22px]
             "
           >
@@ -74,7 +73,7 @@ const FeatureIntroSection = () => {
               mt-[61px] tablet:mt-[100px]
               text-[36px] tablet:text-[48px]
               font-bold leading-tight
-              text-[var(--color-black-pure)]
+              text-black-pure
             "
           >
             해야 할 일을<br />

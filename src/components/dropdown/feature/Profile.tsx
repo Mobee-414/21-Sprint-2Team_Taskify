@@ -38,8 +38,11 @@ function ProfileAvatar({
 
   return (
     <div
-      className="flex h-[38px] w-[38px] items-center justify-center rounded-full bg-gray-base text-white font-semibold"
-      style={{ backgroundColor: color ?? "var(--color-gray-medium)" }}
+      className={[
+        "flex h-[38px] w-[38px] items-center justify-center rounded-full text-white font-semibold",
+        color ? "" : "bg-gray-medium",
+      ].join(" ")}
+      style={color ? { backgroundColor: color } : undefined}
     >
       {nickname?.[0] ?? "?"}
     </div>
@@ -60,11 +63,13 @@ function ProfileTrigger({
   return (
     <button type="button" className="flex items-center cursor-pointer">
       <ProfileAvatar nickname={nickname} imageUrl={imageUrl} color={color} />
-      <span className="ml-[12px] text-lg font-medium text-black-medium">
+
+      <span className="ml-[12px] text-lg font-medium text-black-medium hidden tablet:inline">
         {nickname}
       </span>
+
       <span
-        className={`ml-[8px] text-gray-dark transition-transform ${
+        className={`ml-[8px] text-gray-dark transition-transform hidden tablet:inline ${
           open ? "rotate-180" : ""
         }`}
         aria-hidden

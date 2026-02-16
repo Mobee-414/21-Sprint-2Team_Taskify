@@ -3,10 +3,12 @@ import Image from "next/image";
 const MainFooter = () => {
   return (
     <footer className="flex w-full justify-center bg-[var(--color-white)] text-[var(--color-black-light)]">
+      
+      {/* 모바일 */}
       <div className="flex w-full flex-col items-center tablet:hidden">
-        <div className="pt-[120.48px] text-lg">© codeit · 2023</div>
+        <div className="pt-[120.48px] text-xs">© codeit · 2023</div>
 
-        <div className="mt-4 flex gap-6 text-lg">
+        <div className="mt-4 flex gap-6 text-xs">
           <a
             href="#"
             className="transition-colors hover:text-[var(--color-black-pure)]"
@@ -25,29 +27,30 @@ const MainFooter = () => {
           <Image
             src="/icons/email.svg"
             alt="Email"
-            width={20}
-            height={20}
+            width={16.36}
+            height={16.36}
             className="cursor-pointer opacity-70 transition-opacity hover:opacity-100"
           />
           <Image
             src="/icons/facebook.svg"
             alt="Facebook"
-            width={22}
-            height={22}
+            width={18}
+            height={18}
             className="cursor-pointer opacity-70 transition-opacity hover:opacity-100"
           />
           <Image
             src="/icons/instagram.svg"
             alt="Instagram"
-            width={22}
-            height={22}
+            width={18}
+            height={18}
             className="cursor-pointer opacity-70 transition-opacity hover:opacity-100"
           />
         </div>
       </div>
 
+      {/* 태블릿 / 데스크탑 */}
       <div className="hidden h-[64px] w-full max-w-[1760px] items-center justify-between px-4 text-md tablet:flex">
-        <span className="text-lg">© codeit · 2026</span>
+        <span className="text-lg">© codeit · 2023</span>
 
         <div className="flex gap-6">
           <a
@@ -88,6 +91,7 @@ const MainFooter = () => {
           />
         </div>
       </div>
+
     </footer>
   );
 };

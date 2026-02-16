@@ -7,69 +7,137 @@ type Props = {
 
 export default function DashboardsHeader({ onClickPlus }: Props) {
   return (
-    <header
-      className="
-        flex h-[70px]
-        items-center
-        justify-between
-        border-b border-gray-base
-        bg-white
-        pl-[40px] pr-[80px]
-      "
-    >
-      <h1 className="text-xl font-bold text-black-medium">내 대시보드</h1>
+    <>
+      <header
+        className="
+          flex h-[70px]
+          items-center
+          justify-between
+          border-b border-gray-base
+          bg-white
+          hidden tablet:flex
+          tablet:pl-[40px] tablet:pr-[32px]
+          desktop:pr-[80px]
+        "
+      >
+        <h1 className="text-xl font-bold text-black-medium">내 대시보드</h1>
 
-      <div className="flex items-center">
-        <button
-          type="button"
-          className="
-            flex items-center
-            w-[88px] h-[40px]
-            rounded-md border border-gray-base
-            text-lg font-medium text-gray-dark
-            hover:bg-gray-surface cursor-pointer
-          "
-        >
-          <span className="ml-[16px] mr-[8px] flex items-center">
-            <Image src="/icons/settings.svg" alt="관리" width={20} height={20} />
-          </span>
-          관리
-        </button>
+        <div className="flex items-center">
+          <button
+            type="button"
+            className="
+              flex items-center
+              w-[88px] h-[40px]
+              rounded-md border border-gray-base
+              text-lg font-medium text-gray-dark
+              hover:bg-gray-surface cursor-pointer
+            "
+          >
+            <span className="ml-[16px] mr-[8px] flex items-center">
+              <Image src="/icons/settings.svg" alt="관리" width={20} height={20} />
+            </span>
+            관리
+          </button>
 
-        <div className="w-[16px]" />
+          <div className="w-[16px]" />
 
-        <button
-          type="button"
-          className="
-            flex items-center
-            w-[116px] h-[40px]
-            rounded-md border border-gray-base
-            text-lg font-medium text-gray-dark
-            hover:bg-gray-surface cursor-pointer
-          "
-          onClick={onClickPlus}
-        >
-          <span className="ml-[16px] mr-[8px] flex items-center">
-            <Image src="/icons/add_box.svg" alt="초대하기" width={20} height={20} />
-          </span>
-          초대하기
-        </button>
+          <button
+            type="button"
+            className="
+              flex items-center
+              w-[116px] h-[40px]
+              rounded-md border border-gray-base
+              text-lg font-medium text-gray-dark
+              hover:bg-gray-surface cursor-pointer
+            "
+            onClick={onClickPlus}
+          >
+            <span className="ml-[16px] mr-[8px] flex items-center">
+              <Image src="/icons/add_box.svg" alt="초대하기" width={20} height={20} />
+            </span>
+            초대하기
+          </button>
 
-        <div className="w-[36px]" />
+          <div className="w-[36px]" />
 
-        <div className="h-[40px] w-px bg-gray-base" />
+          <div className="h-[40px] w-px bg-gray-base" />
 
-        <div className="w-[36px]" />
+          <div className="w-[36px]" />
 
-        <ProfileDropdown
-          nickname="배유철"
-          profileImageUrl={null}
-          avatarColor="#7AC555"
-          onLogout={() => {
-            console.log("logout");
-          }}
-        />
-      </div>
-    </header>
+          <ProfileDropdown
+            nickname="배유철"
+            profileImageUrl={null}
+            avatarColor="#7AC555"
+            onLogout={() => {
+              console.log("logout");
+            }}
+          />
+        </div>
+      </header>
+
+      <header
+        className="
+          flex h-[70px]
+          items-center
+          justify-between
+          border-b border-gray-base
+          bg-white
+          px-4
+          tablet:hidden
+        "
+      >
+        <h1 className="text-[16px] font-bold text-black-medium whitespace-nowrap">
+          내 대시보드
+        </h1>
+
+        <div className="flex items-center flex-nowrap">
+          <button
+            type="button"
+            className="
+              flex items-center justify-center
+              w-[49px] h-[30px]
+              rounded-md border border-gray-base
+              text-[14px] font-medium text-gray-dark
+              hover:bg-gray-surface cursor-pointer
+              whitespace-nowrap shrink-0
+            "
+          >
+            관리
+          </button>
+
+          <div className="w-[8px]" />
+
+          <button
+            type="button"
+            className="
+              flex items-center justify-center
+              w-[73px] h-[30px]
+              rounded-md border border-gray-base
+              text-[14px] font-medium text-gray-dark
+              hover:bg-gray-surface cursor-pointer
+              whitespace-nowrap shrink-0
+            "
+            onClick={onClickPlus}
+          >
+            초대하기
+          </button>
+
+          <div className="w-[12px]" />
+
+          <div className="h-[30px] w-px bg-gray-base shrink-0" />
+
+          <div className="w-[12px]" />
+
+          <ProfileDropdown
+            nickname="배유철"
+            profileImageUrl={null}
+            avatarColor="#7AC555"
+            onLogout={() => {
+              console.log("logout");
+            }}
+          />
+        </div>
+      </header>
+    </>
   );
 }

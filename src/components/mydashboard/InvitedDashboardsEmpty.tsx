@@ -11,12 +11,24 @@ export default function InvitedDashboardsEmpty({ message }: Props) {
         <Image
           src="/images/no_Invitation.png"
           alt="초대 없음"
-          width={100}
-          height={100}
+          width={60}
+          height={60}
           priority
+          className="
+            tablet:w-[100px] tablet:h-[100px]
+            desktop:w-[100px] desktop:h-[100px]
+          "
         />
 
-        <p className="mt-[24px] text-2lg font-regular text-gray-medium">
+        <p
+          className="
+            mt-[24px]
+            text-xs-tight
+            font-regular text-gray-medium
+            tablet:text-2lg
+            desktop:text-2lg
+          "
+        >
           {message}
         </p>
       </div>

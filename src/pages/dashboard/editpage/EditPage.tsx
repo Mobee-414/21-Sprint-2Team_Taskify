@@ -13,7 +13,8 @@ import DashboardInfoSection from "./component/DashboardInfoSection";
 import MembersSection from "./component/MembersSection";
 import InvitationsSection from "./component/InvitationsSection";
 
-import type { Member } from "@/api/members.v2.api";
+import type { Member as ApiMember } from "@/api/members.v2.api";
+import type { Member as HeaderMember } from "@/hooks/useDashboardMembers";
 import type { Invitation } from "@/types/invitation.type";
 import type { Dashboard } from "@/types/dashboard.type";
 
@@ -22,6 +23,13 @@ import { getDashboard, updateDashboard, deleteDashboard } from "@/api/dashboards
 type FormValues = { title: string };
 
 const SIDEBAR_W = 300;
+
+const AVATAR_COLORS = ["#FFC85A", "#FDD446", "#9DD7ED", "#C4B1A2", "#F4D7DA", "#A3C4A2"];
+
+const getAvatarColor = (nickname: string) => {
+  const sum = Array.from(nickname).reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
+  return AVATAR_COLORS[sum % AVATAR_COLORS.length];
+};
 
 export default function EditPage() {
   const router = useRouter();
@@ -116,7 +124,7 @@ export default function EditPage() {
     [dashboardId, selectedColor, reset, getValues]
   );
 
-  const [members, setMembers] = useState<Member[]>([]);
+  const [members, setMembers] = useState<ApiMember[]>([]);
   const [membersLoading] = useState(false);
   const [membersPage, setMembersPage] = useState(1);
   const membersTotalPages = 1;
@@ -132,6 +140,15 @@ export default function EditPage() {
   const onDeleteMember = useCallback(async (memberId: number) => {
     setMembers((prev) => prev.filter((m) => m.id !== memberId));
   }, []);
+
+  const headerMembers: HeaderMember[] = useMemo(
+    () =>
+      members.map((m) => ({
+        ...m,
+        avatarColor: getAvatarColor(m.nickname),
+      })),
+    [members]
+  );
 
   const [invites, setInvites] = useState<Invitation[]>([]);
   const [invitesLoading] = useState(false);
@@ -149,8 +166,7 @@ export default function EditPage() {
 
   const handleGoBack = useCallback(() => {
     const from = router.query.from;
-    const target =
-      typeof from === "string" && from.startsWith("/") ? from : null;
+    const target = typeof from === "string" && from.startsWith("/") ? from : null;
 
     if (target) {
       router.replace(target);
@@ -171,7 +187,6 @@ export default function EditPage() {
 
     router.replace("/mydashboard");
   }, [dashboardId, router]);
-
 
   if (!router.isReady) return null;
 
@@ -194,31 +209,24 @@ export default function EditPage() {
 
       <div className="min-h-screen bg-gray-bg" style={{ paddingLeft: SIDEBAR_W }}>
         <div className="flex min-w-0 flex-col">
-          <Header title={watch("title") ?? ""} />
+          <Header
+            title={watch("title") ?? ""}
+            isOwner={true}
+            members={headerMembers}
+            totalCount={members.length}
+            onEditClick={() => router.push(`/dashboard/editpage/${dashboardId}`)}
+          />
 
           <main className="min-w-0">
             <div className="ml-[40px] mt-[20px]">
-              <button
-                type="button"
-                onClick={handleGoBack}
-                className="flex items-center gap-[6px]"
-              >
-                <Image
-                  src="/icons/arrow_forward.svg"
-                  alt="돌아가기"
-                  width={20}
-                  height={20}
-                />
-                <span className="text-lg font-medium text-black-medium">
-                  돌아가기
-                </span>
+              <button type="button" onClick={handleGoBack} className="flex items-center gap-[6px]">
+                <Image src="/icons/arrow_forward.svg" alt="돌아가기" width={20} height={20} />
+                <span className="text-lg font-medium text-black-medium">돌아가기</span>
               </button>
             </div>
 
             {dashboardError && (
-              <div className="ml-[40px] mt-[12px] text-red-500 text-sm">
-                {dashboardError}
-              </div>
+              <div className="ml-[40px] mt-[12px] text-red-500 text-sm">{dashboardError}</div>
             )}
 
             <div className="ml-[40px] mt-[34px] flex flex-col gap-[16px]">

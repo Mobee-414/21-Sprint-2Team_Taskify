@@ -82,7 +82,7 @@ const HeroSection = () => {
             text-[42px]
             tablet:text-[70px]
             desktop:text-[90px]
-            text-[var(--color-violet-main)]
+            text-violet-main
           "
         >
           Taskify
@@ -93,7 +93,7 @@ const HeroSection = () => {
         className="
           h-[46px] w-[235px]
           tablet:h-[54px] tablet:w-[280px]
-          rounded-md bg-[var(--color-violet-main)]
+          rounded-md bg-violet-main
           text-[14px] tablet:text-[18px]
           font-medium text-white
         "
