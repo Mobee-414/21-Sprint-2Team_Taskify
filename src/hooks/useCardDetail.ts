@@ -83,6 +83,7 @@ export function useCardDetail(cardId: number) {
   const [loadingMore, setLoadingMore] = useState(false);
   const listScrollRef = useRef<HTMLDivElement | null>(null);
   const mountedRef = useIsMountedRef();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // 댓글 목록
   useEffect(() => {
@@ -135,7 +136,10 @@ export function useCardDetail(cardId: number) {
 
   // 댓글 추가
   const onSubmit = async (data: CommentCreateType) => {
+    if (isSubmitting) return;
+
     try {
+      setIsSubmitting(true);
       const res = await postComments(data);
 
       if (res) {
@@ -145,14 +149,18 @@ export function useCardDetail(cardId: number) {
       }
     } catch (error) {
       handleApiError(error, "댓글 추가 실패:");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   // 댓글 수정
   const UpdateComment = async (commentId: number, content: string) => {
     if (!content.trim()) return;
+    if (isSubmitting) return;
 
     try {
+      setIsSubmitting(true);
       const res = await putComments(commentId, content);
 
       if (res) {
@@ -165,13 +173,18 @@ export function useCardDetail(cardId: number) {
       }
     } catch (error) {
       handleApiError(error, "댓글 수정 실패:");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   // 댓글 삭제
   const DeleteComment = async (commentId: number) => {
+    if (!commentId) return;
+    if (isSubmitting) return;
+
     try {
-      if (!commentId) return;
+      setIsSubmitting(true);
       const res = await deleteComments(commentId);
 
       if (res.status === 204 || res.status === 200) {
@@ -183,6 +196,8 @@ export function useCardDetail(cardId: number) {
       }
     } catch (error) {
       handleApiError(error, "댓글 삭제 조회 실패:");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -212,7 +227,8 @@ export function useCardDetail(cardId: number) {
     formProps: {
       control,
       isValid,
-      handleSubmit,
+      isSubmitting,
+      onFormSubmit: handleSubmit,
       onSubmit,
     },
     commentActions: {

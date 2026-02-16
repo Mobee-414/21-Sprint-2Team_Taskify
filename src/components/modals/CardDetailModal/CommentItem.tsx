@@ -13,11 +13,13 @@ interface CommentActionProps {
 interface CommentItemProps {
   comment: CommentItemType;
   commentActions: CommentActionProps;
+  isSubmitting: boolean;
 }
 
 export default function CommentItem({
   comment,
   commentActions,
+  isSubmitting,
 }: CommentItemProps) {
   const { user } = useAuth();
 
@@ -30,6 +32,8 @@ export default function CommentItem({
   };
 
   const handleSave = async () => {
+    if (isSubmitting) return;
+
     try {
       await onUpdate(comment.id, editContent);
       setIsEditing(false);
@@ -77,6 +81,7 @@ export default function CommentItem({
                   type="button"
                   className="text-[10px] tablet:text-xs font-regular text-gray-medium underline"
                   onClick={handleSave}
+                  disabled={isSubmitting}
                 >
                   저장
                 </BaseButton>
@@ -84,6 +89,7 @@ export default function CommentItem({
                   type="button"
                   className="text-[10px] tablet:text-xs font-regular text-gray-medium underline"
                   onClick={() => setIsEditing(false)}
+                  disabled={isSubmitting}
                 >
                   취소
                 </BaseButton>
@@ -97,6 +103,7 @@ export default function CommentItem({
                     setEditContent(comment.content);
                     setIsEditing(true);
                   }}
+                  disabled={isSubmitting}
                 >
                   수정
                 </BaseButton>
@@ -104,6 +111,7 @@ export default function CommentItem({
                   type="button"
                   className="text-[10px] tablet:text-xs font-regular text-gray-medium underline"
                   onClick={() => onDelete(comment.id)}
+                  disabled={isSubmitting}
                 >
                   삭제
                 </BaseButton>
