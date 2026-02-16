@@ -4,6 +4,10 @@
   /* 스타일 */
   --font-pretendard: "Pretendard", sans-serif;
 
+  /* 브레이크 포인트 */
+  --breakpoint-tablet: 768px;
+  --breakpoint-desktop: 1920px;
+
   /* 사이즈 */
   --font-size-4xl: 48px;
   --font-size-3xl: 32px;
@@ -177,104 +181,39 @@
   }
 }
 
-@media (min-width: 768px) {
-  .tablet\:text-4xl {
-    font-size: var(--font-size-4xl);
-    line-height: var(--line-height-4xl);
-  }
-  .tablet\:text-3xl {
-    font-size: var(--font-size-3xl);
-    line-height: var(--line-height-3xl);
-  }
-  .tablet\:text-xl2 {
-    font-size: var(--font-size-xl2);
-    line-height: var(--line-height-xl2);
-  }
-  .tablet\:text-2xl {
-    font-size: var(--font-size-2xl);
-    line-height: var(--line-height-2xl);
-  }
-  .tablet\:text-lg2 {
-    font-size: var(--font-size-lg2);
-    line-height: var(--line-height-lg2);
-  }
-  .tablet\:text-xl {
-    font-size: var(--font-size-xl);
-    line-height: var(--line-height-xl);
-  }
-  .tablet\:text-2lg {
-    font-size: var(--font-size-2lg);
-    line-height: var(--line-height-2lg);
-  }
-  .tablet\:text-lg {
-    font-size: var(--font-size-lg);
-    line-height: var(--line-height-lg);
-  }
-  .tablet\:text-md {
-    font-size: var(--font-size-md);
-    line-height: var(--line-height-md);
-  }
-  .tablet\:text-sm {
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-sm);
-  }
-  .tablet\:text-xs {
-    font-size: var(--font-size-xs);
-    line-height: var(--line-height-xs);
-  }
-  .tablet\:text-xs-tight {
-    font-size: var(--font-size-xs-tight);
-    line-height: var(--line-height-xs-tight);
+@layer utilities {
+  .scrollbar-gutter-stable {
+    scrollbar-gutter: stable;
   }
 }
 
-@media (min-width: 1920px) {
-  .desktop\:text-4xl {
-    font-size: var(--font-size-4xl);
-    line-height: var(--line-height-4xl);
-  }
-  .desktop\:text-3xl {
-    font-size: var(--font-size-3xl);
-    line-height: var(--line-height-3xl);
-  }
-  .desktop\:text-xl2 {
-    font-size: var(--font-size-xl2);
-    line-height: var(--line-height-xl2);
-  }
-  .desktop\:text-2xl {
-    font-size: var(--font-size-2xl);
-    line-height: var(--line-height-2xl);
-  }
-  .desktop\:text-lg2 {
-    font-size: var(--font-size-lg2);
-    line-height: var(--line-height-lg2);
-  }
-  .desktop\:text-xl {
-    font-size: var(--font-size-xl);
-    line-height: var(--line-height-xl);
-  }
-  .desktop\:text-2lg {
-    font-size: var(--font-size-2lg);
-    line-height: var(--line-height-2lg);
-  }
-  .desktop\:text-lg {
-    font-size: var(--font-size-lg);
-    line-height: var(--line-height-lg);
-  }
-  .desktop\:text-md {
-    font-size: var(--font-size-md);
-    line-height: var(--line-height-md);
-  }
-  .desktop\:text-sm {
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-sm);
-  }
-  .desktop\:text-xs {
-    font-size: var(--font-size-xs);
-    line-height: var(--line-height-xs);
-  }
-  .desktop\:text-xs-tight {
-    font-size: var(--font-size-xs-tight);
-    line-height: var(--line-height-xs-tight);
+.sidebar-scroll {
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  scrollbar-width: none;
+}
+
+.sidebar-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(120, 116, 134, 0);
+  transition: background-color 1800ms ease;
+}
+
+.sidebar-scroll.is-scrolling::-webkit-scrollbar-thumb {
+  background: rgba(120, 116, 134, 0.45);
+}
+
+@media (min-width: 768px) {
+  .sidebar-scroll.is-scrolling {
+    scrollbar-width: auto;
+    scrollbar-color: rgba(120, 116, 134, 0.45) transparent;
   }
 }
