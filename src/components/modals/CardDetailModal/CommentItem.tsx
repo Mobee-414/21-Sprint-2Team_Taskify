@@ -39,22 +39,22 @@ export default function CommentItem({
   };
 
   return (
-    <li className="flex gap-[8px] md:gap-[12px]">
+    <li className="flex gap-[8px] tablet:gap-[12px]">
       <Avatar
         nickname={comment.author.nickname}
         imageUrl={comment.author.profileImageUrl}
-        className="min-w-[26px] h-[26px] md:min-w-[34px] md:h-[34px]"
+        className="min-w-[26px] h-[26px] tablet:min-w-[34px] tablet:h-[34px]"
       />
-      <div className="flex-grow pt-[6px] md:pt-0">
-        <div className="flex items-center gap-[8px] mb-[8px] md:mb-0">
-          <div className="text-xs md:text-md font-semibold text-black-medium">
+      <div className="flex-grow pt-[6px] tablet:pt-0">
+        <div className="flex items-center gap-[8px] mb-[8px] tablet:mb-0">
+          <div className="text-xs tablet:text-md font-semibold text-black-medium">
             {comment.author.nickname}
           </div>
-          <div className="text-[10px] md:text-xs font-regular text-gray-medium">
+          <div className="text-[10px] tablet:text-xs font-regular text-gray-medium">
             {formatToDisplayDate(comment.updatedAt)}
           </div>
         </div>
-        <div className="w-full text-xs md:text-md font-regular text-black-medium">
+        <div className="w-full text-xs tablet:text-md font-regular text-black-medium">
           {isEditing ? (
             <>
               <input
@@ -70,19 +70,19 @@ export default function CommentItem({
           )}
         </div>
         {user && user.id === comment.author.id && (
-          <div className="flex gap-[8px] md:gap-[12px] mt-[8px] md:mt-[10px]">
+          <div className="flex gap-[8px] tablet:gap-[12px] mt-[8px] tablet:mt-[10px]">
             {isEditing ? (
               <>
                 <BaseButton
                   type="button"
-                  className="text-[10px] md:text-xs font-regular text-gray-medium underline"
+                  className="text-[10px] tablet:text-xs font-regular text-gray-medium underline"
                   onClick={handleSave}
                 >
                   저장
                 </BaseButton>
                 <BaseButton
                   type="button"
-                  className="text-[10px] md:text-xs font-regular text-gray-medium underline"
+                  className="text-[10px] tablet:text-xs font-regular text-gray-medium underline"
                   onClick={() => setIsEditing(false)}
                 >
                   취소
@@ -92,7 +92,7 @@ export default function CommentItem({
               <>
                 <BaseButton
                   type="button"
-                  className="text-[10px] md:text-xs font-regular text-gray-medium underline"
+                  className="text-[10px] tablet:text-xs font-regular text-gray-medium underline"
                   onClick={() => {
                     setEditContent(comment.content);
                     setIsEditing(true);
@@ -102,7 +102,7 @@ export default function CommentItem({
                 </BaseButton>
                 <BaseButton
                   type="button"
-                  className="text-[10px] md:text-xs font-regular text-gray-medium underline"
+                  className="text-[10px] tablet:text-xs font-regular text-gray-medium underline"
                   onClick={() => onDelete(comment.id)}
                 >
                   삭제

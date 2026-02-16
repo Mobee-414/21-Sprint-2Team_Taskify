@@ -30,7 +30,7 @@ const variantMap: Record<ButtonVariant, string> = {
 // 폰트 사이즈
 const fontSizeMap: Record<FontSize, string> = {
   sm: "text-sm",
-  md: "text-md",
+  tablet: "text-md",
   lg: "text-lg",
 };
 

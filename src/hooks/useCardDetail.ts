@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CardDetailType, TagItem } from "@/types/card.type";
 import { getCard } from "@/api/cards.api";
@@ -180,7 +179,7 @@ export function useCardDetail(cardId: number) {
         setCommentList((prev) =>
           prev.filter((comment) => comment.id !== commentId),
         );
-        return res;
+        return;
       }
     } catch (error) {
       handleApiError(error, "댓글 삭제 조회 실패:");

@@ -1,5 +1,4 @@
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
-import axios from "axios";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CardDetailType, SyncCardListType, TagItem } from "@/types/card.type";

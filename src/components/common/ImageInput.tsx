@@ -35,7 +35,7 @@ export default function ImageInput({
       </label>
       <div>
         <div
-          className="w-[58px] h-[58px] md:w-[76px] md:h-[76px] cursor-pointer"
+          className="w-[58px] h-[58px] tablet:w-[76px] tablet:h-[76px] cursor-pointer"
           onClick={(e) => {
             e.stopPropagation();
             e.stopPropagation();
@@ -60,7 +60,7 @@ export default function ImageInput({
                   after:content-[''] after:z-2
                   after:absolute 
                   after:top-1/2 after:left-1/2 after:-translate-1/2 
-                  after:w-[22px] after:h-[22px] md:after:w-[30px] md:after:h-[30px]
+                  after:w-[22px] after:h-[22px] tablet:after:w-[30px] tablet:after:h-[30px]
                   after:bg-[url('/icons/card/image_edit.svg')] 
                   after:bg-no-repeat 
                   after:bg-contain 
@@ -83,7 +83,7 @@ export default function ImageInput({
               w-full h-full bg-[#F5F5F5] rounded-[6px]
               before:content-[''] before:absolute 
               before:top-1/2 before:left-1/2 before:-translate-1/2 
-              before:w-[21px] before:h-[21px] md:before:w-[28px] md:before:h-[28px]
+              before:w-[21px] before:h-[21px] tablet:before:w-[28px] tablet:before:h-[28px]
               before:bg-[url('/icons/card/image_add.svg')] 
               before:bg-no-repeat 
               before:bg-contain 

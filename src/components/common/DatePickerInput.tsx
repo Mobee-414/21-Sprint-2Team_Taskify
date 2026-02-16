@@ -25,7 +25,14 @@ export default function DatePickerInput({
       <label className={CARD_FORM_STYLES.LABEL} htmlFor={id}>
         마감일
       </label>
-      <div className="flex gap-[8px] items-center px-[16px] py-[12px] border border-gray-base rounded-[8px]">
+      <div
+        className={`
+        flex gap-[8px] items-center px-[16px] py-[12px] 
+        border border-gray-base rounded-[8px]
+        ${error ? "border-red-point" : "border-gray-base"}
+        focus-within:border-violet-main
+        `}
+      >
         <label htmlFor={id}>
           <Image
             width={22}
@@ -38,7 +45,7 @@ export default function DatePickerInput({
         <DatePicker
           ref={datepickerRef}
           id={id}
-          className={`${CARD_FORM_STYLES.INPUT} !border-none !px-0 !py-0 outline-none focus:outline-none`}
+          className={`${CARD_FORM_STYLES.INPUT(!!error)} !border-none !px-0 !py-0 outline-none focus:outline-none`}
           placeholderText="날짜를 입력해 주세요"
           selected={field.value ? new Date(field.value) : null}
           onChange={(date: Date | null) =>

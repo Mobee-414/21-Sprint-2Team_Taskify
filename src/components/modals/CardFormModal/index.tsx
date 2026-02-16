@@ -52,7 +52,7 @@ export default function CardFormModal({
 
   return (
     <BaseModal isOpen={isOpen} onClose={onClose} width={584} radius="md">
-      <div className="overflow-y-auto px-[16px] py-[24px] md:px-[32px] md:py-[32px]">
+      <div className="overflow-y-auto px-[16px] py-[24px] tablet:px-[32px] tablet:py-[32px]">
         <Header mode={mode} />
 
         <Content

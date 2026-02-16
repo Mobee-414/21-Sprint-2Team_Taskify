@@ -16,7 +16,7 @@ function StatusPill({ text }: { text: string }) {
       relative
       max-w-[calc(100%-66px)]
       flex items-center gap-[6px] 
-      px-[8px] py-[4px]
+      px-[8px] py-[4px] tablet:py-[1px]
       rounded-[16px] 
       bg-violet-light 
       
@@ -28,7 +28,7 @@ function StatusPill({ text }: { text: string }) {
     >
       <span
         className="
-        text-xs-tight font-regular text-violet-main
+        text-xs-tight tablet:text-md font-regular text-violet-main
         pl-[12px]
         whitespace-nowrap overflow-hidden overflow-ellipsis
       "

@@ -20,21 +20,17 @@ export default function DescriptionInput({
       <label className={CARD_FORM_STYLES.LABEL} htmlFor={id}>
         설명
       </label>
-      <div>
-        <textarea
-          {...field}
-          id={id}
-          placeholder="설명을 입력해 주세요"
-          className={`
+      <textarea
+        {...field}
+        id={id}
+        placeholder="설명을 입력해 주세요"
+        className={`
             resize-none 
             w-full h-[126px]
-            ${CARD_FORM_STYLES.INPUT} 
-            px-[16px] py-[15px]
-            placeholder-gray-medium placeholder:font-regular
-            outline-none focus:outline-none
+            ${CARD_FORM_STYLES.INPUT(!!error)} 
+            px-[16px]
           `}
-        />
-      </div>
+      />
       {error && <div className={CARD_FORM_STYLES.ERROR}>{error}</div>}
     </div>
   );

@@ -20,8 +20,8 @@ interface FormProps {
 }
 
 interface CommentActionProps {
-  onUpdate: (commentId: number, content: string) => void;
-  onDelete: (commentId: number) => void;
+  onUpdate: (commentId: number, content: string) => Promise<void>;
+  onDelete: (commentId: number) => Promise<void>;
 }
 
 interface CommentProps {
@@ -39,7 +39,7 @@ export default function CommentForm({
   const { commentList, loading, loadingMore, sentinelRef } = listProps;
   return (
     <div
-      className={`flex flex-col ${commentList.length > 0 ? "gap-[16px]" : ""} max-h-[180px] md:max-h-[236px] overflow-y-auto`}
+      className={`flex flex-col ${commentList.length > 0 ? "gap-[16px]" : ""} max-h-[180px] tablet:max-h-[236px] overflow-y-auto`}
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <Controller
@@ -49,7 +49,7 @@ export default function CommentForm({
             <div>
               <div className="mb-[4px]">
                 <label
-                  className="text-md md:text-lg font-medium text-black-medium"
+                  className="text-md tablet:text-lg font-medium text-black-medium"
                   htmlFor={field.name}
                 >
                   댓글
@@ -58,8 +58,8 @@ export default function CommentForm({
               <div
                 className="
                     relative
-                    h-[70px] md:h-[110px] 
-                    p-[12px_20px_12px_12px] md:p-[16px_12px_12px_16px]
+                    h-[70px] tablet:h-[110px] 
+                    p-[12px_20px_12px_12px] tablet:p-[16px_12px_12px_16px]
                     border border-gray-base rounded-[6px]
                     "
               >
@@ -68,8 +68,8 @@ export default function CommentForm({
                   id={field.name}
                   className="
                       resize-none 
-                      w-[calc(100%-90px)] md:w-[calc(100%-80px)] h-full 
-                      text-xs-tight md:text-md font-regular text-black-medium
+                      w-[calc(100%-90px)] tablet:w-[calc(100%-80px)] h-full 
+                      text-xs-tight tablet:text-md font-regular text-black-medium
                       placeholder-gray-medium placeholder:font-regular
                       outline-none focus:outline-none
                       "
@@ -80,8 +80,8 @@ export default function CommentForm({
                   variant="secondary"
                   disabled={!isValid}
                   className="
-                      absolute right-[20px] bottom-[12px] md:right-[11px]
-                      w-[84px] h-[28px] md:w-[77px] md:h-[32px]
+                      absolute right-[20px] bottom-[12px] tablet:right-[11px]
+                      w-[84px] h-[28px] tablet:w-[77px] tablet:h-[32px]
                       text-xs-tight font-medium
                       "
                 >
@@ -93,7 +93,7 @@ export default function CommentForm({
         />
       </form>
 
-      <ul className="flex flex-col gap-[15px] md:gap-[20px]">
+      <ul className="flex flex-col gap-[15px] tablet:gap-[20px]">
         {loading ? (
           <div className="py-[40px] text-center text-md text-gray-dark">
             불러오는 중...
