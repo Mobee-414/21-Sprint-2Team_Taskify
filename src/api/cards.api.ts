@@ -32,5 +32,5 @@ export const putCards = async (cardId: number, data: CardCreateType) => {
 export const deleteCard = async (cardId: number) => {
   const response = await axios.delete(`/cards/${cardId}`);
 
-  return response.data;
+  return response;
 };
