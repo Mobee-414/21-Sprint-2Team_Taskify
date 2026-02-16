@@ -4,13 +4,13 @@ import { Input } from "@/components/common/Input";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface EditColumnModalProps {
   isOpen: boolean;
   onClose: () => void;
   column: { id: number; title: string };
-  onSuccess: () => void;
-  existingColumns: { id: number; title: string }[];
+  dashboardId: number;
 }
 
 interface FormValue {
@@ -21,10 +21,11 @@ export default function EditColumnModal({
   isOpen,
   onClose,
   column,
-  onSuccess,
-  existingColumns,
+  dashboardId,
 }: EditColumnModalProps) {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const queryClient = useQueryClient();
+
   const {
     control,
     handleSubmit,
@@ -43,8 +44,35 @@ export default function EditColumnModal({
     }
   }, [isOpen, column, reset]);
 
+  const updateMutation = useMutation({
+    mutationFn: (title: string) =>
+      axiosInstance.put(`/columns/${column.id}`, { title }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["columns", dashboardId],
+      });
+      onClose();
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: () => axiosInstance.delete(`/columns/${column.id}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["columns", dashboardId],
+      });
+      setIsConfirmOpen(false);
+      onClose();
+    },
+  });
+
   const onSubmit = async (data: FormValue) => {
-    const isDuplicate = existingColumns
+    const columnsCache =
+      queryClient.getQueryData<{ id: number; title: string; count: number }[]>([
+        "columns",
+        dashboardId,
+      ]) ?? [];
+    const isDuplicate = columnsCache
       .filter((col) => col.id !== column.id)
       .some((col) => col.title === data.columnTitle);
 
@@ -55,44 +83,14 @@ export default function EditColumnModal({
       });
       return;
     }
-    await handleUpdate(data);
-  };
 
-  const handleUpdate = async (data: FormValue) => {
-    try {
-      await axiosInstance.put(`/columns/${column.id}`, {
-        title: data.columnTitle,
-      });
-      setIsConfirmOpen(false);
-      onSuccess();
-      onClose();
-    } catch (error) {
-      console.log("원인: ", error);
-      alert("컬럼 수정에 실패했습니다.");
-    }
-  };
-
-  const handleDelete = async () => {
-    try {
-      await axiosInstance.delete(`/columns/${column.id}`);
-      setIsConfirmOpen(false);
-      onSuccess();
-      onClose();
-    } catch (error) {
-      console.log("원인: ", error);
-      alert("삭제 실패");
-    }
+    updateMutation.mutate(data.columnTitle);
   };
 
   return (
     <>
       <BaseModal isOpen={isOpen} onClose={onClose} width={540}>
-        <div
-          className={`
-          flex w-full flex-col items-center
-          overflow-y-auto
-        `}
-        >
+        <div className="flex w-full flex-col items-center overflow-y-auto">
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="w-full flex flex-col gap-8"
@@ -116,6 +114,7 @@ export default function EditColumnModal({
                 )}
               />
             </div>
+
             <div className="flex justify-between items-center w-full mt-4">
               <button
                 type="button"
@@ -126,8 +125,7 @@ export default function EditColumnModal({
               </button>
 
               <button
-                type="button"
-                onClick={handleSubmit(handleUpdate)}
+                type="submit"
                 className="bg-violet-main text-white px-12 py-4 rounded-[8px] font-bold"
               >
                 변경
@@ -140,7 +138,7 @@ export default function EditColumnModal({
       <ConfirmDeleteModal
         isOpen={isConfirmOpen}
         onClose={() => setIsConfirmOpen(false)}
-        onConfirm={handleDelete}
+        onConfirm={() => deleteMutation.mutate()}
       />
     </>
   );

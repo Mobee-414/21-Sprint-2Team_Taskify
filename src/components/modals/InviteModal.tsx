@@ -16,9 +16,9 @@ export default function InviteModal({ isOpen, onClose }: InviteModalProps) {
 
   return (
     <BaseModal isOpen={isOpen} onClose={onClose} width={568} radius={"sm"}>
-      <div className="flex w-full flex-col items-center gap-[18px] md:gap-[24px] overflow-y-auto p-[24px]">
+      <div className="flex w-full flex-col items-center gap-[18px] tablet:gap-[24px] overflow-y-auto p-[24px]">
         <div className="flex justify-between items-center w-full">
-          <h2 className="text-xl md:text-2xl font-bold text-black-medium">
+          <h2 className="text-xl tablet:text-2xl font-bold text-black-medium">
             초대하기
           </h2>
           <ButtonModalClose onClick={onClose} />
@@ -42,7 +42,7 @@ export default function InviteModal({ isOpen, onClose }: InviteModalProps) {
               />
             )}
           />
-          <div className="flex gap-[7px] md:gap-[8px] mt-[24px]">
+          <div className="flex gap-[7px] tablet:gap-[8px] mt-[24px]">
             <ButtonModal
               type="button"
               variant="secondary"

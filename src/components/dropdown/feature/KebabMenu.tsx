@@ -21,7 +21,7 @@ export function KebabMenuDropdown({ onEdit, onDelete }: Props) {
           width={20}
           height={20}
           className="
-          w-[20px] md:w-[28px] h-[20px] md:h-[28px] 
+          w-[20px] tablet:w-[28px] h-[20px] tablet:h-[28px] 
           cursor-pointer hover:opacity-70 transition
           "
           alt="menu"
@@ -47,7 +47,7 @@ export function KebabMenuDropdown({ onEdit, onDelete }: Props) {
             h-1/2
             flex items-center justify-center
             text-md
-            text--black-medium
+            text-black-medium
             hover:bg-violet-light
             hover:text-violet-main
           "

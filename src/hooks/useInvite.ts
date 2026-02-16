@@ -1,8 +1,9 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
 import { postInvitations } from "@/api/invitations.api";
+import { useParams } from "next/navigation";
+import { handleApiError } from "@/utils/handleError";
 
 const InviteSchema = z.object({
   email: z
@@ -13,9 +14,8 @@ const InviteSchema = z.object({
 export type InviteValues = z.infer<typeof InviteSchema>;
 
 export function useInvite(onClose: () => void) {
-  // const params = useParams();
-  // const dashboardId = params.dashboardId;
-  const dashboardId = 17279; // 임시 고정
+  const params = useParams();
+  const dashboardId = Number(params?.id) ?? null;
 
   const {
     control,
@@ -35,15 +35,7 @@ export function useInvite(onClose: () => void) {
       alert("초대가 완료되었습니다!");
       onClose();
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const serverMessage = error.response?.data?.message;
-        alert(serverMessage || "서버 응답 오류가 발생했습니다.");
-      } else {
-        alert("예상치 못한 에러가 발생했습니다.");
-      }
-
-      console.error("초대하기 실패:", error);
-      return;
+      handleApiError(error, "초대하기 실패:");
     }
   };
 

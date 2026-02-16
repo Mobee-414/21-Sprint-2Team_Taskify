@@ -17,18 +17,18 @@ export default function Header({
   return (
     <div
       className="
-        flex flex-wrap flex-col md:flex-row 
+        flex flex-wrap flex-col tablet:flex-row 
         justify-between 
-        content-start md:content-center
-        gap-[16px] md:gap-[10px]
-        mb-[8px] md:mb-[24px] 
+        content-start tablet:content-center
+        gap-[16px] tablet:gap-[10px]
+        mb-[8px] tablet:mb-[24px] 
         "
     >
       <h2
         className="
-        order-2 md:order-1 
-        text-xl md:text-2xl font-bold text-black-medium
-        w-full md:w-[calc(100%-98px)]
+        order-2 tablet:order-1 
+        text-xl tablet:text-2xl font-bold text-black-medium
+        w-full tablet:w-[calc(100%-98px)]
         whitespace-nowrap overflow-hidden overflow-ellipsis
         "
       >
@@ -36,10 +36,10 @@ export default function Header({
       </h2>
       <div
         className="
-          order-1 md:order-2 
-          flex justify-end content-center 
-          gap-[16px] md:gap-[24px] 
-          w-full md:w-auto
+          order-1 tablet:order-2 
+          flex justify-end content-center tablet:justify-center tablet: items-center
+          gap-[16px] tablet:gap-[24px] 
+          w-full tablet:w-auto
           "
       >
         <KebabMenuDropdown

@@ -1,12 +1,16 @@
 import Sidebar from "@/components/layout/TempSidebar";
-import Column from "./Column";
+import Column from "@/pages/dashboard/Column";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 import CreateColumnModal from "@/components/modals/ColumnModal/CreateColumnModal";
-import axiosInstance from "@/api/axios";
 import EditColumnModal from "@/components/modals/ColumnModal/EditColumnModal";
 import CardFormModal from "@/components/modals/CardFormModal";
 import { useRouter } from "next/router";
+import Header from "@/pages/dashboard/Header";
+import { useDashboardMembers } from "@/hooks/useDashboardMembers";
+import { useDashboardData } from "@/hooks/useDashboardData";
+import { useDashboardModals } from "@/hooks/useDashboardModals";
+import { useState } from "react";
+import { SyncCardListType } from "@/types/card.type";
 import Header from "./Header";
 import { getDashboard } from "@/api/dashboards.api";
 import type { Dashboard as DashboardType } from "@/types/dashboard.type";
@@ -18,64 +22,48 @@ interface ColumnType {
 }
 
 export default function Dashboard() {
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isCardModalOpen, setIsCardModalOpen] = useState(false);
-  const [selectedColumn, setselectedColumn] = useState<ColumnType | null>(null);
-  const [activeColumnId, setActiveColumnId] = useState<number | null>(null);
-  const [columns, setColumns] = useState<ColumnType[]>([]);
-  const [refreshTrigger, setRefreshTrigger] = useState(0);
-  const [dashboardData, setDashboardData] = useState<DashboardType | null>(
-    null
-  );
-
   const router = useRouter();
   const { id } = router.query;
   const dashboardId = id ? Number(id) : null;
 
-  const handleEditClick = (column: ColumnType) => {
-    setselectedColumn(column);
-    setIsEditModalOpen(true);
-  };
+  const { data: memberData } = useDashboardMembers(dashboardId ?? undefined);
+  const members = memberData?.members ?? [];
+  const totalCount = memberData?.totalCount ?? 0;
 
-  const handleAddCardOpen = (columnId: number) => {
-    setActiveColumnId(columnId);
-    setIsCardModalOpen(true);
-  };
+  const { columns, dashboardData, isLoading } = useDashboardData(dashboardId);
 
-  const handleSuccess = () => setRefreshTrigger((prev) => prev + 1);
+  const [createHandler, setCreateHandler] = useState<
+    Record<number, SyncCardListType>
+  >({});
 
-  useEffect(() => {
-    if (!router.isReady || !dashboardId) return;
+  const {
+    isAddModalOpen,
+    setIsAddModalOpen,
+    isEditModalOpen,
+    setIsEditModalOpen,
+    isCardModalOpen,
+    setIsCardModalOpen,
+    selectedColumn,
+    activeColumnId,
+    openEditColumn,
+    openAddCard,
+  } = useDashboardModals();
 
-    console.log("대시보드 ID:", dashboardId);
-
-    const fetchColumns = async () => {
-      try {
-        const response = await axiosInstance.get(
-          `/columns?dashboardId=${dashboardId}`
-        );
-        setColumns(response.data.data);
-        const data = await getDashboard(dashboardId);
-        setDashboardData(data);
-      } catch (error) {
-        console.error("로딩 실패", error);
-      }
-    };
-
-    fetchColumns();
-  }, [router.isReady, dashboardId, refreshTrigger]);
+  if (!dashboardId || isLoading) return null;
 
   return (
     <div className="flex min-h-screen w-full bg-gray-bg items-stretch">
       <aside className="shrink-0">
-        <Sidebar refreshKey={refreshTrigger} onCreatedGlobal={handleSuccess} />
+        <Sidebar refreshKey={0} />
       </aside>
 
       <div className="flex-1 flex flex-col">
         <Header
           title={dashboardData?.title || "대시보드"}
           isOwner={dashboardData?.createdByMe || false}
+          members={members}
+          totalCount={totalCount}
+          onEditClick={() => router.push(`/dashboard/${dashboardId}/edit`)}
         />
 
         <main className="flex-1 flex flex-col lg:flex-row bg-gray-bg divide-x divide-gray-light">
@@ -84,10 +72,14 @@ export default function Dashboard() {
               key={column.id}
               id={column.id}
               title={column.title}
-              onEditClick={() => handleEditClick(column)}
-              onAddCard={() => handleAddCardOpen(column.id)}
-              refreshTrigger={refreshTrigger}
-              onSuccess={handleSuccess}
+              onEditClick={() => openEditColumn(column)}
+              onAddCard={() => openAddCard(column.id)}
+              registerCreateHandler={(handler) =>
+                setCreateHandler((prev) => ({
+                  ...prev,
+                  [column.id]: handler,
+                }))
+              }
             />
           ))}
 
@@ -108,36 +100,33 @@ export default function Dashboard() {
         </main>
       </div>
 
-      {isAddModalOpen && dashboardId && (
+      {isAddModalOpen && (
         <CreateColumnModal
-          key={isAddModalOpen ? "open" : "closed"}
           isOpen={isAddModalOpen}
           onClose={() => setIsAddModalOpen(false)}
           dashboardId={dashboardId}
-          onSuccess={handleSuccess}
-          existingColumns={columns}
         />
       )}
 
       {selectedColumn && (
         <EditColumnModal
-          key={selectedColumn.id}
           isOpen={isEditModalOpen}
           onClose={() => setIsEditModalOpen(false)}
           column={selectedColumn}
-          onSuccess={handleSuccess}
-          existingColumns={columns}
+          dashboardId={dashboardId}
         />
       )}
 
-      {isCardModalOpen && activeColumnId && dashboardId && (
+      {isCardModalOpen && activeColumnId && (
         <CardFormModal
           isOpen={isCardModalOpen}
           onClose={() => setIsCardModalOpen(false)}
           mode="create"
-          columnId={Number(activeColumnId)}
-          onSuccess={() => {
-            handleSuccess();
+          columnId={activeColumnId}
+          onSuccess={(action, cardData) => {
+            if (cardData) {
+              createHandler[cardData.columnId]?.(action, cardData);
+            }
             setIsCardModalOpen(false);
           }}
         />

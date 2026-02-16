@@ -11,9 +11,28 @@ import { Column } from "@/types/column.type";
 
 function StatusPill({ text }: { text: string }) {
   return (
-    <div className="flex items-center gap-2 rounded-full bg-[var(--color-violet-light)] px-4 py-2">
-      <span className="w-2 h-2 rounded-full bg-[var(--color-violet-main)]" />
-      <span className="text-md font-regular text-[var(--color-violet-main)]">
+    <div
+      className="
+      relative
+      max-w-[calc(100%-66px)]
+      flex items-center gap-[6px] 
+      px-[8px] py-[4px] tablet:py-[1px]
+      rounded-[16px] 
+      bg-violet-light 
+      
+      before:content-[''] before:absolute
+      before:top-1/2 before:-translate-y-1/2 
+      before:left-[8px] 
+      before:w-[6px] before:h-[6px] before:rounded-full before:bg-violet-main
+    "
+    >
+      <span
+        className="
+        text-xs-tight tablet:text-md font-regular text-violet-main
+        pl-[12px]
+        whitespace-nowrap overflow-hidden overflow-ellipsis
+      "
+      >
         {text}
       </span>
     </div>
@@ -28,12 +47,12 @@ function StatusTrigger({ selectedId }: { selectedId: string }) {
       type="button"
       className={`
         flex items-center
-        w-[217px] h-[48px]
+        w-full
+        px-[8px] py-[11px]
         rounded-[6px]
-        bg-[var(--color-white)]
-        px-4
+        bg-color-white
         border-[1px]
-        ${open ? "border-[var(--color-violet-main)]" : "border-gray-200"}
+        ${open ? "border-violet-main" : "border-gray-200"}
       `}
     >
       <StatusPill text={selectedId} />
@@ -71,13 +90,9 @@ export function StatusDropdown({
 
       <DropdownMenu
         className="
-          mt-[2px]
-          w-[217px]
-          rounded-[6px]
-          bg-[var(--color-white)]
-          border border-gray-200
-          overflow-hidden
-        "
+        w-full rounded-[6px] mt-[2px] bg-white border border-gray-200
+        whitespace-nowrap overflow-hidden overflow-ellipsis
+      "
       >
         {columnList.map((item) => {
           const isSelected = item.id === selectedId;
@@ -89,11 +104,7 @@ export function StatusDropdown({
                 setSelectedId(item.id);
                 onChange(item.id);
               }}
-              className="
-                !px-0 !py-0
-                w-[217px] h-[48px]
-                hover:bg-gray-50
-              "
+              className="w-full px-[8px] py-[11px] hover:bg-gray-50"
             >
               <div className="flex items-center h-full w-full pl-[16px] pr-[16px]">
                 <Image

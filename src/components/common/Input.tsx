@@ -10,15 +10,15 @@ import { clsx } from "clsx";
  * - 활용 예시: labelSm = MOBILE 14px / PC 16px 대응
  */
 const FONT_SIZE_VARIANTS = {
-  labelSm: "text-md md:text-lg", // 14-16
-  labelMd: "text-md md:text-2lg", // 14-18
-  labelLg: "text-lg md:text-2lg", // 16-18
+  labelSm: "text-md tablet:text-lg", // 14-16
+  labelMd: "text-md tablet:text-2lg", // 14-18
+  labelLg: "text-lg tablet:text-2lg", // 16-18
   labelFixed: "text-lg", // 16-16 (고정)
 
-  inputMd: "text-md md:text-lg", // 14-16
+  inputMd: "text-md tablet:text-lg", // 14-16
   inputLg: "text-lg", // 16-16 (고정)
 
-  errorSm: "text-xs md:text-md", // 12-14
+  errorSm: "text-xs tablet:text-md", // 12-14
   errorMd: "text-md", // 14-14 (고정)
 };
 
@@ -69,7 +69,7 @@ export function Input<T extends FieldValues>({
       >
         {label}
         {required && (
-          <span className="text-md md:text-lg font-regular text-violet-main ml-[8px]">
+          <span className="text-md tablet:text-lg font-regular text-violet-main ml-[8px]">
             *
           </span>
         )}
@@ -94,20 +94,29 @@ export function Input<T extends FieldValues>({
         {type === "password" && (
           <button
             type="button"
-            className="absolute top-[50%] right-[13px] md:right-[16px] w-[24px] h-[24px] -translate-y-1/2 cursor-pointer"
+            className="absolute top-[50%] right-[13px] tablet:right-[16px] w-[24px] h-[24px] -translate-y-1/2 cursor-pointer"
             aria-label={showPw ? "비밀번호 숨기기" : "비밀번호 보이기"}
             onClick={() => setShowPw((prev) => !prev)}
           >
             <Image
               fill
-              src={showPw ? "/icons/eye_open.svg" : "/icons/eye_close.svg"}
+              src={
+                showPw
+                  ? "/icons/common/eye_open.svg"
+                  : "/icons/common/eye_close.svg"
+              }
               alt=""
             />
           </button>
         )}
       </div>
       {error && (
-        <div className={clsx(FONT_SIZE_VARIANTS[errorSize], "text-red-point")}>
+        <div
+          className={clsx(
+            FONT_SIZE_VARIANTS[errorSize],
+            "font-regular text-red-point",
+          )}
+        >
           {error}
         </div>
       )}

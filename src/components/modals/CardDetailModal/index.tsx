@@ -22,14 +22,16 @@ export default function CardDetailModal({
   handleCardFormOpen,
   handleCardDeleteModalOpen,
 }: CardDetailModalProps) {
-  const { control, isValid, handleSubmit, onSubmit, cardDetailData, tagList } =
+  const { cardProps, listProps, formProps, commentActions } =
     useCardDetail(cardId);
+
+  const { cardDetailData, tagList } = cardProps;
 
   if (!cardDetailData) return;
 
   return (
     <BaseModal isOpen={isOpen} onClose={onClose} width={730} radius="sm">
-      <div className="px-[16px] py-[16px] md:px-[32px] py-[24px] overflow-y-auto">
+      <div className="px-[16px] py-[16px] tablet:px-[32px] py-[24px] overflow-y-auto">
         <Header
           title={cardDetailData.title}
           onClose={onClose}
@@ -39,17 +41,16 @@ export default function CardDetailModal({
           }
         />
 
-        <div className="flex flex-col md:flex-row justify-between md:gap-[13px]">
+        <div className="flex flex-col tablet:flex-row justify-between tablet:gap-[13px]">
           <Content
             columnTitle={columnTitle}
-            control={control}
-            isValid={isValid}
-            handleSubmit={handleSubmit}
-            onSubmit={onSubmit}
             tagList={tagList}
             title={cardDetailData.title}
             description={cardDetailData.description}
             imageUrl={cardDetailData.imageUrl}
+            listProps={listProps}
+            formProps={formProps}
+            commentActions={commentActions}
           />
 
           <SideInfo

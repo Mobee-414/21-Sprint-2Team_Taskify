@@ -1,8 +1,8 @@
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
-import axios from "axios";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CardDetailType, SyncCardListType, TagItem } from "@/types/card.type";
+import { useParams } from "next/navigation";
 import { DatePicker } from "react-datepicker";
 import { formatToApiDate } from "@/utils/formatDate";
 import { getTagColor } from "@/utils/getTagColor";
@@ -12,6 +12,7 @@ import { getMembers } from "@/api/members.api";
 import { MemberType } from "@/types/user.type";
 import { getColumns } from "@/api/columns.api";
 import { Column } from "@/types/column.type";
+import { handleApiError } from "@/utils/handleError";
 
 export function useCardForm(
   onClose: () => void,
@@ -19,9 +20,8 @@ export function useCardForm(
   columnId: number,
   initialData?: CardDetailType | null,
 ) {
-  // const params = useParams();
-  // const dashboardId = params.dashboardId;
-  const dashboardId = 17390; // 임시 고정
+  const params = useParams();
+  const dashboardId = Number(params?.id) ?? null;
 
   const {
     control,
@@ -67,17 +67,9 @@ export function useCardForm(
         alert(serverMessage || "데이터를 가져오는 데 실패했습니다.");
       }
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const serverMessage = error.response?.data?.message;
-        alert(serverMessage || "서버 응답 오류가 발생했습니다.");
-      } else {
-        alert("예상치 못한 에러가 발생했습니다.");
-      }
-
-      console.error("컬럼 목록 조회 실패:", error);
-      return;
+      handleApiError(error, "컬럼 목록 조회 실패:");
     }
-  }, []);
+  }, [dashboardId]);
 
   // 담당자 목록 가져오기 및 변경
   const getMemberList = useCallback(async () => {
@@ -93,15 +85,7 @@ export function useCardForm(
         });
       }
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const serverMessage = error.response?.data?.message;
-        alert(serverMessage || "서버 응답 오류가 발생했습니다.");
-      } else {
-        alert("예상치 못한 에러가 발생했습니다.");
-      }
-
-      console.error("담당자 목록 조회 실패:", error);
-      return;
+      handleApiError(error, "담당자 목록 조회 실패:");
     }
   }, [dashboardId, initialData, setValue]);
 
@@ -207,14 +191,7 @@ export function useCardForm(
       }
       onClose();
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const serverMessage = error.response?.data?.message;
-        alert(serverMessage || "서버 응답 오류가 발생했습니다.");
-      } else {
-        alert("예상치 못한 에러가 발생했습니다.");
-      }
-      console.error("할 일 저장 실패:", error);
-      return;
+      handleApiError(error, "할 일 저장 실패:");
     }
   };
 
