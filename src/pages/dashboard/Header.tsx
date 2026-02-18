@@ -5,6 +5,7 @@ import ProfileDropdown from "@/components/dropdown/feature/Profile";
 import InviteModal from "@/components/modals/InviteModal";
 import { useState } from "react";
 import { Member } from "@/hooks/useDashboardMembers";
+import { useLogout } from "@/hooks/useLogout";
 
 interface HeaderProps {
   title: string;
@@ -20,6 +21,8 @@ export default function Header({
   onEditClick,
 }: HeaderProps) {
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
+
+  const {logout} = useLogout();
 
   return (
     <header
@@ -94,7 +97,7 @@ export default function Header({
         <div className="w-[36px]" />
 
         <ProfileDropdown
-          onLogout={() => console.log("logout")}
+          onLogout={logout}
         />
       </div>
 
