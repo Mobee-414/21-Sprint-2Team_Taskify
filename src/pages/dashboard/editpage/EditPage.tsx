@@ -385,8 +385,9 @@ export default function EditPage() {
                     alt="돌아가기"
                     width={20}
                     height={20}
+                    className="w-[18px] h-[18px] tablet:w-[20px] tablet:h-[20px]"
                   />
-                  <span className="text-lg font-medium text-black-medium">
+                  <span className="text-[14px] tablet:text-lg font-medium text-black-medium">
                     돌아가기
                   </span>
                 </button>
@@ -436,7 +437,8 @@ export default function EditPage() {
                     h-[52px] w-[284px]
                     rounded-[8px]
                     bg-white
-                    text-lg font-medium text-black-medium
+                    text-[16px] tablet:text-lg
+                    font-medium text-black-medium
                     border border-gray-base
                     hover:bg-gray-surface
                   "
