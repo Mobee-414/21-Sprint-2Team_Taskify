@@ -1,8 +1,6 @@
 import Image from "next/image";
 
-type Props = {
-  message: string;
-};
+type Props = { message: string };
 
 export default function InvitedDashboardsEmpty({ message }: Props) {
   return (
@@ -14,21 +12,10 @@ export default function InvitedDashboardsEmpty({ message }: Props) {
           width={60}
           height={60}
           priority
-          className="
-            tablet:w-[100px] tablet:h-[100px]
-            desktop:w-[100px] desktop:h-[100px]
-          "
+          className="tablet:w-[100px] tablet:h-[100px] desktop:w-[100px] desktop:h-[100px]"
         />
 
-        <p
-          className="
-            mt-[24px]
-            text-xs-tight
-            font-regular text-gray-medium
-            tablet:text-2lg
-            desktop:text-2lg
-          "
-        >
+        <p className="mt-[24px] font-regular text-gray-medium text-[12px] leading-[18px] tablet:text-[18px] tablet:leading-[26px]">
           {message}
         </p>
       </div>
