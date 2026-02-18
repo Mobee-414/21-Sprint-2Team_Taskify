@@ -10,6 +10,7 @@ export type LoginResponse = {
   user: AuthUser;
   accessToken: string;
 };
+
 // login (이미 OK)
 export async function login(params: LoginParams): Promise<LoginResponse> {
   const res = await axios.post<LoginResponse>("/auth/login", params);
@@ -23,7 +24,6 @@ export type ChangePasswordParams = {
 };
 
 export async function changePassword(
-  
   params: ChangePasswordParams
 ): Promise<void> {
   await axios.put("/auth/password", params);

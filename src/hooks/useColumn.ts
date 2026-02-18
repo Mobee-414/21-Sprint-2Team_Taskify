@@ -16,7 +16,7 @@ export function useColumn({ id }: UseColumnProps) {
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingCardData, setEditingCardData] = useState<CardDetailType | null>(
-    null
+    null,
   );
 
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
@@ -34,11 +34,11 @@ export function useColumn({ id }: UseColumnProps) {
           if (cardData) {
             if (cardData.columnId !== id) {
               setCards((prev) =>
-                prev.filter((item) => item.id !== cardData.id)
+                prev.filter((item) => item.id !== cardData.id),
               );
             } else {
               setCards((prev) =>
-                prev.map((item) => (item.id === cardData.id ? cardData : item))
+                prev.map((item) => (item.id === cardData.id ? cardData : item)),
               );
             }
           }
@@ -50,17 +50,17 @@ export function useColumn({ id }: UseColumnProps) {
           break;
       }
     },
-    [id]
+    [id],
   );
 
-  const { mutate: deleteMutate } = useCardDelete(
+  const { mutate: deleteMutate, isSubmitting } = useCardDelete(
     selectedCardId || 0,
     (_, __, cardId) => {
       syncCardList("delete", undefined, cardId);
       setIsDeleteConfirmOpen(false);
       setIsDetailOpen(false);
       setSelectedCardId(null);
-    }
+    },
   );
 
   const fetchCards = useCallback(async () => {
@@ -107,5 +107,6 @@ export function useColumn({ id }: UseColumnProps) {
     handleEditOpen,
     syncCardList,
     deleteMutate,
+    isSubmitting,
   };
 }

@@ -10,11 +10,11 @@ import clsx from 'clsx';
 type ButtonVariant = 'primary' | 'secondary';
 type ButtonBorderLine = 'none' | 'gray';
 
-interface BaseButtonProps extends Omit <
+interface BaseButtonProps
+  extends Omit<
     ButtonHTMLAttributes<HTMLButtonElement>,
     'type' | 'disabled' | 'onClick'
-  >
-{
+  > {
   children?: ReactNode;
   disabled?: boolean;
   onClick?: MouseEventHandler<HTMLButtonElement>;
@@ -24,10 +24,8 @@ interface BaseButtonProps extends Omit <
 
   variant?: ButtonVariant;
   borderline?: ButtonBorderLine;
-};
+}
 
-
-// 버튼
 const variantMap: Record<ButtonVariant, string> = {
   primary: `
     bg-[var(--color-violet-main)]
@@ -43,7 +41,6 @@ const variantMap: Record<ButtonVariant, string> = {
   `,
 };
 
-// 테두리
 const borderMap: Record<ButtonBorderLine, string> = {
   none: 'border-none',
   gray: 'border border-[var(--color-gray-base)]',
@@ -55,10 +52,8 @@ export default function ButtonAcceptReject({
   onClick,
   type = 'button',
   className,
-
   variant = 'primary',
   borderline = 'gray',
-
   ...rest
 }: BaseButtonProps) {
   return (
@@ -67,14 +62,20 @@ export default function ButtonAcceptReject({
       disabled={disabled}
       onClick={onClick}
       className={clsx(
-        'flex items-center justify-center gap-[10px]',
+        'flex items-center justify-center',
         'rounded-[4px]',
         disabled && 'cursor-not-allowed',
 
+        // 기본 (Mobile)
+        'h-[32px] w-[74px]',
+        'text-md',
+
+        // Desktop
+        'desktop:w-[84px] desktop:text-lg',
+
         variantMap[variant],
         borderMap[borderline],
-
-        className,
+        className
       )}
       {...rest}
     >

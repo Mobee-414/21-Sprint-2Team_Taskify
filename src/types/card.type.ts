@@ -1,13 +1,4 @@
-import DatePicker from "react-datepicker";
 import { AssigneeUser } from "./user.type";
-
-export interface DatepickerProps {
-  datepickerRef: React.RefObject<DatePicker | null>;
-  handleDateChange: (
-    date: Date | null,
-    onChange: (value: string) => void,
-  ) => void;
-}
 
 export interface TagItem {
   name: string;
@@ -26,7 +17,6 @@ export interface CardDefaultType {
 export interface CardDetailType extends CardDefaultType {
   id: number;
   assignee: AssigneeUser;
-  teamId: string;
   columnId: number;
   createdAt: string;
   updatedAt: string;

@@ -11,9 +11,6 @@ import { useDashboardData } from "@/hooks/useDashboardData";
 import { useDashboardModals } from "@/hooks/useDashboardModals";
 import { useState } from "react";
 import { SyncCardListType } from "@/types/card.type";
-import Header from "./Header";
-import { getDashboard } from "@/api/dashboards.api";
-import type { Dashboard as DashboardType } from "@/types/dashboard.type";
 
 interface ColumnType {
   id: number;
@@ -63,8 +60,9 @@ export default function Dashboard() {
           isOwner={dashboardData?.createdByMe || false}
           members={members}
           totalCount={totalCount}
-          onEditClick={() => router.push(`/dashboard/${dashboardId}/edit`)}
+          onEditClick={() => router.push(`/dashboard/editpage/${dashboardId}`)}
         />
+
 
         <main className="flex-1 flex flex-col lg:flex-row bg-gray-bg divide-x divide-gray-light">
           {columns.map((column) => (

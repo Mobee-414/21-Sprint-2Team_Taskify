@@ -1,18 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { useParams } from "next/navigation";
 
 import DashboardsLayout from "@/components/layout/DashboardsLayout";
 import MyDashboardsSection from "@/components/mydashboard/MyDashboardsSection";
 import InvitedDashboardsSection from "@/components/mydashboard/InvitedDashboardsSection";
 import CreateDashboardModal from "@/components/modals/CreateDashboardModal";
 import type { Dashboard } from "@/types/dashboard.type";
+import ProtectedRoute from "@/components/common/ProtectedRoute";
 
 export default function DashboardsPage() {
-  const params = useParams();
-  const teamId = params.teamId as string;
-
   const [refreshKey, setRefreshKey] = useState(0);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
 
@@ -24,6 +21,7 @@ export default function DashboardsPage() {
   };
 
   return (
+  <ProtectedRoute>
     <DashboardsLayout
       refreshKey={refreshKey}
       onRefresh={bumpRefresh}
@@ -35,10 +33,7 @@ export default function DashboardsPage() {
       />
 
       <div className="ml-[40px] mt-[40px]">
-        <InvitedDashboardsSection
-          teamId={teamId}         
-          onAccepted={bumpRefresh}
-        />
+        <InvitedDashboardsSection onAccepted={bumpRefresh} />
       </div>
 
       {isCreateOpen && (
@@ -48,5 +43,6 @@ export default function DashboardsPage() {
         />
       )}
     </DashboardsLayout>
+  </ProtectedRoute>  
   );
 }

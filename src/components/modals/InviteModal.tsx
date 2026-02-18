@@ -11,7 +11,7 @@ interface InviteModalProps {
 }
 
 export default function InviteModal({ isOpen, onClose }: InviteModalProps) {
-  const { control, errors, isValid, handleSubmit, onSubmit } =
+  const { control, errors, isValid, onFormSubmit, onSubmit, isSubmitting } =
     useInvite(onClose);
 
   return (
@@ -24,7 +24,7 @@ export default function InviteModal({ isOpen, onClose }: InviteModalProps) {
           <ButtonModalClose onClick={onClose} />
         </div>
 
-        <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
+        <form className="w-full" onSubmit={onFormSubmit(onSubmit)}>
           <Controller
             name="email"
             control={control}
@@ -49,6 +49,7 @@ export default function InviteModal({ isOpen, onClose }: InviteModalProps) {
               fontSize={"lg"}
               className="w-full h-[54px]"
               onClick={onClose}
+              disabled={isSubmitting}
             >
               취소
             </ButtonModal>
@@ -56,6 +57,7 @@ export default function InviteModal({ isOpen, onClose }: InviteModalProps) {
               type="submit"
               fontSize={"lg"}
               className={`w-full h-[54px] ${isValid ? "" : "disabled"}`}
+              disabled={isSubmitting}
             >
               초대
             </ButtonModal>

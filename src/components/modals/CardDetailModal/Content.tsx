@@ -16,7 +16,8 @@ interface ListProps {
 interface FormProps {
   control: Control<CardCommentValues>;
   isValid: boolean;
-  handleSubmit: UseFormHandleSubmit<CardCommentValues>;
+  isSubmitting: boolean;
+  onFormSubmit: UseFormHandleSubmit<CardCommentValues>;
   onSubmit: (data: CardCommentValues) => void;
 }
 

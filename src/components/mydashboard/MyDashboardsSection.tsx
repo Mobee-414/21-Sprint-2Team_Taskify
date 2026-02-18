@@ -12,12 +12,18 @@ type Props = {
 
 export default function MyDashboardsSection({ refreshKey, onClickCreate }: Props) {
   const router = useRouter();
-
   const { page, setPage, totalPages, dashboards, loading } =
     useMyDashboards(refreshKey);
 
   return (
-    <div className="ml-[40px] mt-[40px] w-[1022px]">
+    <div
+      className="
+        ml-[24px] mt-[24px]
+        w-[260px]
+        tablet:ml-[40px] tablet:mt-[40px] tablet:w-[507px]
+        desktop:ml-[40px] desktop:mt-[40px] desktop:w-[1022px]
+      "
+    >
       <section>
         {loading ? (
           <div className="py-[40px] text-center text-md text-gray-dark">
@@ -25,7 +31,15 @@ export default function MyDashboardsSection({ refreshKey, onClickCreate }: Props
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-3 gap-x-[13px] gap-y-[12px]">
+            <div
+              className="
+                grid
+                grid-cols-1
+                tablet:grid-cols-2
+                desktop:grid-cols-3
+                gap-x-[13px] gap-y-[12px]
+              "
+            >
               <ButtonDashboardAdd
                 type="button"
                 onClick={onClickCreate}
@@ -42,11 +56,14 @@ export default function MyDashboardsSection({ refreshKey, onClickCreate }: Props
                   type="button"
                   onClick={() => router.push(`/dashboard/${d.id}`)}
                   className="
-                    flex h-[70px] w-[332px]
-                    items-center justify-between
+                    flex items-center justify-between
                     rounded-[8px] border border-gray-base bg-white
-                    px-[16px]
                     hover:bg-gray-bg
+                    px-[16px]
+
+                    w-[260px] h-[58px]
+                    tablet:w-[247px] tablet:h-[68px]
+                    desktop:w-[332px] desktop:h-[70px]
                   "
                 >
                   <div className="flex min-w-0 flex-1 items-center gap-[10px]">
@@ -62,21 +79,35 @@ export default function MyDashboardsSection({ refreshKey, onClickCreate }: Props
                     </Tooltip>
 
                     {d.createdByMe && (
-                      <Image src="/icons/crown.svg" alt="owner" width={18} height={18} />
+                      <Image
+                        src="/icons/crown.svg"
+                        alt="owner"
+                        width={18}
+                        height={18}
+                      />
                     )}
                   </div>
 
-                  <Image src="/icons/arrow_right.svg" alt="이동" width={18} height={18} />
+                  <Image
+                    src="/icons/arrow_right.svg"
+                    alt="이동"
+                    width={18}
+                    height={18}
+                  />
                 </button>
               ))}
             </div>
 
             {dashboards.length > 0 && (
               <div className="mt-[12px] flex items-center justify-end">
-                <span className="text-md font-regular text-black-medium mr-[16px]">
+                <span className="whitespace-nowrap text-xs-tight tablet:text-md font-regular text-black-medium mr-[16px]">
                   {page} 페이지 중 {totalPages}
                 </span>
-                <Pagination page={page} totalPages={totalPages} onChange={setPage} />
+                <Pagination
+                  page={page}
+                  totalPages={totalPages}
+                  onChange={setPage}
+                />
               </div>
             )}
           </>

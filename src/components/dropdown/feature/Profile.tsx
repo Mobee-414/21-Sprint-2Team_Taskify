@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useEffect, useMemo, useState } from "react";
 import {
   Dropdown,
   DropdownItem,
@@ -7,12 +10,23 @@ import {
   DropdownTrigger,
 } from "../Dropdown";
 import { useDropdown } from "@/contexts/DropdownContext";
+import { getMyUser, type User } from "@/api/users.api";
 
 type Props = {
-  nickname: string;
-  profileImageUrl?: string | null;
-  avatarColor?: string;
   onLogout?: () => void;
+};
+
+const AVATAR_COLORS = [
+  "#7AC555",
+  "#760DDE",
+  "#FFA500",
+  "#76A5EA",
+  "#E876EA",
+];
+
+const getAvatarColor = (seed: string) => {
+  const sum = Array.from(seed).reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
+  return AVATAR_COLORS[sum % AVATAR_COLORS.length];
 };
 
 function ProfileAvatar({
@@ -38,8 +52,11 @@ function ProfileAvatar({
 
   return (
     <div
-      className="flex h-[38px] w-[38px] items-center justify-center rounded-full bg-gray-base text-white font-semibold"
-      style={{ backgroundColor: color ?? "var(--color-gray-medium)" }}
+      className={[
+        "flex h-[38px] w-[38px] items-center justify-center rounded-full text-white font-semibold",
+        color ? "" : "bg-gray-medium",
+      ].join(" ")}
+      style={color ? { backgroundColor: color } : undefined}
     >
       {nickname?.[0] ?? "?"}
     </div>
@@ -60,11 +77,13 @@ function ProfileTrigger({
   return (
     <button type="button" className="flex items-center cursor-pointer">
       <ProfileAvatar nickname={nickname} imageUrl={imageUrl} color={color} />
-      <span className="ml-[12px] text-lg font-medium text-black-medium">
+
+      <span className="ml-[12px] text-lg font-medium text-black-medium hidden tablet:inline">
         {nickname}
       </span>
+
       <span
-        className={`ml-[8px] text-gray-dark transition-transform ${
+        className={`ml-[8px] text-gray-dark transition-transform hidden tablet:inline ${
           open ? "rotate-180" : ""
         }`}
         aria-hidden
@@ -75,16 +94,42 @@ function ProfileTrigger({
   );
 }
 
-export default function ProfileDropdown({
-  nickname,
-  profileImageUrl = null,
-  avatarColor,
-  onLogout,
-}: Props) {
+export default function ProfileDropdown({ onLogout }: Props) {
   const router = useRouter();
 
+  const [me, setMe] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let alive = true;
+
+    (async () => {
+      try {
+        const data = await getMyUser(); 
+        if (!alive) return;
+        setMe(data);
+      } catch (e) {
+        console.error("getMyUser 실패:", e);
+        if (!alive) return;
+        setMe(null);
+      } finally {
+        if (!alive) return;
+        setLoading(false);
+      }
+    })();
+
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  const nickname = me?.nickname ?? (loading ? "로딩중" : "사용자");
+  const profileImageUrl = me?.profileImageUrl ?? null;
+
+  const avatarColor = useMemo(() => getAvatarColor(nickname), [nickname]);
+
   const handleAccount = () => router.push("/account");
-  const handleMyDashboard = () => router.push("/dashboard");
+  const handleMyDashboard = () => router.push("/mydashboard");
   const handleLogout = () => onLogout?.();
 
   return (
