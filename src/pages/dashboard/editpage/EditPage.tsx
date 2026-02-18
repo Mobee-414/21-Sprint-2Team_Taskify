@@ -1,6 +1,7 @@
+// EditPage.tsx
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
@@ -29,6 +30,11 @@ import {
   deleteDashboard,
 } from "@/api/dashboards.api";
 
+import {
+  getDashboardInvitations,
+  cancelDashboardInvitation,
+} from "@/api/invitations.api";
+
 type FormValues = { title: string };
 
 const AVATAR_COLORS = [
@@ -41,7 +47,10 @@ const AVATAR_COLORS = [
 ];
 
 const getAvatarColor = (nickname: string) => {
-  const sum = Array.from(nickname).reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
+  const sum = Array.from(nickname).reduce(
+    (acc, ch) => acc + ch.charCodeAt(0),
+    0
+  );
   return AVATAR_COLORS[sum % AVATAR_COLORS.length];
 };
 
@@ -68,7 +77,6 @@ export default function EditPage() {
 
   const [selectedColor, setSelectedColor] = useState("#7AC555");
   const [updating, setUpdating] = useState(false);
-
   const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
@@ -129,7 +137,6 @@ export default function EditPage() {
         setDashboard(updated);
         setSelectedColor(updated.color);
         reset({ title: updated.title });
-
         setRefreshKey((k) => k + 1);
       } finally {
         setUpdating(false);
@@ -218,35 +225,103 @@ export default function EditPage() {
 
   const headerMembers: HeaderMember[] = useMemo(
     () =>
-      members.map(
-        (m) =>
-          ({
-            id: m.id,
-            nickname: m.nickname,
-            profileImageUrl: m.profileImageUrl,
-            avatarColor: getAvatarColor(m.nickname),
-          } as HeaderMember)
-      ),
+      members.map((m) => ({
+        id: m.id,
+        nickname: m.nickname,
+        profileImageUrl: m.profileImageUrl,
+        avatarColor: getAvatarColor(m.nickname),
+      })),
     [members]
   );
 
+  const INVITES_SIZE = 10;
+
   const [invites, setInvites] = useState<Invitation[]>([]);
   const [invitesLoading, setInvitesLoading] = useState(false);
-  const [invitesHasNext] = useState(false);
+  const [invitesCursorId, setInvitesCursorId] = useState<number | null>(0);
+  const invitesHasNext = invitesCursorId !== null;
 
-  const fetchInvites = useCallback(async () => {}, []);
+  const invitesLoadingRef = useRef(false);
+  const invitesCursorRef = useRef<number | null>(0);
+
+  useEffect(() => {
+    invitesLoadingRef.current = invitesLoading;
+  }, [invitesLoading]);
+
+  useEffect(() => {
+    invitesCursorRef.current = invitesCursorId;
+  }, [invitesCursorId]);
+
+  const fetchInvites = useCallback(
+    async (mode: "reset" | "append" = "append") => {
+      if (!dashboardId) return;
+
+      if (invitesLoadingRef.current) return;
+      if (mode === "append" && invitesCursorRef.current === null) return;
+
+      invitesLoadingRef.current = true;
+      setInvitesLoading(true);
+
+      try {
+        const cursor = mode === "reset" ? 0 : invitesCursorRef.current ?? 0;
+
+        const res = await getDashboardInvitations({
+          dashboardId,
+          size: INVITES_SIZE,
+          cursorId: cursor,
+        });
+
+        setInvitesCursorId(res.cursorId);
+
+        setInvites((prev) => {
+          if (mode === "reset") return res.invitations;
+
+          const seen = new Set(prev.map((x) => x.id));
+          return [...prev, ...res.invitations.filter((x) => !seen.has(x.id))];
+        });
+      } finally {
+        invitesLoadingRef.current = false;
+        setInvitesLoading(false);
+      }
+    },
+    [dashboardId]
+  );
+
+  useEffect(() => {
+    if (!router.isReady) return;
+    if (!dashboardId) return;
+
+    setInvites([]);
+    setInvitesCursorId(0);
+    fetchInvites("reset");
+  }, [router.isReady, dashboardId, fetchInvites]);
+
+  const onLoadMoreInvites = useCallback(() => {
+    fetchInvites("append");
+  }, [fetchInvites]);
 
   const [inviteOpen, setInviteOpen] = useState(false);
   const onOpenInvite = useCallback(() => setInviteOpen(true), []);
-  const onCloseInvite = useCallback(() => setInviteOpen(false), []);
 
-  const onCancelInvite = useCallback(async (invitationId: number) => {
-    setInvites((prev) => prev.filter((x) => x.id !== invitationId));
-  }, []);
+  const onCloseInvite = useCallback(() => {
+    setInviteOpen(false);
+    fetchInvites("reset");
+  }, [fetchInvites]);
+
+  const onCancelInvite = useCallback(
+    async (invitationId: number) => {
+      if (!dashboardId) return;
+
+      await cancelDashboardInvitation({ dashboardId, invitationId });
+      setInvites((prev) => prev.filter((x) => x.id !== invitationId));
+    },
+    [dashboardId]
+  );
 
   const handleGoBack = useCallback(() => {
     const from = router.query.from;
-    const target = typeof from === "string" && from.startsWith("/") ? from : null;
+    const target =
+      typeof from === "string" && from.startsWith("/") ? from : null;
 
     if (target) {
       router.replace(target);
@@ -264,7 +339,6 @@ export default function EditPage() {
     if (!ok) return;
 
     await deleteDashboard(dashboardId);
-
     router.replace("/mydashboard");
   }, [dashboardId, router]);
 
@@ -294,7 +368,9 @@ export default function EditPage() {
               isOwner={true}
               members={headerMembers}
               totalCount={membersTotalCount}
-              onEditClick={() => router.push(`/dashboard/editpage/${dashboardId}`)}
+              onEditClick={() =>
+                router.push(`/dashboard/editpage/${dashboardId}`)
+              }
             />
 
             <main className="min-w-0">
@@ -347,7 +423,7 @@ export default function EditPage() {
                   invites={invites}
                   loading={invitesLoading}
                   hasNext={invitesHasNext}
-                  onLoadMore={fetchInvites}
+                  onLoadMore={onLoadMoreInvites}
                   onOpenInvite={onOpenInvite}
                   onCancel={onCancelInvite}
                 />

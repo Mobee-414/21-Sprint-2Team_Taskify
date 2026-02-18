@@ -145,12 +145,14 @@ export default function ProfileDropdown({ onLogout }: Props) {
 
         <DropdownMenu
           className="
-            mt-[10px]
-            w-[140px]
+            mt-[6px] tablet:mt-[10px]
+            w-[140px] max-w-[calc(100vw-16px)]
             rounded-[6px]
             bg-white
             border border-gray-light
             overflow-hidden
+            !left-auto !right-0 !translate-x-0
+            tablet:!left-0 tablet:!right-auto
           "
         >
           <DropdownItem
