@@ -6,7 +6,6 @@ import {
 } from "react-hook-form";
 import { ChangeEvent, RefObject } from "react";
 import { CardFormValues } from "@/types/card.schema";
-import { DatepickerProps, TagItem } from "@/types/card.type";
 import { MemberType } from "@/types/user.type";
 import { Column } from "@/types/column.type";
 import { Input } from "@/components/common/Input";
@@ -20,28 +19,43 @@ import ImageInput from "@/components/common/ImageInput";
 import DescriptionInput from "@/components/common/DescriptionInput";
 import { CARD_FORM_STYLES } from "@/constants/cardFormStyles";
 import ButtonModal from "@/components/common/Button/ButtonModal";
+import DatePicker from "react-datepicker";
+import { TagItem } from "@/types/card.type";
 
 interface FormProps {
   control: Control<CardFormValues>;
   errors: FieldErrors<CardFormValues>;
   isValid: boolean;
   isDirty: boolean;
+  isSubmitting: boolean;
+  onFormSubmit: UseFormHandleSubmit<CardFormValues>;
+  onSubmit: (data: CardFormValues) => void;
 }
 
-interface TagsProps {
+interface SelectOptions {
+  columnList: Column[];
+  memberList: MemberType[];
+}
+
+interface DatepickerProps {
+  datepickerRef: React.RefObject<DatePicker | null>;
+  onDateChange: (date: Date | null, onChange: (value: string) => void) => void;
+}
+
+interface TagProps {
   tagList: TagItem[];
-  handleKeyDown: (
+  onKeyDown: (
     e: React.KeyboardEvent<HTMLInputElement>,
     currentTags: string[],
     onChange: (value: string[]) => void,
   ) => void;
 }
 
-interface imageProps {
+interface ImageProps {
   fileInputRef: RefObject<HTMLInputElement | null>;
   previewUrl: string | null;
-  handleImageButtonClick: () => void;
-  handleFileChange: (
+  onImageButtonClick: () => void;
+  onFileChange: (
     e: ChangeEvent<HTMLInputElement>,
     onChange: (value: File) => void,
   ) => void;
@@ -50,38 +64,41 @@ interface imageProps {
 interface ContentProps {
   mode: "create" | "edit";
   formProps: FormProps;
-  handleSubmit: UseFormHandleSubmit<CardFormValues>;
-  onSubmit: (data: CardFormValues) => void;
-  onClose: () => void;
-  columnList: Column[];
-  memberList: MemberType[];
+  selectOptions: SelectOptions;
   datepickerProps: DatepickerProps;
-  tagsProps: TagsProps;
-  imageProps: imageProps;
+  tagProps: TagProps;
+  imageProps: ImageProps;
+  onClose: () => void;
 }
 
 export default function Content({
   mode,
   formProps,
-  handleSubmit,
-  onSubmit,
-  onClose,
-  columnList,
-  memberList,
+  selectOptions,
   datepickerProps,
-  tagsProps,
+  tagProps,
   imageProps,
+  onClose,
 }: ContentProps) {
-  const { control, errors, isValid, isDirty } = formProps;
-  const { datepickerRef, handleDateChange } = datepickerProps;
-  const { tagList, handleKeyDown } = tagsProps;
-  const { fileInputRef, previewUrl, handleImageButtonClick, handleFileChange } =
+  const {
+    control,
+    errors,
+    isValid,
+    isDirty,
+    isSubmitting,
+    onFormSubmit,
+    onSubmit,
+  } = formProps;
+  const { columnList, memberList } = selectOptions;
+  const { datepickerRef, onDateChange } = datepickerProps;
+  const { tagList, onKeyDown } = tagProps;
+  const { fileInputRef, previewUrl, onImageButtonClick, onFileChange } =
     imageProps;
 
   return (
     <form
       className="flex flex-col gap-[32px]"
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={onFormSubmit(onSubmit)}
     >
       <div className="flex flex-col tablet:flex-row tablet:justify-between tablet:gap-[32px]">
         {mode === "edit" && (
@@ -169,7 +186,7 @@ export default function Content({
             datepickerRef={datepickerRef}
             field={field}
             error={errors.dueDate?.message}
-            handleDateChange={handleDateChange}
+            onDateChange={onDateChange}
           />
         )}
       />
@@ -182,7 +199,7 @@ export default function Content({
             tagList={tagList}
             field={field}
             error={errors.tags?.message}
-            handleKeyDown={handleKeyDown}
+            onKeyDown={onKeyDown}
           />
         )}
       />
@@ -197,8 +214,8 @@ export default function Content({
             field={field}
             error={errors.imageUrl?.message as string}
             previewUrl={previewUrl}
-            handleFileChange={handleFileChange}
-            handleImageButtonClick={handleImageButtonClick}
+            onFileChange={onFileChange}
+            onImageButtonClick={onImageButtonClick}
           />
         )}
       />
@@ -210,6 +227,7 @@ export default function Content({
           fontSize={"lg"}
           className="w-full h-[54px]"
           onClick={onClose}
+          disabled={isSubmitting}
         >
           취소
         </ButtonModal>
@@ -218,15 +236,16 @@ export default function Content({
             type="submit"
             fontSize={"lg"}
             className={`w-full h-[54px] ${isValid ? "" : "disabled"}`}
+            disabled={isSubmitting}
           >
             생성
           </ButtonModal>
         ) : (
           <ButtonModal
             type="submit"
-            disabled={!isDirty}
             fontSize={"lg"}
             className={`w-full h-[54px] ${isValid ? "" : "disabled"}`}
+            disabled={!isDirty || isSubmitting}
           >
             수정
           </ButtonModal>

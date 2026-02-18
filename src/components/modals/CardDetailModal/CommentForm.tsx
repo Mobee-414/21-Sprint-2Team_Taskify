@@ -15,7 +15,8 @@ interface ListProps {
 interface FormProps {
   control: Control<CardCommentValues>;
   isValid: boolean;
-  handleSubmit: UseFormHandleSubmit<CardCommentValues>;
+  isSubmitting: boolean;
+  onFormSubmit: UseFormHandleSubmit<CardCommentValues>;
   onSubmit: (data: CardCommentValues) => void;
 }
 
@@ -35,13 +36,13 @@ export default function CommentForm({
   formProps,
   commentActions,
 }: CommentProps) {
-  const { control, isValid, handleSubmit, onSubmit } = formProps;
+  const { control, isValid, onFormSubmit, onSubmit, isSubmitting } = formProps;
   const { commentList, loading, loadingMore, sentinelRef } = listProps;
   return (
     <div
       className={`flex flex-col ${commentList.length > 0 ? "gap-[16px]" : ""} max-h-[180px] tablet:max-h-[236px] overflow-y-auto`}
     >
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={onFormSubmit(onSubmit)}>
         <Controller
           name="content"
           control={control}
@@ -78,7 +79,7 @@ export default function CommentForm({
                 <ButtonInputDelete
                   type="submit"
                   variant="secondary"
-                  disabled={!isValid}
+                  disabled={!isValid || isSubmitting}
                   className="
                       absolute right-[20px] bottom-[12px] tablet:right-[11px]
                       w-[84px] h-[28px] tablet:w-[77px] tablet:h-[32px]
@@ -105,6 +106,7 @@ export default function CommentForm({
                 key={comment.id}
                 comment={comment}
                 commentActions={commentActions}
+                isSubmitting={isSubmitting}
               />
             ))}
           </>

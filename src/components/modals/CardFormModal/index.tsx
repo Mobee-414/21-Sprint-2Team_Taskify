@@ -21,34 +21,8 @@ export default function CardFormModal({
   initialData,
   onSuccess,
 }: CardFormModalProps) {
-  const {
-    control,
-    errors,
-    isValid,
-    isDirty,
-    handleSubmit,
-    onSubmit,
-    columnList,
-    memberList,
-    datepickerRef,
-    handleDateChange,
-    tagList,
-    handleKeyDown,
-    fileInputRef,
-    previewUrl,
-    handleImageButtonClick,
-    handleFileChange,
-  } = useCardForm(onClose, onSuccess, columnId, initialData);
-
-  const formProps = { control, errors, isValid, isDirty };
-  const datepickerProps = { datepickerRef, handleDateChange };
-  const tagsProps = { tagList, handleKeyDown };
-  const imageProps = {
-    fileInputRef,
-    previewUrl,
-    handleImageButtonClick,
-    handleFileChange,
-  };
+  const { formProps, selectOptions, datepickerProps, tagProps, imageProps } =
+    useCardForm(onClose, onSuccess, columnId, initialData);
 
   return (
     <BaseModal isOpen={isOpen} onClose={onClose} width={584} radius="md">
@@ -58,14 +32,11 @@ export default function CardFormModal({
         <Content
           mode={mode}
           formProps={formProps}
-          handleSubmit={handleSubmit}
-          onSubmit={onSubmit}
-          onClose={onClose}
-          columnList={columnList}
-          memberList={memberList}
+          selectOptions={selectOptions}
           datepickerProps={datepickerProps}
-          tagsProps={tagsProps}
+          tagProps={tagProps}
           imageProps={imageProps}
+          onClose={onClose}
         />
       </div>
     </BaseModal>
