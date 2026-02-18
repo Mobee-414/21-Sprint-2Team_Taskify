@@ -65,7 +65,7 @@
 
   /* Breakpoints 추가 */
   --breakpoint-tablet: 768px;
-  --breakpoint-desktop: 1920px;
+  --breakpoint-desktop: 1024px;
 }
 
 @layer base {
@@ -135,45 +135,6 @@
   .text-xs-tight {
     font-size: var(--font-size-xs-tight);
     line-height: var(--line-height-xs-tight);
-  }
-
-  @media (min-width: 48rem) {
-    .md\:text-3xl {
-      font-size: var(--font-size-3xl);
-      line-height: var(--line-height-3xl);
-    }
-    .md\:text-2xl {
-      font-size: var(--font-size-2xl);
-      line-height: var(--line-height-2xl);
-    }
-    .md\:text-xl {
-      font-size: var(--font-size-xl);
-      line-height: var(--line-height-xl);
-    }
-    .md\:text-2lg {
-      font-size: var(--font-size-2lg);
-      line-height: var(--line-height-2lg);
-    }
-    .md\:text-lg {
-      font-size: var(--font-size-lg);
-      line-height: var(--line-height-lg);
-    }
-    .md\:text-md {
-      font-size: var(--font-size-md);
-      line-height: var(--line-height-md);
-    }
-    .md\:text-sm {
-      font-size: var(--font-size-sm);
-      line-height: var(--line-height-sm);
-    }
-    .md\:text-xs {
-      font-size: var(--font-size-xs);
-      line-height: var(--line-height-xs);
-    }
-    .md\:text-xs-tight {
-      font-size: var(--font-size-xs-tight);
-      line-height: var(--line-height-xs-tight);
-    }
   }
 }
 

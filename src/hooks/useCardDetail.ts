@@ -16,6 +16,7 @@ import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 import { useParams } from "next/navigation";
 import { CardCommentSchema, CardCommentValues } from "@/types/card.schema";
 import { handleApiError } from "@/utils/handleError";
+import { showToast } from "@/contexts/ToastProvider";
 
 const SIZE = 5;
 
@@ -188,7 +189,6 @@ export function useCardDetail(cardId: number) {
       const res = await deleteComments(commentId);
 
       if (res.status === 204 || res.status === 200) {
-        alert("삭제되었습니다.");
         setCommentList((prev) =>
           prev.filter((comment) => comment.id !== commentId),
         );

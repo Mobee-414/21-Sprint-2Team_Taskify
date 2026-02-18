@@ -2,6 +2,7 @@ import { deleteCard } from "@/api/cards.api";
 import { useCallback, useState } from "react";
 import { SyncCardListType } from "@/types/card.type";
 import { handleApiError } from "@/utils/handleError";
+import { showToast } from "@/contexts/ToastProvider";
 
 export function useCardDelete(cardId: number, onSuccess: SyncCardListType) {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -16,7 +17,7 @@ export function useCardDelete(cardId: number, onSuccess: SyncCardListType) {
       const res = await deleteCard(cardId);
 
       if (res.status === 204 || res.status === 200) {
-        alert("삭제되었습니다.");
+        showToast.success("삭제되었습니다!");
         onSuccess("delete", undefined, cardId);
         return;
       }

@@ -5,6 +5,7 @@ import { postInvitations } from "@/api/invitations.api";
 import { useParams } from "next/navigation";
 import { handleApiError } from "@/utils/handleError";
 import { useState } from "react";
+import { showToast } from "@/contexts/ToastProvider";
 
 const InviteSchema = z.object({
   email: z
@@ -38,7 +39,7 @@ export function useInvite(onClose: () => void) {
       setIsSubmitting(true);
 
       await postInvitations(dashboardId, data);
-      alert("초대가 완료되었습니다!");
+      showToast.success("초대가 완료되었습니다!");
       onClose();
     } catch (error) {
       handleApiError(error, "초대하기 실패:");
