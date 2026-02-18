@@ -65,7 +65,7 @@
 
   /* Breakpoints 추가 */
   --breakpoint-tablet: 768px;
-  --breakpoint-desktop: 1920px;
+  --breakpoint-desktop: 1024px;
 }
 
 @layer base {
