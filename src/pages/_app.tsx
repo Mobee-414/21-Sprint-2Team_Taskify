@@ -4,6 +4,7 @@ import { AuthProvider } from "@/contexts/AuthProvider";
 import Head from "next/head";
 import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ToastProvider } from "@/contexts/ToastProvider";
 
 export default function App({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(() => new QueryClient());
@@ -47,6 +48,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <Component {...pageProps} />
+          <ToastProvider />
         </AuthProvider>
       </QueryClientProvider>
     </>
