@@ -1,13 +1,14 @@
 import { useId } from "react";
 import DatePicker from "react-datepicker";
 import { ControllerRenderProps } from "react-hook-form";
-import { DatepickerProps } from "@/types/card.type";
 import { CardFormValues } from "@/types/card.schema";
 import { CARD_FORM_STYLES } from "@/constants/cardFormStyles";
 import Image from "next/image";
 import "@/styles/utility.module.css";
 
-interface DatePickerInputProps extends DatepickerProps {
+interface DatepickerProps {
+  datepickerRef: React.RefObject<DatePicker | null>;
+  onDateChange: (date: Date | null, onChange: (value: string) => void) => void;
   field: ControllerRenderProps<CardFormValues, "dueDate">;
   error?: string | null;
 }
@@ -16,8 +17,8 @@ export default function DatePickerInput({
   datepickerRef,
   field,
   error,
-  handleDateChange,
-}: DatePickerInputProps) {
+  onDateChange,
+}: DatepickerProps) {
   const id = useId();
 
   return (
@@ -48,9 +49,7 @@ export default function DatePickerInput({
           className={`${CARD_FORM_STYLES.INPUT(!!error)} !border-none !px-0 !py-0 outline-none focus:outline-none`}
           placeholderText="날짜를 입력해 주세요"
           selected={field.value ? new Date(field.value) : null}
-          onChange={(date: Date | null) =>
-            handleDateChange(date, field.onChange)
-          }
+          onChange={(date: Date | null) => onDateChange(date, field.onChange)}
           dateFormat="yyyy.MM.dd HH:mm"
           showTimeSelect
           timeIntervals={30}

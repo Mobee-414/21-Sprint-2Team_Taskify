@@ -20,21 +20,21 @@ export default function NoticeModal({
         <div
           className="
             w-full
-            h-[144px]
+            h-[192px]
             flex flex-col justify-center items-center
             max-md:w-full
-            max-md:h-[172px]
+            max-md:h-[220px]
           "
-        >
+          >
           <div
             className="
-          text-center
-          font-medium text-[#333236]
-          text-[20px] leading-[32px]
-          max-md:text-[16px] max-md:leading-[24px]
-          mb-[24px]
-          max-md:mb-[28px]
-        "
+            text-center
+            font-medium text-[#333236]
+            text-[20px] leading-[32px]
+            max-md:text-[16px] max-md:leading-[24px]
+            mb-[24px]
+            max-md:mb-[40px]
+          "
           >
             {message}
           </div>

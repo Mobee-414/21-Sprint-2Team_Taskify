@@ -13,6 +13,7 @@ import { MemberType } from "@/types/user.type";
 import { getColumns } from "@/api/columns.api";
 import { Column } from "@/types/column.type";
 import { handleApiError } from "@/utils/handleError";
+import { showToast } from "@/contexts/ToastProvider";
 
 export function useCardForm(
   onClose: () => void,
@@ -54,6 +55,7 @@ export function useCardForm(
   const [previewUrl, setPreviewUrl] = useState<string | null>(() => {
     return initialData?.imageUrl || null;
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // 컬럼 목록 가져오기
   const getColumnList = useCallback(async () => {
@@ -64,10 +66,10 @@ export function useCardForm(
         setColumnList(nextColumnList);
       } else {
         const serverMessage = res?.data?.message;
-        alert(serverMessage || "데이터를 가져오는 데 실패했습니다.");
+        showToast.error(serverMessage || "데이터를 가져오는 데 실패했습니다.");
       }
     } catch (error) {
-      handleApiError(error, "컬럼 목록 조회 실패:");
+      handleApiError(error, "컬럼 목록 조회 실패");
     }
   }, [dashboardId]);
 
@@ -166,7 +168,11 @@ export function useCardForm(
   };
 
   const onSubmit = async (data: CardFormValues) => {
+    if (isSubmitting) return;
+
     try {
+      setIsSubmitting(true);
+
       let finalData = data;
       if (typeof data.imageUrl !== "string") {
         const returnImageUrl = await uploadImage(data.imageUrl);
@@ -187,49 +193,61 @@ export function useCardForm(
 
       if (result) {
         const type = isEdit ? "edit" : "create";
+        const message = isEdit ? "수정되었습니다!" : "생성되었습니다!";
+        showToast.success(message);
         onSuccess(type, result, data.cardId ?? undefined);
       }
       onClose();
     } catch (error) {
       handleApiError(error, "할 일 저장 실패:");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   useEffect(() => {
     const fetchData = async () => {
-      if (dashboardId) {
-        await getMemberList();
-      }
-      if (initialData?.id) {
-        await getColumnList();
-      }
+      if (dashboardId) await getMemberList();
+      if (initialData?.id) await getColumnList();
     };
-
     fetchData();
+  }, [initialData?.id, dashboardId, getMemberList, getColumnList]);
 
+  useEffect(() => {
     return () => {
       if (previewUrl) {
         URL.revokeObjectURL(previewUrl);
       }
     };
-  }, [initialData?.id, dashboardId, getMemberList, getColumnList]);
+  }, [previewUrl]);
 
   return {
-    control,
-    errors,
-    isValid,
-    isDirty,
-    handleSubmit,
-    onSubmit,
-    columnList,
-    memberList,
-    datepickerRef,
-    handleDateChange,
-    tagList,
-    handleKeyDown,
-    previewUrl,
-    fileInputRef,
-    handleImageButtonClick,
-    handleFileChange,
+    formProps: {
+      control,
+      errors,
+      isValid,
+      isDirty,
+      isSubmitting,
+      onFormSubmit: handleSubmit,
+      onSubmit,
+    },
+    selectOptions: {
+      columnList,
+      memberList,
+    },
+    datepickerProps: {
+      datepickerRef,
+      onDateChange: handleDateChange,
+    },
+    tagProps: {
+      tagList,
+      onKeyDown: handleKeyDown,
+    },
+    imageProps: {
+      previewUrl,
+      fileInputRef,
+      onImageButtonClick: handleImageButtonClick,
+      onFileChange: handleFileChange,
+    },
   };
 }

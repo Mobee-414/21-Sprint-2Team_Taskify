@@ -5,6 +5,7 @@ interface ConfirmModalProps {
   isOpen: boolean;
   onClose: () => void;
   onClick: () => void;
+  isSubmitting?: boolean;
   children: React.ReactNode;
 }
 
@@ -13,6 +14,7 @@ export default function ConfirmModal({
   onClose,
   onClick,
   children,
+  isSubmitting = false,
 }: ConfirmModalProps) {
   return (
     <BaseModal isOpen={isOpen} onClose={onClose} width={568} radius="md">
@@ -32,6 +34,7 @@ export default function ConfirmModal({
             fontSize={"lg"}
             className="w-full h-[54px]"
             onClick={onClose}
+            disabled={isSubmitting}
           >
             취소
           </ButtonModal>
@@ -40,6 +43,7 @@ export default function ConfirmModal({
             fontSize={"lg"}
             className="w-full h-[54px]"
             onClick={onClick}
+            disabled={isSubmitting}
           >
             삭제
           </ButtonModal>

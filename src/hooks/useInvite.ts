@@ -4,6 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { postInvitations } from "@/api/invitations.api";
 import { useParams } from "next/navigation";
 import { handleApiError } from "@/utils/handleError";
+import { useState } from "react";
+import { showToast } from "@/contexts/ToastProvider";
 
 const InviteSchema = z.object({
   email: z
@@ -16,6 +18,7 @@ export type InviteValues = z.infer<typeof InviteSchema>;
 export function useInvite(onClose: () => void) {
   const params = useParams();
   const dashboardId = Number(params?.id) ?? null;
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
     control,
@@ -30,12 +33,18 @@ export function useInvite(onClose: () => void) {
   });
 
   const onSubmit = async (data: InviteValues) => {
+    if (isSubmitting) return;
+
     try {
+      setIsSubmitting(true);
+
       await postInvitations(dashboardId, data);
-      alert("초대가 완료되었습니다!");
+      showToast.success("초대가 완료되었습니다!");
       onClose();
     } catch (error) {
       handleApiError(error, "초대하기 실패:");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -43,7 +52,8 @@ export function useInvite(onClose: () => void) {
     control,
     errors,
     isValid,
-    handleSubmit,
+    onFormSubmit: handleSubmit,
     onSubmit,
+    isSubmitting,
   };
 }

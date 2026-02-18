@@ -1,13 +1,4 @@
-import DatePicker from "react-datepicker";
 import { AssigneeUser } from "./user.type";
-
-export interface DatepickerProps {
-  datepickerRef: React.RefObject<DatePicker | null>;
-  handleDateChange: (
-    date: Date | null,
-    onChange: (value: string) => void,
-  ) => void;
-}
 
 export interface TagItem {
   name: string;

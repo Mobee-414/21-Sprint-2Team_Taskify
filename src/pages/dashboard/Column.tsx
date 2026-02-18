@@ -21,7 +21,7 @@ export default function Column({
   title,
   onEditClick,
   onAddCard,
-  registerCreateHandler
+  registerCreateHandler,
 }: ColumnProps) {
   const {
     cards,
@@ -39,6 +39,7 @@ export default function Column({
     handleEditOpen,
     syncCardList,
     deleteMutate,
+    isSubmitting,
   } = useColumn({ id });
 
   useEffect(() => {
@@ -159,6 +160,7 @@ export default function Column({
             setIsDetailOpen(false);
             setSelectedCardId(null);
           }}
+          isSubmitting={isSubmitting}
         >
           <div className="flex flex-col gap-2">
             <p className="text-black-medium">카드의 모든 내용이 삭제됩니다.</p>

@@ -7,6 +7,7 @@ import MyDashboardsSection from "@/components/mydashboard/MyDashboardsSection";
 import InvitedDashboardsSection from "@/components/mydashboard/InvitedDashboardsSection";
 import CreateDashboardModal from "@/components/modals/CreateDashboardModal";
 import type { Dashboard } from "@/types/dashboard.type";
+import ProtectedRoute from "@/components/common/ProtectedRoute";
 
 export default function DashboardsPage() {
   const [refreshKey, setRefreshKey] = useState(0);
@@ -20,6 +21,7 @@ export default function DashboardsPage() {
   };
 
   return (
+  <ProtectedRoute>
     <DashboardsLayout
       refreshKey={refreshKey}
       onRefresh={bumpRefresh}
@@ -41,5 +43,6 @@ export default function DashboardsPage() {
         />
       )}
     </DashboardsLayout>
+  </ProtectedRoute>  
   );
 }

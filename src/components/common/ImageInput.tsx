@@ -10,8 +10,8 @@ interface ImageInputProps {
   field: ControllerRenderProps<CardFormValues, "imageUrl">;
   error?: string | null;
   previewUrl?: string | null;
-  handleImageButtonClick: () => void;
-  handleFileChange: (
+  onImageButtonClick: () => void;
+  onFileChange: (
     e: ChangeEvent<HTMLInputElement>,
     onChange: (value: File) => void,
   ) => void;
@@ -23,8 +23,8 @@ export default function ImageInput({
   field,
   error,
   previewUrl,
-  handleImageButtonClick,
-  handleFileChange,
+  onImageButtonClick,
+  onFileChange,
 }: ImageInputProps) {
   const id = useId();
 
@@ -39,7 +39,7 @@ export default function ImageInput({
           onClick={(e) => {
             e.stopPropagation();
             e.stopPropagation();
-            handleImageButtonClick();
+            onImageButtonClick();
           }}
         >
           {previewUrl ? (
@@ -102,7 +102,7 @@ export default function ImageInput({
             fileInputRef.current = e;
           }}
           className="hidden"
-          onChange={(e) => handleFileChange(e, field.onChange)}
+          onChange={(e) => onFileChange(e, field.onChange)}
         />
       </div>
       {error && <div className={CARD_FORM_STYLES.ERROR}>{error}</div>}
