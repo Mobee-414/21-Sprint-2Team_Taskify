@@ -6,16 +6,9 @@ import type { Invitation } from "@/types/invitation.type";
 import { useIsMountedRef } from "@/hooks/useIsMountedRef";
 
 const SIZE = 10;
-const USE_MOCK = process.env.NEXT_PUBLIC_USE_MOCK?.trim() === "true";
-const MOCK_TEAM_ID = "mock-team";
 
-export function useInvitedDashboards(params: {
-  teamId: string;
-  onAccepted: () => void;
-}) {
-  const { teamId, onAccepted } = params;
-
-  const effectiveTeamId = USE_MOCK ? MOCK_TEAM_ID : teamId;
+export function useInvitedDashboards(params: { onAccepted: () => void }) {
+  const { onAccepted } = params;
 
   const [query, setQuery] = useState("");
   const debounced = useDebounce(query, 300);
@@ -30,13 +23,10 @@ export function useInvitedDashboards(params: {
   const mountedRef = useIsMountedRef();
 
   useEffect(() => {
-    if (!effectiveTeamId) return;
-
     (async () => {
       setLoading(true);
       try {
         const data = await getReceivedInvitations({
-          teamId: effectiveTeamId,
           size: SIZE,
           cursorId: null,
           title: debounced,
@@ -51,15 +41,14 @@ export function useInvitedDashboards(params: {
         if (mountedRef.current) setLoading(false);
       }
     })();
-  }, [effectiveTeamId, debounced, mountedRef]);
+  }, [debounced, mountedRef]);
 
   const loadMore = useCallback(async () => {
-    if (!effectiveTeamId || !hasNext || loadingMore) return;
+    if (!hasNext || loadingMore) return;
 
     setLoadingMore(true);
     try {
       const data = await getReceivedInvitations({
-        teamId: effectiveTeamId,
         size: SIZE,
         cursorId,
         title: debounced,
@@ -73,7 +62,7 @@ export function useInvitedDashboards(params: {
     } finally {
       if (mountedRef.current) setLoadingMore(false);
     }
-  }, [effectiveTeamId, hasNext, loadingMore, cursorId, debounced, mountedRef]);
+  }, [hasNext, loadingMore, cursorId, debounced, mountedRef]);
 
   const sentinelRef = useInfiniteScroll(
     loadMore,
@@ -96,8 +85,10 @@ export function useInvitedDashboards(params: {
   }, []);
 
   const isSearching = useMemo(() => debounced.trim().length > 0, [debounced]);
-
-  const isEmpty = useMemo(() => !loading && items.length === 0, [loading, items.length]);
+  const isEmpty = useMemo(
+    () => !loading && items.length === 0,
+    [loading, items.length]
+  );
 
   return {
     query,

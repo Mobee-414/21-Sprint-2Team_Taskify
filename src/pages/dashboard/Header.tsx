@@ -4,7 +4,6 @@ import Image from "next/image";
 import ProfileDropdown from "@/components/dropdown/feature/Profile";
 import InviteModal from "@/components/modals/InviteModal";
 import { useState } from "react";
-import Avatar from "@/components/common/Avatar";
 import { Member } from "@/hooks/useDashboardMembers";
 
 interface HeaderProps {
@@ -18,16 +17,9 @@ interface HeaderProps {
 export default function Header({
   title,
   isOwner,
-  members,
-  totalCount,
   onEditClick,
 }: HeaderProps) {
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
-  const MAX_VISIBLE_MEMBERS = 4;
-  const visibleMembers = members?.slice(0, MAX_VISIBLE_MEMBERS);
-  const extraCount =
-    totalCount > MAX_VISIBLE_MEMBERS ? totalCount - MAX_VISIBLE_MEMBERS : 0;
-
 
   return (
     <header
@@ -79,6 +71,7 @@ export default function Header({
         )}
 
         <div className="w-[16px]" />
+
         <button
           type="button"
           onClick={() => setIsInviteModalOpen(true)}
@@ -96,37 +89,11 @@ export default function Header({
           초대하기
         </button>
 
-        <div className="flex items-center ml-[24px] mr-[24px]">
-          <div className="flex -space-x-2">
-            {visibleMembers.map((member) => (
-              <Avatar
-                key={member.id}
-                nickname={member.nickname}
-                imageUrl={member.profileImageUrl}
-                className="w-8 h-8 border-2 border-white"
-              />
-            ))}
-            {extraCount > 0 && (
-              <div
-                className="
-                  w-8 h-8 rounded-full border-2 border-white 
-                  flex items-center justify-center 
-                  text-sm font-medium text-white bg-gray-medium"
-              >
-                +{extraCount}
-              </div>
-            )}
-          </div>
-        </div>
-
         <div className="w-[36px]" />
         <div className="h-[40px] w-px bg-gray-base" />
         <div className="w-[36px]" />
 
         <ProfileDropdown
-          nickname="배유철"
-          profileImageUrl={null}
-          avatarColor="#7AC555"
           onLogout={() => console.log("logout")}
         />
       </div>
