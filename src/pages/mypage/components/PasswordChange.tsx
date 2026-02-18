@@ -3,6 +3,9 @@
 import { useForm, Controller } from 'react-hook-form';
 import { Input } from '@/components/common/Input';
 import BaseButton from '@/components/common/Button/ButtonBase';
+import { useState } from 'react';
+import { changePassword } from '@/api/auth.api';
+import { AxiosError } from 'axios';
 
 interface PasswordChangeFormValues {
   currentPassword: string;
@@ -11,7 +14,10 @@ interface PasswordChangeFormValues {
 }
 
 const PasswordChange = () => {
-  const { control, handleSubmit } = useForm<PasswordChangeFormValues>({
+  const [ loading, setLoading ] = useState(false);
+  
+  const { control, handleSubmit, watch, formState:{isDirty, isValid} } = useForm<PasswordChangeFormValues>({
+    mode: 'onChange',
     defaultValues: {
       currentPassword: '',
       newPassword: '',
@@ -19,59 +25,101 @@ const PasswordChange = () => {
     },
   });
 
-  const onSubmit = (data: PasswordChangeFormValues) => {
-    console.log(data);
+  const newPassword = watch('newPassword');
+  const confirmPassword = watch('confirmPassword');
+
+  const onSubmit = async (data: PasswordChangeFormValues) => {
+      if (data.newPassword !== data.confirmPassword) {
+      alert('새 비밀번호가 일치하지 않습니다.');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      await changePassword({
+        password: data.currentPassword,
+        newPassword: data.newPassword,
+      });
+
+      alert('비밀번호가 변경되었습니다.');
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      console.error(axiosError);
+
+      if (axiosError.response?.status === 400) {
+        alert('현재 비밀번호가 틀립니다.');
+      } else {
+        alert('비밀번호 변경 실패');
+      }
+    } finally {
+      setLoading(false);
+    }    
   };
 
   return (
-    <div className="bg-white px-[24px] py-[24px]">
+    <div className="bg-white px-[24px] py-[24px] rounded-[12px]">
       <h2 className="text-xl font-bold mb-[24px]">비밀번호 변경</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-[16px]">
+          {/* 현재 비밀번호 */}
           <div className="w-[252px] md:w-[500px] lg:w-[624px]">
             <Controller
               name="currentPassword"
               control={control}
-              render={({ field }) => (
+              rules={{ required: '현재 비밀번호를 입력해주세요.'}}
+              render={({ field, fieldState }) => (
                 <Input
                   label="현재 비밀번호"
                   field={field}
                   type="password"
                   placeholder="비밀번호 입력"
+                  error={fieldState.error?.message}                  
                 />
               )}
             />
           </div>
+          {/* 새 비밀번호 */}
           <div className="w-[252px] md:w-[500px] lg:w-[624px]">
             <Controller
               name="newPassword"
               control={control}
-              render={({ field }) => (
+              rules={{ required: '새 비밀번호를 입력해주세요' }}
+              render={({ field, fieldState }) => (
                 <Input
                   label="새 비밀번호"
                   field={field}
                   type="password"
                   placeholder="새 비밀번호 입력"
+                  error={fieldState.error?.message}                  
                 />
               )}
             />
           </div>
+          {/* 새 비밀번호 확인 */}
           <div className="w-[252px] md:w-[500px] lg:w-[624px]">
             <Controller
               name="confirmPassword"
               control={control}
-              render={({ field }) => (
+              rules={{ required: '새 비밀번호 확인을 입력해주세요' }}
+              render={({ field, fieldState }) => (
                 <Input
                   label="새 비밀번호 확인"
                   field={field}
                   type="password"
                   placeholder="새 비밀번호 입력"
+                  error={
+                    fieldState.error?.message ||
+                    (confirmPassword && newPassword !== confirmPassword
+                      ? '비밀번호가 일치하지 않습니다.'
+                      : undefined)
+                  }
                 />
               )}
             />
           </div>
           <BaseButton
             type="submit"
+            disabled={!isDirty || !isValid || loading}
             className="w-[252px] h-[54px] md:w-[500px] lg:w-[624px] bg-violet-main text-white rounded-[8px] text-lg font-semibold"
           >
             변경

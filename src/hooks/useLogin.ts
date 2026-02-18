@@ -48,7 +48,7 @@ export function useLogin() {
 
       setUser(res.user); // 전역 user 저장
 
-      router.push('/'); // 페이지 이동
+      router.push('/dashboard'); // 페이지 이동
 
       console.log("로그인 성공:", res.user);
       return res.user;
