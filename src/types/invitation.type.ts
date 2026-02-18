@@ -7,7 +7,7 @@ export interface InvitationUser {
 export interface Invitation {
   id: number;
   inviter: InvitationUser;
-  teamId: string;
+  teamId?: string;
   dashboard: {
     id: number;
     title: string;

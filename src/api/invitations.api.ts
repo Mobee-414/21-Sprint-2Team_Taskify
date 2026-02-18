@@ -39,12 +39,11 @@ function makeMockInvitations(count = 30): Invitation[] {
 let mockInvitations: Invitation[] = makeMockInvitations(30);
 
 export async function getReceivedInvitations(params: {
-  teamId: string;
   size?: number;
   cursorId?: number | null;
   title?: string;
 }): Promise<InvitationsResponse> {
-  const { teamId, size = 10, cursorId = 0, title } = params;
+  const { size = 10, cursorId = 0, title } = params;
 
   if (USE_MOCK) {
     const keyword = (title ?? "").trim().toLowerCase();
@@ -65,16 +64,13 @@ export async function getReceivedInvitations(params: {
     };
   }
 
-  const res = await axios.get<InvitationsResponse>(
-    `/${teamId}/invitations`,
-    {
-      params: {
-        size,
-        cursorId: cursorId ?? undefined,
-        title: title?.trim() || undefined,
-      },
-    }
-  );
+  const res = await axios.get<InvitationsResponse>("/invitations", {
+    params: {
+      size,
+      cursorId: cursorId ?? undefined,
+      title: title?.trim() || undefined,
+    },
+  });
 
   return res.data;
 }
@@ -97,13 +93,7 @@ export async function respondInvitation(params: {
   return { success: true };
 }
 
-export async function postInvitations(
-  dashboardId: number,
-  data: InviteValues
-) {
-  const res = await axios.post(
-    `/dashboards/${dashboardId}/invitations`,
-    data
-  );
+export async function postInvitations(dashboardId: number, data: InviteValues) {
+  const res = await axios.post(`/dashboards/${dashboardId}/invitations`, data);
   return res.data;
 }

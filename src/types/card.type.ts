@@ -17,7 +17,6 @@ export interface CardDefaultType {
 export interface CardDetailType extends CardDefaultType {
   id: number;
   assignee: AssigneeUser;
-  teamId: string;
   columnId: number;
   createdAt: string;
   updatedAt: string;

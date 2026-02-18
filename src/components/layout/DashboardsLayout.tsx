@@ -26,7 +26,7 @@ export default function DashboardsLayout({
       <div className="flex min-w-0 flex-1 flex-col">
         <DashboardsHeader onClickPlus={onClickPlus ?? (() => {})} />
 
-        <main className="min-w-0 flex-1 p-[20px]">{children}</main>
+        <main className="min-w-0 flex-1 p-4 tablet:p-[20px]">{children}</main>
       </div>
     </div>
   );
