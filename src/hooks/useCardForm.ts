@@ -1,7 +1,13 @@
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CardDetailType, SyncCardListType, TagItem } from "@/types/card.type";
+import {
+  CardCreateType,
+  CardDetailType,
+  CardUpdateType,
+  SyncCardListType,
+  TagItem,
+} from "@/types/card.type";
 import { useParams } from "next/navigation";
 import { DatePicker } from "react-datepicker";
 import { formatToApiDate } from "@/utils/formatDate";
@@ -156,14 +162,17 @@ export function useCardForm(
   };
 
   const onCreate = async (data: CardFormValues) => {
-    const result = await postCards(data);
+    const result = await postCards(data as unknown as CardCreateType);
     return result;
   };
 
   const onUpdate = async (data: CardFormValues) => {
     if (!data.cardId) return;
 
-    const result = await putCards(data.cardId, data);
+    const result = await putCards(
+      data.cardId,
+      data as unknown as CardUpdateType,
+    );
     return result;
   };
 
