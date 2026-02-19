@@ -96,17 +96,18 @@ const Profile = () => {
   }
 
   return (
-    <div className="bg-white px-[24px] py-[24px] rounded-[12px]">
-      <h2 className="text-xl font-bold mb-[24px]">프로필</h2>
+    <div className="bg-white px-[24px] py-[24px] rounded-[12px] w-[284px] md:w-[548px] lg:w-[672px]">
+      <h2 className="text-[18px] md:text-xl font-bold mb-[24px]">프로필</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex gap-[24px]">
+        <div className="flex flex-col md:flex-row gap-[24px]">
           {/* 이미지 업로드 */}
           <button
             type = "button"
             onClick={handleImageClick}
             className="
-              w-[160px] h-[160px] bg-gray-light rounded-[8px] 
-              flex items-center justify-center cursor-pointer flex-shrink-0 overflow-hidden"
+              w-[100px] h-[100px] md:w-[160px] md:h-[160px] bg-gray-light rounded-[8px] 
+              flex items-center justify-center cursor-pointer flex-shrink-0 overflow-hidden              
+            "
             aria-label="프로필 이미지 업로드"
           >
             {previewUrl ? (
@@ -123,6 +124,7 @@ const Profile = () => {
                 alt="프로필 이미지 추가"
                 width={160}
                 height={160}
+                className="w-full h-full object-contain"
               />
             )}
           </button>
@@ -137,8 +139,8 @@ const Profile = () => {
           />
 
           {/* 입력 영역 */}
-          <div className="flex flex-col gap-[16px]">
-            <div className="w-[252px] md:w-[276px] lg:w-[400px]">
+          <div className="flex flex-col gap-[16px] w-[252px] md:w-[276px] lg:w-[400px]">
+            <div>
               <Controller
                 name="email"
                 control={control}
@@ -152,7 +154,7 @@ const Profile = () => {
                 )}
               />
             </div>
-            <div className="w-[252px] md:w-[276px] lg:w-[400px]">
+            <div>
               <Controller
                 name="nickname"
                 control={control}
@@ -169,7 +171,7 @@ const Profile = () => {
               type="submit"
               disabled = {!isDirty}
               className="
-                w-[252px] h-[54px] md:w-[276px] lg:w-[400px] 
+                w-[252px] md:w-[276px] lg:w-[400px] h-[54px]
                 bg-violet-main text-white rounded-[8px] text-lg font-semibold"
             >
               저장

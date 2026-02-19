@@ -1,16 +1,44 @@
 'use client'
+
 import { Controller } from "react-hook-form";
 import { useSignup } from "@/hooks/useSignup";
 import { Input } from "@/components/common/Input";
 import LoginButton from "@/components/common/Button/ButtonLogin";
+import NoticeModal from "@/components/modals/NoticeModal";
+import { useState } from "react";
 
+interface SignupFormValues {
+  email: string;
+  nickname: string;
+  password: string;
+  passwordConfirmation: string;
+  terms: boolean;
+}
 
 const SignupForm = () => {
   const { control, errors, isValid, handleSubmit, onSubmit } = useSignup();
 
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
+  const [isEmailUsedOpen, setIsEmailUsedOpen] = useState(false);
+
+  const handleSignup = async (data: SignupFormValues) => {
+    const result = await onSubmit(data);
+
+    if (typeof result === "object" && "success" in result && result.success === false) {
+      if (result.status === 409) {
+        setIsEmailUsedOpen(true);
+      }
+      return;
+    }
+
+    if (typeof result === "object" && result.success === true) {
+      setIsSuccessOpen(true);
+    }
+  };
+
   return (
     <div>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(handleSignup)}>
         <Controller
           name="email"
           control={control}
@@ -124,6 +152,21 @@ const SignupForm = () => {
           </LoginButton>
         </div>      
       </form>
+
+      {/* 가입 완료 모달 */}
+      <NoticeModal
+        isOpen={isSuccessOpen}
+        onClose={() => setIsSuccessOpen(false)}
+        message="가입이 완료되었습니다."
+      />
+
+      {/* 이미 사용중인 이메일 모달 */}
+      <NoticeModal
+        isOpen={isEmailUsedOpen}
+        onClose={() => setIsEmailUsedOpen(false)}
+        message="이미 사용중인 이메일입니다."
+      />
+
     </div>
   )
 }

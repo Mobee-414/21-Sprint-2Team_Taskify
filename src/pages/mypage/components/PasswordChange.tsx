@@ -6,6 +6,7 @@ import BaseButton from '@/components/common/Button/ButtonBase';
 import { useState } from 'react';
 import { changePassword } from '@/api/auth.api';
 import { AxiosError } from 'axios';
+import NoticeModal from '@/components/modals/NoticeModal';
 
 interface PasswordChangeFormValues {
   currentPassword: string;
@@ -15,6 +16,7 @@ interface PasswordChangeFormValues {
 
 const PasswordChange = () => {
   const [ loading, setLoading ] = useState(false);
+  const [ isMismatchOpen, setIsMismatchOpen] = useState(false);
   
   const { control, handleSubmit, watch, formState:{isDirty, isValid} } = useForm<PasswordChangeFormValues>({
     mode: 'onChange',
@@ -30,7 +32,7 @@ const PasswordChange = () => {
 
   const onSubmit = async (data: PasswordChangeFormValues) => {
       if (data.newPassword !== data.confirmPassword) {
-      alert('새 비밀번호가 일치하지 않습니다.');
+      setIsMismatchOpen(true);
       return;
     }
 
@@ -57,7 +59,7 @@ const PasswordChange = () => {
   };
 
   return (
-    <div className="bg-white px-[24px] py-[24px] rounded-[12px]">
+    <div className="bg-white px-[24px] py-[24px] rounded-[12px] w-[284px] md:w-[548px] lg:w-[672px]">
       <h2 className="text-xl font-bold mb-[24px]">비밀번호 변경</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-[16px]">
@@ -126,6 +128,12 @@ const PasswordChange = () => {
           </BaseButton>
         </div>
       </form>
+
+          <NoticeModal 
+            isOpen={isMismatchOpen}
+            onClose={() => setIsMismatchOpen(false)}
+            message="비밀번호가 일치하지 않습니다."          
+          />
     </div>
   );
 };

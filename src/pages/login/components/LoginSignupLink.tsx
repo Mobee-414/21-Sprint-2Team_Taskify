@@ -11,8 +11,8 @@ const LoginSignupLink = () => {
 
       <Link href="/signup"
         className="
-          text-[var(--color-violet-main)]
-          font-[var(--font-weight-medium)]
+          text-violet-main
+          font-weight-medium
           hover:underline
       ">
         회원가입하기
