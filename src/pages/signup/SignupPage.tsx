@@ -5,7 +5,7 @@ import LoginLink from '@/pages/signup/components/LoginLink';
 
 const Signup = () => {
   return (
-    <div className='min-h-screen flex items-center justify-center bg-[var(--color-gray-bg)]'> 
+    <div className='min-h-screen flex items-center justify-center bg-gray-bg'> 
       <div className="flex-col items-center">
         <LoginLogo />
 

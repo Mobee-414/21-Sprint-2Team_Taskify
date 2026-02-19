@@ -6,6 +6,7 @@ import { login } from '@/api/auth.api';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useAuth } from '@/contexts/AuthProvider';
+import { showToast } from '@/contexts/ToastProvider';
 
 // 스키마
 const LoginSchema = z.object({
@@ -47,6 +48,8 @@ export function useLogin() {
       localStorage.setItem("accessToken", res.accessToken); // 로그인 성공시 토큰 저장
       localStorage.setItem("user", JSON.stringify(res.user)); 
       setUser(res.user); // 전역 user 저장
+
+      showToast.success("로그인 하셨습니다");
 
       router.push( '/mydashboard'); // 로그인 성공 시 마이대시보드 페이지 이동
 
