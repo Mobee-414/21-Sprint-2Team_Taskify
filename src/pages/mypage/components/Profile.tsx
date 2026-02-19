@@ -1,10 +1,11 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useForm, Controller } from 'react-hook-form';
 import { Input } from '@/components/common/Input';
 import BaseButton from '@/components/common/Button/ButtonBase';
+import { getMyUser, putMyUser, postMyUserImage } from '@/api/users.api';
 
 interface ProfileFormValues {
   email: string;
@@ -14,38 +15,88 @@ interface ProfileFormValues {
 const Profile = () => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [loading, setLoading] = useState(true);
+  const [userId, setUserId] = useState<number | null>(null);
 
-  const { control, handleSubmit } = useForm<ProfileFormValues>({
-    defaultValues: {
-      email: '',
-      nickname: '배유철',
-    },
-  });
+  const { control, handleSubmit, reset, formState:{isDirty}, 
+  } = useForm<ProfileFormValues>();
 
+  // 유저 정보 불러오기
+  useEffect( () => {
+    const fetchUser = async () => {
+      try {
+        const user = await getMyUser();
+
+        setUserId(user.id);
+
+        reset({
+          email: user.email,
+          nickname: user.nickname,
+        });
+
+        if (user.profileImageUrl) {
+          setPreviewUrl(user.profileImageUrl);
+        }
+      } catch (error) {
+        console.error(error);
+        alert('유저 정보를 불러오지 못했습니다.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchUser();
+  }, [reset]);
+
+  // 이미지 클릭
   const handleImageClick = () => {
     fileInputRef.current?.click();
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-     const file = e.target.files?.[0];
+  // 이미지 변경
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     if (!file) return;
 
-    if (previewUrl) {
-      URL.revokeObjectURL(previewUrl);
-    }
+    try {
+      const updatedUser = await postMyUserImage(file);
 
-    const url = URL.createObjectURL(file);
-    setPreviewUrl(url);
+      if (updatedUser.profileImageUrl) {
+        setPreviewUrl(updatedUser.profileImageUrl);
+      }
+      alert('프로필 이미지가 변경되었습니다.'); // toast 변경 예정
+    } catch (error) {
+      console.error(error);
+      alert('이미지 업로드 실패'); // toast 변경 예정
+    }
 
     e.target.value = '';
   };
 
-  const onSubmit = (data: ProfileFormValues) => {
-    console.log(data);
+  // 닉네임 수정
+  const onSubmit = async (data: ProfileFormValues) => {
+    try {
+      const updatedUser = await putMyUser({
+        nickname: data.nickname,
+      });
+
+      alert('정보가 수정되었습니다.'); // toast 변경 예정
+
+      reset({
+        email: updatedUser.email,
+        nickname: updatedUser.nickname,
+      });
+    } catch (error) {
+      console.error(error);
+      alert('수정 실패'); // toast 변경 예정
+    }
   };
 
+  if (loading) {
+    return <div>로딩중...</div>;
+  }
+
   return (
-    <div className="bg-white px-[24px] py-[24px]">
+    <div className="bg-white px-[24px] py-[24px] rounded-[12px]">
       <h2 className="text-xl font-bold mb-[24px]">프로필</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex gap-[24px]">
@@ -95,8 +146,8 @@ const Profile = () => {
                   <Input
                     label="이메일"
                     field={field}
-                    type="text"
-                    placeholder="johndoe@gmail.com"
+                    readOnly
+                    placeholder=""                    
                   />
                 )}
               />
@@ -116,6 +167,7 @@ const Profile = () => {
             </div>
             <BaseButton
               type="submit"
+              disabled = {!isDirty}
               className="
                 w-[252px] h-[54px] md:w-[276px] lg:w-[400px] 
                 bg-violet-main text-white rounded-[8px] text-lg font-semibold"

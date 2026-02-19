@@ -38,6 +38,8 @@ interface InputProps<T extends FieldValues> {
   labelWeight?: keyof typeof WEIGHT_VARIANTS;
   inputSize?: keyof typeof FONT_SIZE_VARIANTS;
   errorSize?: keyof typeof FONT_SIZE_VARIANTS;
+
+  readOnly?:boolean;
 }
 
 export function Input<T extends FieldValues>({
@@ -51,6 +53,8 @@ export function Input<T extends FieldValues>({
   labelWeight = "medium",
   inputSize = "inputMd",
   errorSize = "errorMd",
+
+  readOnly = false,
 }: InputProps<T>) {
   const id = useId();
 
@@ -80,6 +84,7 @@ export function Input<T extends FieldValues>({
           type={inputType}
           id={id}
           placeholder={placeholder}
+          readOnly = {readOnly}
           className={clsx(
             "w-full h-[50px] border rounded-[8px] outline-none",
             FONT_SIZE_VARIANTS[inputSize],
@@ -89,6 +94,7 @@ export function Input<T extends FieldValues>({
             error ? "border-red-point" : "border-gray-base",
             "focus:border-violet-main",
             "placeholder:text-gray-medium",
+            readOnly && "bg-gray-base cursor-default"
           )}
         />
         {type === "password" && (
