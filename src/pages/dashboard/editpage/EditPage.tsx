@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import Header from "@/pages/dashboard/Header";
 import Sidebar from "@/components/layout/TempSidebar";
 import InviteModal from "@/components/modals/InviteModal";
+import ConfirmModal from "@/components/modals/ConfirmModal";
 
 import DashboardInfoSection from "./component/DashboardInfoSection";
 import MembersSection from "./component/MembersSection";
@@ -28,6 +29,11 @@ import {
   updateDashboard,
   deleteDashboard,
 } from "@/api/dashboards.api";
+
+import {
+  getDashboardInvitations,
+  cancelDashboardInvitation,
+} from "@/api/invitations.api";
 
 type FormValues = { title: string };
 
@@ -68,8 +74,16 @@ export default function EditPage() {
 
   const [selectedColor, setSelectedColor] = useState("#7AC555");
   const [updating, setUpdating] = useState(false);
-
   const [refreshKey, setRefreshKey] = useState(0);
+
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
+  const onOpenDeleteModal = useCallback(() => setDeleteOpen(true), []);
+  const onCloseDeleteModal = useCallback(() => {
+    if (deleting) return;
+    setDeleteOpen(false);
+  }, [deleting]);
 
   useEffect(() => {
     if (!router.isReady) return;
@@ -129,13 +143,12 @@ export default function EditPage() {
         setDashboard(updated);
         setSelectedColor(updated.color);
         reset({ title: updated.title });
-
         setRefreshKey((k) => k + 1);
       } finally {
         setUpdating(false);
       }
     },
-    [dashboardId, selectedColor, reset, getValues]
+    [dashboardId, selectedColor, reset, getValues],
   );
 
   const MEMBERS_SIZE = 4;
@@ -147,7 +160,7 @@ export default function EditPage() {
 
   const membersTotalPages = useMemo(
     () => Math.max(1, Math.ceil(membersTotalCount / MEMBERS_SIZE)),
-    [membersTotalCount]
+    [membersTotalCount],
   );
 
   useEffect(() => {
@@ -213,36 +226,103 @@ export default function EditPage() {
       setMembers(data.members);
       setMembersTotalCount(data.totalCount);
     },
-    [dashboardId, members.length, membersPage]
+    [dashboardId, members.length, membersPage],
   );
 
   const headerMembers: HeaderMember[] = useMemo(
     () =>
-      members.map(
-        (m) =>
-          ({
-            id: m.id,
-            nickname: m.nickname,
-            profileImageUrl: m.profileImageUrl,
-            avatarColor: getAvatarColor(m.nickname),
-          } as HeaderMember)
-      ),
-    [members]
+      members.map((m) => ({
+        id: m.id,
+        nickname: m.nickname,
+        profileImageUrl: m.profileImageUrl,
+        avatarColor: getAvatarColor(m.nickname),
+      })),
+    [members],
   );
+
+  const INVITES_SIZE = 10;
 
   const [invites, setInvites] = useState<Invitation[]>([]);
   const [invitesLoading, setInvitesLoading] = useState(false);
-  const [invitesHasNext] = useState(false);
+  const [invitesCursorId, setInvitesCursorId] = useState<number | null>(0);
+  const invitesHasNext = invitesCursorId !== null;
 
-  const fetchInvites = useCallback(async () => {}, []);
+  const invitesLoadingRef = useRef(false);
+  const invitesCursorRef = useRef<number | null>(0);
+
+  useEffect(() => {
+    invitesLoadingRef.current = invitesLoading;
+  }, [invitesLoading]);
+
+  useEffect(() => {
+    invitesCursorRef.current = invitesCursorId;
+  }, [invitesCursorId]);
+
+  const fetchInvites = useCallback(
+    async (mode: "reset" | "append" = "append") => {
+      if (!dashboardId) return;
+
+      if (invitesLoadingRef.current) return;
+      if (mode === "append" && invitesCursorRef.current === null) return;
+
+      invitesLoadingRef.current = true;
+      setInvitesLoading(true);
+
+      try {
+        const cursor = mode === "reset" ? 0 : invitesCursorRef.current ?? 0;
+
+        const res = await getDashboardInvitations({
+          dashboardId,
+          size: INVITES_SIZE,
+          cursorId: cursor,
+        });
+
+        setInvitesCursorId(res.cursorId);
+
+        setInvites((prev) => {
+          if (mode === "reset") return res.invitations;
+
+          const seen = new Set(prev.map((x) => x.id));
+          return [...prev, ...res.invitations.filter((x) => !seen.has(x.id))];
+        });
+      } finally {
+        invitesLoadingRef.current = false;
+        setInvitesLoading(false);
+      }
+    },
+    [dashboardId],
+  );
+
+  useEffect(() => {
+    if (!router.isReady) return;
+    if (!dashboardId) return;
+
+    setInvites([]);
+    setInvitesCursorId(0);
+    fetchInvites("reset");
+  }, [router.isReady, dashboardId, fetchInvites]);
+
+  const onLoadMoreInvites = useCallback(() => {
+    fetchInvites("append");
+  }, [fetchInvites]);
 
   const [inviteOpen, setInviteOpen] = useState(false);
   const onOpenInvite = useCallback(() => setInviteOpen(true), []);
-  const onCloseInvite = useCallback(() => setInviteOpen(false), []);
 
-  const onCancelInvite = useCallback(async (invitationId: number) => {
-    setInvites((prev) => prev.filter((x) => x.id !== invitationId));
-  }, []);
+  const onCloseInvite = useCallback(() => {
+    setInviteOpen(false);
+    fetchInvites("reset");
+  }, [fetchInvites]);
+
+  const onCancelInvite = useCallback(
+    async (invitationId: number) => {
+      if (!dashboardId) return;
+
+      await cancelDashboardInvitation({ dashboardId, invitationId });
+      setInvites((prev) => prev.filter((x) => x.id !== invitationId));
+    },
+    [dashboardId],
+  );
 
   const handleGoBack = useCallback(() => {
     const from = router.query.from;
@@ -260,12 +340,14 @@ export default function EditPage() {
   const onDeleteDashboard = useCallback(async () => {
     if (!dashboardId) return;
 
-    const ok = window.confirm("정말 삭제할까요?");
-    if (!ok) return;
-
-    await deleteDashboard(dashboardId);
-
-    router.replace("/mydashboard");
+    setDeleting(true);
+    try {
+      await deleteDashboard(dashboardId);
+      router.replace("/mydashboard");
+    } finally {
+      setDeleting(false);
+      setDeleteOpen(false);
+    }
   }, [dashboardId, router]);
 
   if (!router.isReady) return null;
@@ -309,8 +391,9 @@ export default function EditPage() {
                     alt="돌아가기"
                     width={20}
                     height={20}
+                    className="w-[18px] h-[18px] tablet:w-[20px] tablet:h-[20px]"
                   />
-                  <span className="text-lg font-medium text-black-medium">
+                  <span className="text-[14px] tablet:text-lg font-medium text-black-medium">
                     돌아가기
                   </span>
                 </button>
@@ -347,20 +430,21 @@ export default function EditPage() {
                   invites={invites}
                   loading={invitesLoading}
                   hasNext={invitesHasNext}
-                  onLoadMore={fetchInvites}
+                  onLoadMore={onLoadMoreInvites}
                   onOpenInvite={onOpenInvite}
                   onCancel={onCancelInvite}
                 />
 
                 <button
                   type="button"
-                  onClick={onDeleteDashboard}
+                  onClick={onOpenDeleteModal}
                   className="
                     mt-[8px] mb-[57px]
                     h-[52px] w-[284px]
                     rounded-[8px]
                     bg-white
-                    text-lg font-medium text-black-medium
+                    text-[16px] tablet:text-lg
+                    font-medium text-black-medium
                     border border-gray-base
                     hover:bg-gray-surface
                   "
@@ -374,6 +458,18 @@ export default function EditPage() {
       </div>
 
       <InviteModal isOpen={inviteOpen} onClose={onCloseInvite} />
+
+      <ConfirmModal
+        isOpen={deleteOpen}
+        onClose={onCloseDeleteModal}
+        onClick={onDeleteDashboard}
+        isSubmitting={deleting}
+      >
+        <p>정말 삭제할까요?</p>
+        <p className="mt-2 text-gray-medium text-base tablet:text-lg font-regular">
+          삭제하면 복구할 수 없습니다.
+        </p>
+      </ConfirmModal>
     </>
   );
 }
