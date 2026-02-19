@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef } from "react";
 import Image from "next/image";
 import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 import type { Invitation } from "@/types/invitation.type";
@@ -21,8 +22,10 @@ export default function InvitationsSection({
   onOpenInvite,
   onCancel,
 }: Props) {
-  const enabled = hasNext && !loading && invites.length > 0;
-  const endRef = useInfiniteScroll(onLoadMore, enabled);
+  const enabled = hasNext && !loading && invites.length >= 5;
+
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const endRef = useInfiniteScroll(onLoadMore, enabled, containerRef);
 
   return (
     <section
@@ -33,6 +36,7 @@ export default function InvitationsSection({
         px-[12px] py-[10px]
         tablet:h-[477px] tablet:w-[544px] tablet:px-[20px] tablet:py-[19px]
         desktop:h-[404px] desktop:w-[620px] desktop:px-[28px] desktop:py-[32px]
+        flex flex-col
       "
     >
       <div className="flex items-center justify-between">
@@ -68,7 +72,10 @@ export default function InvitationsSection({
         이메일
       </div>
 
-      <div className="mt-3 flex flex-col">
+      <div
+        ref={containerRef}
+        className="mt-3 flex-1 overflow-y-auto sidebar-scroll scrollbar-gutter-stable"
+      >
         {loading && invites.length === 0 ? (
           <div className="py-[16px] text-[14px] font-regular text-gray-dark tablet:text-md">
             불러오는 중...
