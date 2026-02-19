@@ -1,4 +1,3 @@
-// EditPage.tsx
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -9,6 +8,7 @@ import { useForm } from "react-hook-form";
 import Header from "@/pages/dashboard/Header";
 import Sidebar from "@/components/layout/TempSidebar";
 import InviteModal from "@/components/modals/InviteModal";
+import ConfirmModal from "@/components/modals/ConfirmModal";
 
 import DashboardInfoSection from "./component/DashboardInfoSection";
 import MembersSection from "./component/MembersSection";
@@ -47,10 +47,7 @@ const AVATAR_COLORS = [
 ];
 
 const getAvatarColor = (nickname: string) => {
-  const sum = Array.from(nickname).reduce(
-    (acc, ch) => acc + ch.charCodeAt(0),
-    0
-  );
+  const sum = Array.from(nickname).reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
   return AVATAR_COLORS[sum % AVATAR_COLORS.length];
 };
 
@@ -78,6 +75,15 @@ export default function EditPage() {
   const [selectedColor, setSelectedColor] = useState("#7AC555");
   const [updating, setUpdating] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
+
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
+  const onOpenDeleteModal = useCallback(() => setDeleteOpen(true), []);
+  const onCloseDeleteModal = useCallback(() => {
+    if (deleting) return;
+    setDeleteOpen(false);
+  }, [deleting]);
 
   useEffect(() => {
     if (!router.isReady) return;
@@ -142,7 +148,7 @@ export default function EditPage() {
         setUpdating(false);
       }
     },
-    [dashboardId, selectedColor, reset, getValues]
+    [dashboardId, selectedColor, reset, getValues],
   );
 
   const MEMBERS_SIZE = 4;
@@ -154,7 +160,7 @@ export default function EditPage() {
 
   const membersTotalPages = useMemo(
     () => Math.max(1, Math.ceil(membersTotalCount / MEMBERS_SIZE)),
-    [membersTotalCount]
+    [membersTotalCount],
   );
 
   useEffect(() => {
@@ -220,7 +226,7 @@ export default function EditPage() {
       setMembers(data.members);
       setMembersTotalCount(data.totalCount);
     },
-    [dashboardId, members.length, membersPage]
+    [dashboardId, members.length, membersPage],
   );
 
   const headerMembers: HeaderMember[] = useMemo(
@@ -231,7 +237,7 @@ export default function EditPage() {
         profileImageUrl: m.profileImageUrl,
         avatarColor: getAvatarColor(m.nickname),
       })),
-    [members]
+    [members],
   );
 
   const INVITES_SIZE = 10;
@@ -284,7 +290,7 @@ export default function EditPage() {
         setInvitesLoading(false);
       }
     },
-    [dashboardId]
+    [dashboardId],
   );
 
   useEffect(() => {
@@ -315,13 +321,12 @@ export default function EditPage() {
       await cancelDashboardInvitation({ dashboardId, invitationId });
       setInvites((prev) => prev.filter((x) => x.id !== invitationId));
     },
-    [dashboardId]
+    [dashboardId],
   );
 
   const handleGoBack = useCallback(() => {
     const from = router.query.from;
-    const target =
-      typeof from === "string" && from.startsWith("/") ? from : null;
+    const target = typeof from === "string" && from.startsWith("/") ? from : null;
 
     if (target) {
       router.replace(target);
@@ -335,11 +340,14 @@ export default function EditPage() {
   const onDeleteDashboard = useCallback(async () => {
     if (!dashboardId) return;
 
-    const ok = window.confirm("정말 삭제할까요?");
-    if (!ok) return;
-
-    await deleteDashboard(dashboardId);
-    router.replace("/mydashboard");
+    setDeleting(true);
+    try {
+      await deleteDashboard(dashboardId);
+      router.replace("/mydashboard");
+    } finally {
+      setDeleting(false);
+      setDeleteOpen(false);
+    }
   }, [dashboardId, router]);
 
   if (!router.isReady) return null;
@@ -368,9 +376,7 @@ export default function EditPage() {
               isOwner={true}
               members={headerMembers}
               totalCount={membersTotalCount}
-              onEditClick={() =>
-                router.push(`/dashboard/editpage/${dashboardId}`)
-              }
+              onEditClick={() => router.push(`/dashboard/editpage/${dashboardId}`)}
             />
 
             <main className="min-w-0">
@@ -431,7 +437,7 @@ export default function EditPage() {
 
                 <button
                   type="button"
-                  onClick={onDeleteDashboard}
+                  onClick={onOpenDeleteModal}
                   className="
                     mt-[8px] mb-[57px]
                     h-[52px] w-[284px]
@@ -452,6 +458,18 @@ export default function EditPage() {
       </div>
 
       <InviteModal isOpen={inviteOpen} onClose={onCloseInvite} />
+
+      <ConfirmModal
+        isOpen={deleteOpen}
+        onClose={onCloseDeleteModal}
+        onClick={onDeleteDashboard}
+        isSubmitting={deleting}
+      >
+        <p>정말 삭제할까요?</p>
+        <p className="mt-2 text-gray-medium text-base tablet:text-lg font-regular">
+          삭제하면 복구할 수 없습니다.
+        </p>
+      </ConfirmModal>
     </>
   );
 }
