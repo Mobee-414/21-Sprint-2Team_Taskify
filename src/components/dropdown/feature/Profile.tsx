@@ -128,7 +128,7 @@ export default function ProfileDropdown({ onLogout }: Props) {
 
   const avatarColor = useMemo(() => getAvatarColor(nickname), [nickname]);
 
-  const handleAccount = () => router.push("/account");
+  const handleAccount = () => router.push("/mypage");
   const handleMyDashboard = () => router.push("/mydashboard");
   const handleLogout = () => onLogout?.();
 

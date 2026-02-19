@@ -1,5 +1,5 @@
 import axios from "./axios";
-import { CardCreateType } from "@/types/card.type";
+import { CardCreateType, CardUpdateType } from "@/types/card.type";
 
 export const getCard = async (cardId: number) => {
   return await axios.get(`/cards/${cardId}`);
@@ -23,7 +23,7 @@ export const postCards = async (data: CardCreateType) => {
   return response.data;
 };
 
-export const putCards = async (cardId: number, data: CardCreateType) => {
+export const putCards = async (cardId: number, data: CardUpdateType) => {
   const response = await axios.put(`/cards/${cardId}`, data);
 
   return response.data;

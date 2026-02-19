@@ -5,6 +5,7 @@ import ProfileDropdown from "@/components/dropdown/feature/Profile";
 import InviteModal from "@/components/modals/InviteModal";
 import { useState } from "react";
 import { Member } from "@/hooks/useDashboardMembers";
+import { useLogout } from "@/hooks/useLogout";
 
 interface HeaderProps {
   title: string;
@@ -16,6 +17,8 @@ interface HeaderProps {
 
 export default function Header({ title, isOwner, onEditClick }: HeaderProps) {
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
+
+  const {logout} = useLogout();
 
   return (
     <>
@@ -96,6 +99,7 @@ export default function Header({ title, isOwner, onEditClick }: HeaderProps) {
             </span>
             초대하기
           </button>
+<<<<<<< feature/CP21-70-editpage-responsive
 
           <div className="w-[36px]" />
           <div className="h-[40px] w-px bg-gray-base" />
@@ -187,6 +191,37 @@ export default function Header({ title, isOwner, onEditClick }: HeaderProps) {
           <ProfileDropdown onLogout={() => console.log("logout")} />
         </div>
       </header>
+=======
+        )}
+
+        <div className="w-[16px]" />
+
+        <button
+          type="button"
+          onClick={() => setIsInviteModalOpen(true)}
+          className="
+            flex items-center
+            w-[116px] h-[40px]
+            rounded-md border border-gray-base
+            text-[16px] font-medium text-[#787486]
+            hover:bg-gray-surface cursor-pointer
+          "
+        >
+          <span className="ml-[16px] mr-[8px] flex items-center">
+            <Image src="/icons/add_box.svg" alt="초대하기" width={20} height={20} />
+          </span>
+          초대하기
+        </button>
+
+        <div className="w-[36px]" />
+        <div className="h-[40px] w-px bg-gray-base" />
+        <div className="w-[36px]" />
+
+        <ProfileDropdown
+          onLogout={logout}
+        />
+      </div>
+>>>>>>> develop
 
       {isInviteModalOpen && (
         <InviteModal
