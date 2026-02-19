@@ -1,11 +1,16 @@
+'use client'
+
 import Image from "next/image";
 import ProfileDropdown from "@/components/dropdown/feature/Profile";
+import { useLogout } from "@/hooks/useLogout";
 
 type Props = {
   onClickPlus: () => void;
 };
 
 export default function DashboardsHeader({ onClickPlus }: Props) {
+  const { logout } = useLogout();
+
   return (
     <>
       <header
@@ -29,9 +34,7 @@ export default function DashboardsHeader({ onClickPlus }: Props) {
           <div className="w-[36px]" />
 
           <ProfileDropdown
-            onLogout={() => {
-              console.log("logout");
-            }}
+            onLogout={logout}
           />
         </div>
       </header>
