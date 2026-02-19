@@ -13,7 +13,7 @@ export function useLogout () {
     // 2. 전역 상태 초기화
     setUser(null);
     // 3. 로그인 페이지 이동
-    router.replace('/login');
+    router.replace('/');
   };
 
   return { logout };
