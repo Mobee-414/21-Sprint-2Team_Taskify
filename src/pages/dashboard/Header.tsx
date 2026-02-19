@@ -3,6 +3,7 @@
 import Image from "next/image";
 import ProfileDropdown from "@/components/dropdown/feature/Profile";
 import InviteModal from "@/components/modals/InviteModal";
+import Tooltip from "@/components/common/Tooltip";
 import { useState } from "react";
 import { Member } from "@/hooks/useDashboardMembers";
 
@@ -19,7 +20,6 @@ export default function Header({ title, isOwner, onEditClick }: HeaderProps) {
 
   return (
     <>
-      {/* 태블릿/데스크탑 */}
       <header
         className="
           flex h-[70px]
@@ -32,10 +32,20 @@ export default function Header({ title, isOwner, onEditClick }: HeaderProps) {
           desktop:pr-[80px]
         "
       >
-        <div className="flex items-center min-w-0">
-          <h1 className="text-[20px] font-bold text-[#333236] truncate">
-            {title}
-          </h1>
+        <div className="flex min-w-0 flex-1 items-center">
+          <Tooltip content={title} placement="bottom" onlyWhenTruncated>
+            <h1
+              className="
+                text-[20px] font-bold text-[#333236]
+                truncate
+                max-w-[220px]
+                tablet:max-w-[360px]
+                desktop:max-w-[520px]
+              "
+            >
+              {title}
+            </h1>
+          </Tooltip>
 
           {isOwner && (
             <Image
@@ -48,7 +58,7 @@ export default function Header({ title, isOwner, onEditClick }: HeaderProps) {
           )}
         </div>
 
-        <div className="flex items-center">
+        <div className="flex shrink-0 items-center">
           {isOwner && (
             <button
               type="button"
@@ -62,12 +72,7 @@ export default function Header({ title, isOwner, onEditClick }: HeaderProps) {
               "
             >
               <span className="ml-[16px] mr-[8px] flex items-center">
-                <Image
-                  src="/icons/settings.svg"
-                  alt="관리"
-                  width={20}
-                  height={20}
-                />
+                <Image src="/icons/settings.svg" alt="관리" width={20} height={20} />
               </span>
               관리
             </button>
@@ -87,12 +92,7 @@ export default function Header({ title, isOwner, onEditClick }: HeaderProps) {
             "
           >
             <span className="ml-[16px] mr-[8px] flex items-center">
-              <Image
-                src="/icons/add_box.svg"
-                alt="초대하기"
-                width={20}
-                height={20}
-              />
+              <Image src="/icons/add_box.svg" alt="초대하기" width={20} height={20} />
             </span>
             초대하기
           </button>
@@ -105,7 +105,6 @@ export default function Header({ title, isOwner, onEditClick }: HeaderProps) {
         </div>
       </header>
 
-      {/* 모바일 */}
       <header
         className="
           flex h-[70px]
@@ -117,10 +116,12 @@ export default function Header({ title, isOwner, onEditClick }: HeaderProps) {
           tablet:hidden
         "
       >
-        <div className="flex items-center min-w-0">
-          <h1 className="text-[16px] font-bold text-black-medium whitespace-nowrap truncate">
-            {title}
-          </h1>
+        <div className="flex min-w-0 flex-1 items-center">
+          <Tooltip content={title} placement="bottom" onlyWhenTruncated>
+            <h1 className="text-[16px] font-bold text-black-medium truncate max-w-[200px]">
+              {title}
+            </h1>
+          </Tooltip>
 
           {isOwner && (
             <Image
@@ -133,7 +134,7 @@ export default function Header({ title, isOwner, onEditClick }: HeaderProps) {
           )}
         </div>
 
-        <div className="flex items-center flex-nowrap">
+        <div className="flex shrink-0 items-center flex-nowrap">
           {isOwner && (
             <button
               type="button"
@@ -148,12 +149,7 @@ export default function Header({ title, isOwner, onEditClick }: HeaderProps) {
               aria-label="관리"
               title="관리"
             >
-              <Image
-                src="/icons/settings.svg"
-                alt="관리"
-                width={18}
-                height={18}
-              />
+              <Image src="/icons/settings.svg" alt="관리" width={18} height={18} />
             </button>
           )}
 
@@ -172,12 +168,7 @@ export default function Header({ title, isOwner, onEditClick }: HeaderProps) {
             aria-label="초대하기"
             title="초대하기"
           >
-            <Image
-              src="/icons/add_box.svg"
-              alt="초대하기"
-              width={18}
-              height={18}
-            />
+            <Image src="/icons/add_box.svg" alt="초대하기" width={18} height={18} />
           </button>
 
           <div className="w-[12px]" />
