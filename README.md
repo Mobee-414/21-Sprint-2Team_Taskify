@@ -1,3 +1,8 @@
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/e4c80d40-054b-4584-82ad-03cb8fee5294" width="100%" alt="Taskify Banner" />
+</div>
+
+
 ## 🚀 Taskify: 스마트 협업 스케줄링 대시보드
 **"함께 관리하고, 더 스마트하게 협업하는 스케줄링 대시보드"**
 
@@ -10,15 +15,45 @@ Taskify는 가족, 동료, 친구 등 다양한 커뮤니티가 목표를 공유
 실무 수준의 워크플로우를 직접 구현하며 코드의 완성도를 높이는 데 집중하여, 팀원 모두가 기술적 깊이를 보여줄 수 있는 강력한 포트폴리오를 구축하고자 선택했습니다.
 
 ## 🛠 테크 스펙 
-- (추가 예정)
+🔗 **[상세 테크 스펙 확인하기 (Notion)](https://www.notion.so/Teskify-Tech-Spec-3011833f6e7f80828380d92b80ae3820)**
 
 ## 🤝 협업 및 이슈 관리
 - **Jira**: 스프린트 단위(1~3주차)로 일감을 관리하고 전체 프로젝트 일정 조율
 - **Git Workflow**: Jira에서 생성한 이슈 번호를 기반으로 브랜치를 생성하고, 작업 완료 후 PR 연결
 - **Code Review**: 팀 내부 PR 템플릿을 활용하여 일관된 형식의 코드 리뷰 진행
 
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/69369ba9-dcce-43c9-9891-0360c1b073ec" width="32%" />
+  <img src="https://github.com/user-attachments/assets/2075c913-e46f-4b85-a00b-12b30dd37031" width="32%" />
+  <img src="https://github.com/user-attachments/assets/5a77c241-5d3a-43c6-9d58-9284da01f9b2" width="32%" />
+</div>
+
+
 ## 🛠 기술 스택
-- (추가 예정)
+
+### ⚙️ 프레임워크 & 상태 관리
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=nextdotjs&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![React Query](https://img.shields.io/badge/React%20Query-FF4154?style=flat-square&logo=reactquery&logoColor=white)
+
+### 🎨 스타일링
+![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
+![React Hot Toast](https://img.shields.io/badge/React%20Hot%20Toast-FF4B4B?style=flat-square&logo=react&logoColor=white)
+![React Datepicker](https://img.shields.io/badge/React%20Datepicker-217355?style=flat-square&logo=react&logoColor=white)
+
+### 📝 폼 & 유효성 검사
+![React Hook Form](https://img.shields.io/badge/React%20Hook%20Form-EC5990?style=flat-square&logo=reacthookform&logoColor=white)
+![Zod](https://img.shields.io/badge/Zod-3E67B1?style=flat-square&logo=zod&logoColor=white)
+
+### 🚀 배포 & 데이터 통신
+![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat-square&logo=vercel&logoColor=white)
+![Axios](https://img.shields.io/badge/Axios-5A29E4?style=flat-square&logo=axios&logoColor=white)
+
+### 🤝 협업 & 관리
+![Jira](https://img.shields.io/badge/Jira-0052CC?style=flat-square&logo=jira&logoColor=white)
+![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white)
+![Figma](https://img.shields.io/badge/Figma-F24E1E?style=flat-square&logo=figma&logoColor=white)
+![Notion](https://img.shields.io/badge/Notion-000000?style=flat-square&logo=notion&logoColor=white)
 
 ## 📸 서비스 화면 (Screenshots)
 - (추가 예정)
