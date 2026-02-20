@@ -34,7 +34,7 @@ export async function getDashboardInvitations(params: {
         size,
         cursorId: cursorId ?? undefined,
       },
-    }
+    },
   );
 
   return res.data;
@@ -57,21 +57,13 @@ export async function cancelDashboardInvitation(params: {
 }): Promise<{ success: true }> {
   const { dashboardId, invitationId } = params;
 
-  await axios.delete(
-    `/dashboards/${dashboardId}/invitations/${invitationId}`
-  );
+  await axios.delete(`/dashboards/${dashboardId}/invitations/${invitationId}`);
 
   return { success: true };
 }
 
-export async function postInvitations(
-  dashboardId: number,
-  data: InviteValues
-) {
-  const res = await axios.post(
-    `/dashboards/${dashboardId}/invitations`,
-    data
-  );
+export async function postInvitations(dashboardId: number, data: InviteValues) {
+  const res = await axios.post(`/dashboards/${dashboardId}/invitations`, data);
 
-  return res.data;
+  return res;
 }
