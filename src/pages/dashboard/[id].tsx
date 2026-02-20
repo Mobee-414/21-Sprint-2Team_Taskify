@@ -58,7 +58,7 @@ export default function Dashboard() {
           onEditClick={() => router.push(`/dashboard/${dashboardId}/edit`)}
         />
 
-        <main className="flex-1 bg-gray-bg flex flex-col overflow-y-auto overflow-x-hidden divide-y divide-gray-light lg:flex-row lg:overflow-x-auto lg:overflow-y-hidden lg:divide-x lg:divide-gray-light">
+        <main className="flex-1 bg-gray-bg flex flex-col overflow-y-auto overflow-x-hidden divide-y divide-gray-light desktop:flex-row desktop:overflow-x-auto desktop:overflow-y-hidden desktop:divide-x desktop:divide-gray-light">
           {columns.map((column) => (
             <Column
               key={column.id}
@@ -75,7 +75,7 @@ export default function Dashboard() {
             />
           ))}
 
-          <div className="shrink-0 w-[284px] md:w-[544px] lg:w-[354px] flex flex-col gap-4 p-3">
+          <div className="shrink-0 w-[284px] tablet:w-[544px] desktop:w-[354px] flex flex-col gap-4 p-3">
             <ButtonColumnAdd
               variant="secondary"
               className="hover:ring-1 hover:ring-violet-main transition-colors"

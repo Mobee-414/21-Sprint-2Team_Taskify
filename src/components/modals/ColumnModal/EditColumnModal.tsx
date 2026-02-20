@@ -91,7 +91,7 @@ export default function EditColumnModal({
   return (
     <>
       <BaseModal isOpen={isOpen} onClose={onClose} radius="sm">
-        <div className="w-[327px] md:w-[568px] mx-auto px-5 md:px-8 py-6 md:py-8 overflow-y-auto">
+        <div className="w-[327px] tablet:w-[568px] mx-auto px-5 tablet:px-8 py-6 tablet:py-8 overflow-y-auto">
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="w-full flex flex-col gap-8"

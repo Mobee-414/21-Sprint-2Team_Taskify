@@ -15,11 +15,11 @@ export default function ConfirmDeleteModal({
     <BaseModal isOpen={isOpen} onClose={onClose} radius="sm">
       <div
         className={`
-          w-[300px] md:w-[540px] mx-auto px-6 md:px-8 py-8
+          w-[300px] tablet:w-[540px] mx-auto px-6 tablet:px-8 py-8
         `}
       >
         <div className="flex flex-col gap-10">
-          <p className="text-lg md:text-xl text-black-dark font-medium mb-10 mt-4 text-center">
+          <p className="text-lg tablet:text-xl text-black-dark font-medium mb-10 mt-4 text-center">
             컬럼의 모든 카드가 삭제됩니다.
           </p>
 

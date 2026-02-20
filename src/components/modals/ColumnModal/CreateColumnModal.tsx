@@ -90,7 +90,7 @@ export default function CreateColumnModal({
 
   return (
     <BaseModal isOpen={isOpen} onClose={onClose} radius="sm">
-      <div className="w-[327px] md:w-[568px] mx-auto px-5 md:px-8 py-6 md:py-8">
+      <div className="w-[327px] tablet:w-[568px] mx-auto px-5 tablet:px-8 py-6 tablet:py-8">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col w-full gap-10 "
@@ -119,7 +119,7 @@ export default function CreateColumnModal({
               variant="secondary"
               fontSize="md"
               onClick={onClose}
-              className="flex-1 h-[48px] md:h-[54px]"
+              className="flex-1 h-[48px] tablet:h-[54px]"
             >
               취소
             </ButtonModal>
@@ -127,7 +127,7 @@ export default function CreateColumnModal({
               type="submit"
               variant="primary"
               fontSize="md"
-              className="flex-1 h-[48px] md:h-[54px]"
+              className="flex-1 h-[48px] tablet:h-[54px]"
             >
               생성
             </ButtonModal>
