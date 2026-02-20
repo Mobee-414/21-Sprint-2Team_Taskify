@@ -2,49 +2,12 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { login } from "@/api/auth.api";
-import { signup } from "@/api/users.api";
-import { AxiosError } from "axios";
 
 const HeroSection = () => {
   const router = useRouter();
 
-  const handleLogin = async () => {
-    const email = process.env.NEXT_PUBLIC_TEST_EMAIL!;
-    const nickname = process.env.NEXT_PUBLIC_TEST_NICKNAME!;
-    const password = process.env.NEXT_PUBLIC_TEST_PASSWORD!;
-
-    try {
-      await signup({ email, nickname, password });
-
-      const { accessToken } = await login({ email, password });
-      localStorage.setItem("accessToken", accessToken);
-      router.push("/mydashboard");
-    } catch (e: unknown) {
-      if (e instanceof AxiosError) {
-        const status = e.response?.status;
-        const message =
-          (e.response?.data as { message?: string })?.message ?? e.message;
-
-        if (status === 409) {
-          try {
-            const { accessToken } = await login({ email, password });
-            localStorage.setItem("accessToken", accessToken);
-            router.push("/mydashboard");
-            return;
-          } catch {
-            alert("테스트 계정 로그인에 실패했습니다.");
-            return;
-          }
-        }
-
-        alert(`실패 (${status ?? "unknown"}): ${message}`);
-        return;
-      }
-
-      console.error(e);
-      alert("알 수 없는 오류가 발생했습니다.");
-    }
+  const handleLogin = () => {
+    router.push("/login");
   };
 
   return (
