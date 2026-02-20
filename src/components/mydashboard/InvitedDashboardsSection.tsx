@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import InvitedDashboardsEmpty from "./InvitedDashboardsEmpty";
 import ButtonAcceptReject from "@/components/common/Button/ButtonAcceptReject";
@@ -7,10 +9,8 @@ import { useInvitedDashboards } from "@/hooks/useInvitedDashboards";
 import "@/styles/utility.module.css";
 
 export default function InvitedDashboardsSection({
-  teamId,
   onAccepted,
 }: {
-  teamId: string;
   onAccepted: () => void;
 }) {
   const {
@@ -24,7 +24,7 @@ export default function InvitedDashboardsSection({
     sentinelRef,
     accept,
     decline,
-  } = useInvitedDashboards({ teamId, onAccepted });
+  } = useInvitedDashboards({ onAccepted });
 
   const { isScrolling, onScroll } = useScrollFade(1000);
 
@@ -48,12 +48,7 @@ export default function InvitedDashboardsSection({
           <div className="mt-[24px] tablet:mt-[28px] desktop:mt-[32px]">
             <div className="relative w-full">
               <span className="pointer-events-none absolute left-[14px] top-1/2 -translate-y-1/2">
-                <Image
-                  src="/icons/search.svg"
-                  alt="검색"
-                  width={24}
-                  height={24}
-                />
+                <Image src="/icons/search.svg" alt="검색" width={24} height={24} />
               </span>
               <input
                 value={query}
@@ -77,7 +72,6 @@ export default function InvitedDashboardsSection({
             </div>
           ) : (
             <div className="mt-[24px]">
-
               <div
                 className="
                   hidden tablet:grid
@@ -115,7 +109,6 @@ export default function InvitedDashboardsSection({
                   "desktop:max-h-[420px]",
                 ].join(" ")}
               >
-
                 <div className="tablet:hidden">
                   {items.map((inv) => (
                     <div key={inv.id} className="border-t border-gray-light py-[14px]">
@@ -130,7 +123,6 @@ export default function InvitedDashboardsSection({
                         <div className="text-md font-regular text-gray-medium">초대자</div>
                         <div className="text-md font-regular text-black-medium">
                           {inv.inviter.nickname}
-                          
                         </div>
                       </div>
 
