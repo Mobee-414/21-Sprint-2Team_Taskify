@@ -6,6 +6,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { Input } from '@/components/common/Input';
 import BaseButton from '@/components/common/Button/ButtonBase';
 import { getMyUser, putMyUser, postMyUserImage } from '@/api/users.api';
+import { showToast } from "@/contexts/ToastProvider";
 
 interface ProfileFormValues {
   email: string;
@@ -13,10 +14,11 @@ interface ProfileFormValues {
 }
 
 const Profile = () => {
+  const [profileImage, setProfileImage] = useState<string | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(true);
-  const [userId, setUserId] = useState<number | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   const { control, handleSubmit, reset, formState:{isDirty}, 
   } = useForm<ProfileFormValues>();
@@ -25,18 +27,16 @@ const Profile = () => {
   useEffect( () => {
     const fetchUser = async () => {
       try {
-        const user = await getMyUser();
+        setLoading(true);
 
-        setUserId(user.id);
+        const user = await getMyUser();
 
         reset({
           email: user.email,
           nickname: user.nickname,
         });
 
-        if (user.profileImageUrl) {
-          setPreviewUrl(user.profileImageUrl);
-        }
+        setProfileImage(user.profileImageUrl ?? null);
       } catch (error) {
         console.error(error);
         alert('유저 정보를 불러오지 못했습니다.');
@@ -44,6 +44,7 @@ const Profile = () => {
         setLoading(false);
       }
     };
+
     fetchUser();
   }, [reset]);
 
@@ -52,42 +53,48 @@ const Profile = () => {
     fileInputRef.current?.click();
   };
 
-  // 이미지 변경
+  // 이미지 선택
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    try {
-      const updatedUser = await postMyUserImage(file);
-
-      if (updatedUser.profileImageUrl) {
-        setPreviewUrl(updatedUser.profileImageUrl);
-      }
-      alert('프로필 이미지가 변경되었습니다.'); // toast 변경 예정
-    } catch (error) {
-      console.error(error);
-      alert('이미지 업로드 실패'); // toast 변경 예정
-    }
+    setImageFile(file); 
+    setPreviewUrl(URL.createObjectURL(file));
 
     e.target.value = '';
   };
 
-  // 닉네임 수정
+  // 저장 업로드
   const onSubmit = async (data: ProfileFormValues) => {
     try {
+      let imageUrl = profileImage;
+      // 이미지 먼저
+
+      if (imageFile) {
+        const res = await postMyUserImage(imageFile);
+        imageUrl = res.profileImageUrl;
+        }
+
+      // 닉네임
       const updatedUser = await putMyUser({
         nickname: data.nickname,
+        profileImageUrl: imageUrl,
       });
 
-      alert('정보가 수정되었습니다.'); // toast 변경 예정
+      setProfileImage(updatedUser.profileImageUrl ?? null);
+      setImageFile(null);
+      setPreviewUrl(null);
+
+      showToast.success('정보가 수정되었습니다.');
 
       reset({
         email: updatedUser.email,
         nickname: updatedUser.nickname,
       });
+
     } catch (error) {
       console.error(error);
-      alert('수정 실패'); // toast 변경 예정
+      showToast.error('수정 실패');
     }
   };
 
@@ -110,9 +117,9 @@ const Profile = () => {
             "
             aria-label="프로필 이미지 업로드"
           >
-            {previewUrl ? (
+            {(previewUrl || profileImage )? (
               <Image
-                src={previewUrl}
+                src={previewUrl || profileImage! }
                 alt="프로필 이미지"
                 width={160}
                 height={160}

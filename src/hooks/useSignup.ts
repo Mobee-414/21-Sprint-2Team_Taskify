@@ -5,7 +5,6 @@ import { z } from 'zod';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signup } from '@/api/users.api';
 import axios from 'axios';
-import { useRouter } from 'next/navigation'; 
 
 // 스키마
 const SignupSchema = z.object({
@@ -39,7 +38,7 @@ type SignupValues = z.infer<typeof SignupSchema>;
 
 // 훅
 export function useSignup() {
-  const router = useRouter();
+
 
   const {
     control,
@@ -65,8 +64,7 @@ export function useSignup() {
         nickname: data.nickname,
         password: data.password,
       });
-      alert("회원가입이 완료되었습니다");
-      router.push("/login");
+      return {success:true};
 
     } catch (error) {
         if (axios.isAxiosError(error)) {

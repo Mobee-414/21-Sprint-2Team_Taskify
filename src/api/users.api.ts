@@ -17,6 +17,11 @@ export type SignupParams = {
 
 export type UpdateMyUserParams = {
   nickname: string;
+  profileImageUrl?: string | null;
+};
+
+export type UploadImageResponse = {
+  profileImageUrl: string;
 };
 
 // 회원가입
@@ -43,11 +48,11 @@ export const putMyUser = async (
 // ✅ 프로필 이미지 업로드
 export const postMyUserImage = async (
   image: File
-): Promise<User> => {
+): Promise<UploadImageResponse> => {
   const formData = new FormData();
   formData.append("image", image);
 
-  const response = await axios.post<User>(
+  const response = await axios.post<UploadImageResponse>(
     "/users/me/image",
     formData
   );

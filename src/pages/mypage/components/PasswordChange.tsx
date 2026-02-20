@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { changePassword } from '@/api/auth.api';
 import { AxiosError } from 'axios';
 import NoticeModal from '@/components/modals/NoticeModal';
+import { showToast } from "@/contexts/ToastProvider";
 
 interface PasswordChangeFormValues {
   currentPassword: string;
@@ -43,7 +44,7 @@ const PasswordChange = () => {
         newPassword: data.newPassword,
       });
 
-      alert('비밀번호가 변경되었습니다.');
+      showToast.success('비밀번호가 변경되었습니다.');
     } catch (error) {
       const axiosError = error as AxiosError;
       console.error(axiosError);
