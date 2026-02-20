@@ -8,6 +8,7 @@ import { useState } from "react";
 import { Member } from "@/hooks/useDashboardMembers";
 import Avatar from "@/components/common/Avatar";
 import MemberListModal from "@/components/modals/MemberListModal";
+import { useLogout } from "@/hooks/useLogout";
 
 interface HeaderProps {
   title: string;
@@ -30,6 +31,8 @@ export default function Header({
   const MAX_VISIBLE = 4;
   const visibleMembers = members?.slice(0, MAX_VISIBLE);
   const extraCount = totalCount > MAX_VISIBLE ? totalCount - MAX_VISIBLE : 0;
+
+  const { logout } = useLogout();
 
   return (
     <>
@@ -111,7 +114,10 @@ export default function Header({
                 </div>
               ))}
               {extraCount > 0 && (
-                <div className="flex w-[34px] h-[34px] tablet:w-[38px] tablet:h-[38px] items-center justify-center rounded-full border-2 border-white bg-gray-medium text-[10px] tablet:text-sm font-medium text-white">
+                <div
+                  onClick={() => setIsMemberModalOpen(true)}
+                  className="flex w-[34px] h-[34px] tablet:w-[38px] tablet:h-[38px] items-center justify-center rounded-full border-2 border-white bg-gray-medium text-[10px] tablet:text-sm font-medium text-white cursor-pointer hover:scale-120 transition-transform"
+                >
                   +{extraCount}
                 </div>
               )}
@@ -122,7 +128,7 @@ export default function Header({
           <div className="w-[12px] tablet:w-[36px]" />
 
           {/* 프로필 */}
-          <ProfileDropdown onLogout={() => console.log("logout")} />
+          <ProfileDropdown onLogout={logout} />
         </div>
       </header>
 
