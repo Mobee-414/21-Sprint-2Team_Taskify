@@ -72,12 +72,16 @@ export default function Header({ title, isOwner, onEditClick }: HeaderProps) {
               "
             >
               <span className="ml-[16px] mr-[8px] flex items-center">
+<<<<<<< feature/CP21-71-modal-design
                 <Image
                   src="/icons/settings.svg"
                   alt="관리"
                   width={20}
                   height={20}
                 />
+=======
+                <Image src="/icons/settings.svg" alt="관리" width={20} height={20} />
+>>>>>>> develop
               </span>
               관리
             </button>
@@ -97,12 +101,16 @@ export default function Header({ title, isOwner, onEditClick }: HeaderProps) {
             "
           >
             <span className="ml-[16px] mr-[8px] flex items-center">
+<<<<<<< feature/CP21-71-modal-design
               <Image
                 src="/icons/add_box.svg"
                 alt="초대하기"
                 width={20}
                 height={20}
               />
+=======
+              <Image src="/icons/add_box.svg" alt="초대하기" width={20} height={20} />
+>>>>>>> develop
             </span>
             초대하기
           </button>
@@ -159,12 +167,16 @@ export default function Header({ title, isOwner, onEditClick }: HeaderProps) {
               aria-label="관리"
               title="관리"
             >
+<<<<<<< feature/CP21-71-modal-design
               <Image
                 src="/icons/settings.svg"
                 alt="관리"
                 width={18}
                 height={18}
               />
+=======
+              <Image src="/icons/settings.svg" alt="관리" width={18} height={18} />
+>>>>>>> develop
             </button>
           )}
 
@@ -183,12 +195,16 @@ export default function Header({ title, isOwner, onEditClick }: HeaderProps) {
             aria-label="초대하기"
             title="초대하기"
           >
+<<<<<<< feature/CP21-71-modal-design
             <Image
               src="/icons/add_box.svg"
               alt="초대하기"
               width={18}
               height={18}
             />
+=======
+            <Image src="/icons/add_box.svg" alt="초대하기" width={18} height={18} />
+>>>>>>> develop
           </button>
 
           <div className="w-[12px]" />

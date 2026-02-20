@@ -28,15 +28,25 @@ export default function DashboardInfoSection({
   updating,
 }: Props) {
   return (
-    <section className="h-[344px] w-[620px] rounded-[12px] bg-white px-[28px] py-[32px]">
-      <h2 className="text-2xl font-bold text-black-medium">비브리지</h2>
+    <section
+      className="
+        h-[312px] w-[284px]
+        rounded-[12px] bg-white
+        px-[12px] py-[10px]
+        tablet:h-[344px] tablet:w-[544px] tablet:px-[20px] tablet:py-[19px]
+        desktop:h-[344px] desktop:w-[620px] desktop:px-[20px] desktop:py-[34px]
+      "
+    >
+      <h2 className="text-[20px] font-bold text-black-medium tablet:text-2xl desktop:text-2xl">
+        비브리지
+      </h2>
 
       <div className="mt-[24px]">
-        <div className="text-2lg font-medium text-black-medium">
+        <div className="text-[16px] font-medium text-black-medium tablet:text-2lg desktop:text-2lg">
           대시보드 이름
         </div>
 
-        <div className="mt-[8px] w-[564px]">
+        <div className="mt-[8px] w-[252px] tablet:w-[488px] desktop:w-[564px]">
           <Controller
             name="title"
             control={control}
@@ -85,13 +95,16 @@ export default function DashboardInfoSection({
           onClick={handleSubmit(onSubmitUpdate)}
           disabled={!canUpdate}
           className="
-            mt-[40px]
-            h-[54px] w-[564px]
+            mt-[32px]
+            h-[54px] w-[252px]
             rounded-[8px]
             bg-violet-main
-            text-lg font-semibold text-white
+            text-[14px] font-semibold text-white
             hover:opacity-90
             disabled:cursor-not-allowed disabled:opacity-40
+
+            tablet:mt-[40px] tablet:w-[488px] tablet:text-lg
+            desktop:w-[564px]
           "
         >
           {updating ? "변경 중..." : "변경"}

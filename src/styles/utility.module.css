@@ -1,4 +1,10 @@
 /* 사이드바 스크롤바 커스텀 */
+@layer utilities {
+  .scrollbar-gutter-stable {
+    scrollbar-gutter: stable;
+  }
+}
+
 :global(.sidebar-scroll) {
   overscroll-behavior: contain;
   scrollbar-gutter: stable;
@@ -26,6 +32,13 @@
 :global(.sidebar-scroll.is-scrolling) {
   scrollbar-width: auto;
   scrollbar-color: rgba(120, 116, 134, 0.45) transparent;
+}
+
+@media (min-width: 768px) {
+  .sidebar-scroll.is-scrolling {
+    scrollbar-width: auto;
+    scrollbar-color: rgba(120, 116, 134, 0.45) transparent;
+  }
 }
 
 /* 캘린더 커스텀 */

@@ -1,11 +1,14 @@
+'use client'
+
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signup } from '@/api/users.api';
 import axios from 'axios';
+import { useRouter } from 'next/navigation'; 
 
 // 스키마
-const LoginSchema = z.object({
+const SignupSchema = z.object({
   email: z 
     .string()
     .nonempty("이메일을 입력해주세요.")
@@ -32,16 +35,18 @@ const LoginSchema = z.object({
   path: ["passwordConfirmation"],
 });
 
-type SignupValues = z.infer<typeof LoginSchema>;
+type SignupValues = z.infer<typeof SignupSchema>;
 
 // 훅
 export function useSignup() {
+  const router = useRouter();
+
   const {
     control,
     formState: { errors, isValid },
     handleSubmit,
   } = useForm<SignupValues>({
-    resolver: zodResolver(LoginSchema),
+    resolver: zodResolver(SignupSchema),
     mode: "all",
     defaultValues: {
       email: "",
@@ -55,13 +60,14 @@ export function useSignup() {
   // submit logic
   const onSubmit = async (data: SignupValues) => {
     try {
-      const res = await signup({
+      await signup({
         email: data.email,
         nickname: data.nickname,
         password: data.password,
       });
-      console.log("회원가입 성공:", res);
-      return { success: true, data: res};
+      alert("회원가입이 완료되었습니다");
+      router.push("/login");
+
     } catch (error) {
         if (axios.isAxiosError(error)) {
           return {

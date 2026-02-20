@@ -1,15 +1,15 @@
 "use client";
 
+import { useRef } from "react";
 import Image from "next/image";
+import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 import type { Invitation } from "@/types/invitation.type";
 
 type Props = {
   invites: Invitation[];
   loading: boolean;
-  page: number;
-  totalPages: number;
-  onPrev: () => void;
-  onNext: () => void;
+  hasNext: boolean;
+  onLoadMore: () => void;
   onOpenInvite: () => void;
   onCancel: (invitationId: number) => void;
 };
@@ -17,122 +17,104 @@ type Props = {
 export default function InvitationsSection({
   invites,
   loading,
-  page,
-  totalPages,
-  onPrev,
-  onNext,
+  hasNext,
+  onLoadMore,
   onOpenInvite,
   onCancel,
 }: Props) {
+  const enabled = hasNext && !loading && invites.length >= 5;
+
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const endRef = useInfiniteScroll(onLoadMore, enabled, containerRef);
+
   return (
-    <section className="mt-[16px] h-[477px] w-[620px] rounded-[12px] bg-white px-[28px] py-[32px]">
+    <section
+      className="
+        mt-[16px]
+        h-[406px] w-[284px]
+        rounded-[12px] bg-white
+        px-[12px] py-[10px]
+        tablet:h-[477px] tablet:w-[544px] tablet:px-[20px] tablet:py-[19px]
+        desktop:h-[404px] desktop:w-[620px] desktop:px-[28px] desktop:py-[32px]
+        flex flex-col
+      "
+    >
       <div className="flex items-center justify-between">
-        <h3 className="text-2xl font-bold text-black-medium">
+        <h2 className="text-[20px] font-bold text-black-medium tablet:text-xl">
           초대 내역
-        </h3>
+        </h2>
 
-        <div className="flex items-center gap-[16px]">
-          <span className="text-md font-regular text-black-medium">
-            {page} 페이지 중 {totalPages}
-          </span>
-
-          <div className="flex h-[40px] w-[80px] overflow-hidden">
-            <button
-              type="button"
-              onClick={onPrev}
-              disabled={page <= 1}
-              className="flex h-[40px] w-[40px] items-center justify-center rounded-l-[4px] bg-white disabled:opacity-50"
-              aria-label="이전"
-            >
-              <Image
-                src="/icons/pagination_left.svg"
-                alt="이전"
-                width={16}
-                height={16}
-              />
-            </button>
-
-            <button
-              type="button"
-              onClick={onNext}
-              disabled={page >= totalPages}
-              className="flex h-[40px] w-[40px] items-center justify-center rounded-r-[4px] bg-white disabled:opacity-50"
-              aria-label="다음"
-            >
-              <Image
-                src="/icons/pagination_right.svg"
-                alt="다음"
-                width={16}
-                height={16}
-              />
-            </button>
-          </div>
-
-          <button
-            type="button"
-            onClick={onOpenInvite}
-            className="
-              flex h-[32px] w-[105px] items-center justify-center gap-[6px]
-              rounded-[8px]
-              bg-violet-main
-              text-md font-medium text-white
-              hover:opacity-90
-            "
-          >
-            <Image
-              src="/icons/white_add_box.svg"
-              alt="초대하기"
-              width={16}
-              height={16}
-            />
-            초대하기
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={onOpenInvite}
+          className="
+            inline-flex shrink-0 items-center justify-center gap-[4px]
+            h-[26px] w-[86px]
+            rounded-[6px]
+            bg-violet-main
+            text-[10px] leading-none font-medium text-white
+            hover:opacity-90
+            tablet:h-[32px] tablet:w-[105px] tablet:gap-[6px] tablet:rounded-[8px] tablet:text-md
+          "
+        >
+          <Image
+            src="/icons/white_add_box.svg"
+            alt="초대"
+            width={14}
+            height={14}
+            className="tablet:w-[16px] tablet:h-[16px]"
+          />
+          초대하기
+        </button>
       </div>
 
-      <div className="mt-[32px]">
-        <div className="text-lg font-regular text-gray-medium">
-          이메일
-        </div>
+      <div className="mt-4 text-[14px] font-regular text-gray-medium tablet:text-lg">
+        이메일
+      </div>
 
-        <div className="mt-[17px] flex flex-col">
-          {loading ? (
-            <div className="py-[16px] text-md font-regular text-gray-dark">
-              불러오는 중...
-            </div>
-          ) : invites.length === 0 ? (
-            <div className="py-[16px] text-md font-regular text-gray-dark">
-              초대 내역이 없습니다.
-            </div>
-          ) : (
-            invites.map((inv) => (
-              <div
-                key={inv.id}
-                className="flex items-center justify-between border-b border-gray-light py-[12px]"
+      <div
+        ref={containerRef}
+        className="mt-3 flex-1 overflow-y-auto sidebar-scroll scrollbar-gutter-stable"
+      >
+        {loading && invites.length === 0 ? (
+          <div className="py-[16px] text-[14px] font-regular text-gray-dark tablet:text-md">
+            불러오는 중...
+          </div>
+        ) : invites.length === 0 ? (
+          <div className="py-[16px] text-[14px] font-regular text-gray-dark tablet:text-md">
+            초대 내역이 없습니다.
+          </div>
+        ) : (
+          invites.map((inv) => (
+            <div
+              key={inv.id}
+              className="flex items-center justify-between border-b border-gray-light py-[12px]"
+            >
+              <p className="min-w-0 truncate text-[14px] font-regular text-black-medium tablet:text-lg">
+                {inv.invitee.email}
+              </p>
+
+              <button
+                type="button"
+                onClick={() => onCancel(inv.id)}
+                className="
+                  rounded-[6px]
+                  bg-white
+                  text-violet-main
+                  border border-gray-base
+                  hover:bg-gray-surface
+                  h-[32px] w-[52px] text-[12px]
+                  tablet:w-[84px] tablet:text-md
+                  desktop:w-[84px] desktop:text-md
+                "
               >
-                <div className="text-lg font-regular text-black-medium">
-                  {inv.invitee.email}
-                </div>
+                취소
+              </button>
+            </div>
+          ))
+        )}
 
-                <div className="mr-[28px]">
-                  <button
-                    type="button"
-                    onClick={() => onCancel(inv.id)}
-                    className="
-                      h-[32px] w-[84px]
-                      rounded-[6px]
-                      bg-white
-                      text-md font-medium text-violet-main
-                      hover:bg-gray-surface
-                    "
-                  >
-                    취소
-                  </button>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
+        {enabled && <div ref={endRef} className="h-[1px]" />}
       </div>
     </section>
   );

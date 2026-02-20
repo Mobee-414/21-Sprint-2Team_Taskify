@@ -17,14 +17,13 @@ export type MembersResponse = {
 };
 
 export const getMembersByTeam = async (params: {
-  teamId: string;
   dashboardId: number;
   page?: number;
   size?: number;
 }): Promise<MembersResponse> => {
-  const { teamId, dashboardId, page = 1, size = 10 } = params;
+  const { dashboardId, page = 1, size = 10 } = params;
 
-  const res = await axiosInstance.get<MembersResponse>(`/${teamId}/members`, {
+  const res = await axiosInstance.get<MembersResponse>("/members", {
     params: { dashboardId, page, size },
   });
 

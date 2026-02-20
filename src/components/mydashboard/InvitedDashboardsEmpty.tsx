@@ -1,8 +1,6 @@
 import Image from "next/image";
 
-type Props = {
-  message: string;
-};
+type Props = { message: string };
 
 export default function InvitedDashboardsEmpty({ message }: Props) {
   return (
@@ -11,12 +9,13 @@ export default function InvitedDashboardsEmpty({ message }: Props) {
         <Image
           src="/images/no_Invitation.png"
           alt="초대 없음"
-          width={100}
-          height={100}
+          width={60}
+          height={60}
           priority
+          className="tablet:w-[100px] tablet:h-[100px] desktop:w-[100px] desktop:h-[100px]"
         />
 
-        <p className="mt-[24px] text-2lg font-regular text-gray-medium">
+        <p className="mt-[24px] font-regular text-gray-medium text-[12px] leading-[18px] tablet:text-[18px] tablet:leading-[26px]">
           {message}
         </p>
       </div>

@@ -15,7 +15,7 @@ export const CardFormSchema = z.object({
       message: "중복된 태그가 있습니다.",
     }),
   imageUrl: z
-    .union([z.string(), z.any()])
+    .union([z.string(), z.instanceof(File)])
     .refine((val) => {
       if (!val || (Array.isArray(val) && val.length === 0)) return false;
       return true;

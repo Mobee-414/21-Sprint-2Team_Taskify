@@ -1,10 +1,10 @@
-import { ReactNode, useEffect, useId, useRef, useState } from "react";
+import { ReactNode, useCallback, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 type TooltipProps = {
   content: string;
   children: ReactNode;
-  placement?: "right" | "top" | "bottom" ;
+  placement?: "right" | "top" | "bottom";
   maxWidth?: number;
   onlyWhenTruncated?: boolean;
 };
@@ -13,7 +13,7 @@ export default function Tooltip({
   content,
   children,
   placement = "right",
-  maxWidth = 260,
+  maxWidth = 360,
   onlyWhenTruncated = true,
 }: TooltipProps) {
   const tooltipId = useId();
@@ -38,12 +38,12 @@ export default function Tooltip({
     return el.scrollWidth > el.clientWidth + 1;
   };
 
-  const updatePosition = () => {
+  const updatePosition = useCallback(() => {
     const el = targetRef.current;
     if (!el) return;
 
     const r = el.getBoundingClientRect();
-    const gap = 8;
+    const gap = 10;
 
     let top = 0;
     let left = 0;
@@ -60,7 +60,7 @@ export default function Tooltip({
     }
 
     setPos({ top, left });
-  };
+  }, [placement]);
 
   const show = () => {
     if (!content) return;
@@ -77,21 +77,20 @@ export default function Tooltip({
   useEffect(() => {
     if (!open) return;
 
-    const onScrollOrResize = () => updatePosition();
-    window.addEventListener("scroll", onScrollOrResize, true);
-    window.addEventListener("resize", onScrollOrResize);
+    window.addEventListener("scroll", updatePosition, true);
+    window.addEventListener("resize", updatePosition);
 
     return () => {
-      window.removeEventListener("scroll", onScrollOrResize, true);
-      window.removeEventListener("resize", onScrollOrResize);
+      window.removeEventListener("scroll", updatePosition, true);
+      window.removeEventListener("resize", updatePosition);
     };
-  }, [open]);
+  }, [open, updatePosition]);
 
   const longPressTimer = useRef<number | null>(null);
 
   const onTouchStart = () => {
     if (longPressTimer.current) window.clearTimeout(longPressTimer.current);
-    longPressTimer.current = window.setTimeout(() => show(), 500);
+    longPressTimer.current = window.setTimeout(() => show(), 450);
   };
 
   const onTouchEnd = () => {
@@ -100,7 +99,7 @@ export default function Tooltip({
     hide();
   };
 
-  const transform =
+  const baseTransform =
     placement === "right"
       ? "translateY(-50%)"
       : placement === "top"
@@ -129,12 +128,43 @@ export default function Tooltip({
             <div
               id={tooltipId}
               role="tooltip"
-              className="fixed z-[9999] rounded-md bg-gray-900 text-white px-3 py-2 text-xs shadow-lg pointer-events-none break-words"
-              style={{ top: pos.top, left: pos.left, transform, maxWidth }}
+              className="
+                fixed z-[9999]
+                rounded-[12px]
+                border border-violet-main/15
+                bg-white
+                px-3.5 py-2.5
+                text-[12px] leading-[16px]
+                text-black-medium
+                shadow-[0_14px_40px_rgba(17,24,39,0.14)]
+                pointer-events-none
+                break-words
+                opacity-0
+                animate-[tooltipIn_200ms_cubic-bezier(0.2,0.8,0.2,1)_forwards]
+              "
+              style={{
+                top: pos.top,
+                left: pos.left,
+                transform: `${baseTransform} scale(0.98)`,
+                maxWidth,
+              }}
             >
-              {content}
+              <style>{`@keyframes tooltipIn{to{opacity:1;transform:${baseTransform} scale(1)}}`}</style>
+
+              <div className="font-medium">{content}</div>
+
+              <div
+                className="absolute h-2.5 w-2.5 rotate-45 bg-white border border-violet-main/15"
+                style={
+                  placement === "right"
+                    ? { left: -6, top: "50%", transform: "translateY(-50%) rotate(45deg)" }
+                    : placement === "top"
+                    ? { left: "50%", bottom: -6, transform: "translateX(-50%) rotate(45deg)" }
+                    : { left: "50%", top: -6, transform: "translateX(-50%) rotate(45deg)" }
+                }
+              />
             </div>,
-            document.body
+            document.body,
           )
         : null}
     </>

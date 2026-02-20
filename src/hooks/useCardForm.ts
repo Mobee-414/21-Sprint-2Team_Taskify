@@ -1,7 +1,13 @@
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CardDetailType, SyncCardListType, TagItem } from "@/types/card.type";
+import {
+  CardCreateType,
+  CardDetailType,
+  CardUpdateType,
+  SyncCardListType,
+  TagItem,
+} from "@/types/card.type";
 import { useParams } from "next/navigation";
 import { DatePicker } from "react-datepicker";
 import { formatToApiDate } from "@/utils/formatDate";
@@ -13,6 +19,7 @@ import { MemberType } from "@/types/user.type";
 import { getColumns } from "@/api/columns.api";
 import { Column } from "@/types/column.type";
 import { handleApiError } from "@/utils/handleError";
+import { showToast } from "@/contexts/ToastProvider";
 
 export function useCardForm(
   onClose: () => void,
@@ -65,10 +72,10 @@ export function useCardForm(
         setColumnList(nextColumnList);
       } else {
         const serverMessage = res?.data?.message;
-        alert(serverMessage || "데이터를 가져오는 데 실패했습니다.");
+        showToast.error(serverMessage || "데이터를 가져오는 데 실패했습니다.");
       }
     } catch (error) {
-      handleApiError(error, "컬럼 목록 조회 실패:");
+      handleApiError(error, "컬럼 목록 조회 실패");
     }
   }, [dashboardId]);
 
@@ -155,14 +162,17 @@ export function useCardForm(
   };
 
   const onCreate = async (data: CardFormValues) => {
-    const result = await postCards(data);
+    const result = await postCards(data as unknown as CardCreateType);
     return result;
   };
 
   const onUpdate = async (data: CardFormValues) => {
     if (!data.cardId) return;
 
-    const result = await putCards(data.cardId, data);
+    const result = await putCards(
+      data.cardId,
+      data as unknown as CardUpdateType,
+    );
     return result;
   };
 
@@ -192,6 +202,8 @@ export function useCardForm(
 
       if (result) {
         const type = isEdit ? "edit" : "create";
+        const message = isEdit ? "수정되었습니다!" : "생성되었습니다!";
+        showToast.success(message);
         onSuccess(type, result, data.cardId ?? undefined);
       }
       onClose();
