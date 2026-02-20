@@ -6,6 +6,8 @@ export interface Member {
   nickname: string;
   profileImageUrl: string | null;
   avatarColor: string;
+  email?: string;
+  isOwner?: boolean;
 }
 
 export function useDashboardMembers(dashboardId: number | undefined) {

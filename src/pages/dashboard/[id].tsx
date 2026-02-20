@@ -11,16 +11,7 @@ import { useDashboardData } from "@/hooks/useDashboardData";
 import { useDashboardModals } from "@/hooks/useDashboardModals";
 import { useState } from "react";
 import { SyncCardListType } from "@/types/card.type";
-<<<<<<< feature/CP21-71-modal-design
 import ButtonColumnAdd from "@/components/common/Button/ButtonColumnAdd";
-=======
-
-interface ColumnType {
-  id: number;
-  title: string;
-  count: number;
-}
->>>>>>> develop
 
 export default function Dashboard() {
   const router = useRouter();
@@ -67,12 +58,7 @@ export default function Dashboard() {
           onEditClick={() => router.push(`/dashboard/editpage/${dashboardId}`)}
         />
 
-<<<<<<< feature/CP21-71-modal-design
         <main className="flex-1 bg-gray-bg flex flex-col overflow-y-auto overflow-x-hidden divide-y divide-gray-light desktop:flex-row desktop:overflow-x-auto desktop:overflow-y-hidden desktop:divide-x desktop:divide-gray-light">
-=======
-
-        <main className="flex-1 flex flex-col lg:flex-row bg-gray-bg divide-x divide-gray-light">
->>>>>>> develop
           {columns.map((column) => (
             <Column
               key={column.id}
