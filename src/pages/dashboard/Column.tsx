@@ -7,6 +7,7 @@ import { useColumn } from "@/hooks/useColumn";
 import Avatar from "@/components/common/Avatar";
 import { SyncCardListType } from "@/types/card.type";
 import { useEffect } from "react";
+import ButtonTodoAdd from "@/components/common/Button/ButtonTodoAdd";
 
 interface ColumnProps {
   id: number;
@@ -30,7 +31,6 @@ export default function Column({
     isEditModalOpen,
     editingCardData,
     isDeleteConfirmOpen,
-    selectedCard,
     setIsDetailOpen,
     setSelectedCardId,
     setIsEditModalOpen,
@@ -47,7 +47,7 @@ export default function Column({
   }, [registerCreateHandler, syncCardList]);
 
   return (
-    <div className="w-full lg:max-w-[354px] flex flex-col gap-4 p-3">
+    <div className="shrink-0 w-[308px] tablet:w-[584px] desktop:w-[354px] flex flex-col gap-4 p-3">
       <div className="flex justify-between items-center px-1">
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-violet-main" />
@@ -61,8 +61,9 @@ export default function Column({
         </button>
       </div>
 
-      <button
-        className="w-full py-2 bg-white border border-gray-light rounded-md text-violet-main font-bold flex justify-center items-center hover:cursor-pointer hover:bg-gray-50 transition"
+      <ButtonTodoAdd
+        variant="secondary"
+        className="hover:ring-1 hover:ring-violet-main transition-colors"
         onClick={onAddCard}
       >
         <Image
@@ -71,7 +72,7 @@ export default function Column({
           width={22}
           height={22}
         />
-      </button>
+      </ButtonTodoAdd>
 
       {cards.map((card) => (
         <div
@@ -101,7 +102,7 @@ export default function Column({
                 return (
                   <span
                     key={index}
-                    className="px-2 py-1 rounded text-md md:text-xs"
+                    className="px-2 py-1 rounded text-md tablet:text-xs"
                     style={{
                       backgroundColor: tagStyle.bgColor,
                       color: tagStyle.fontColor,
@@ -114,7 +115,7 @@ export default function Column({
             </div>
 
             <div className="flex justify-between items-center">
-              <div className="flex items-center gap-1.5 text-md md:text-xs text-gray-medium">
+              <div className="flex items-center gap-1.5 text-md tablet:text-xs text-gray-medium">
                 <Image
                   src="/icons/calender.svg"
                   alt="달력"
