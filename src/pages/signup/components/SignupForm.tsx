@@ -6,6 +6,8 @@ import { Input } from "@/components/common/Input";
 import LoginButton from "@/components/common/Button/ButtonLogin";
 import NoticeModal from "@/components/modals/NoticeModal";
 import { useState } from "react";
+import { showToast } from "@/contexts/ToastProvider";
+import { useRouter } from "next/navigation";
 
 interface SignupFormValues {
   email: string;
@@ -21,6 +23,8 @@ const SignupForm = () => {
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isEmailUsedOpen, setIsEmailUsedOpen] = useState(false);
 
+  const router = useRouter();
+
   const handleSignup = async (data: SignupFormValues) => {
     const result = await onSubmit(data);
 
@@ -32,7 +36,11 @@ const SignupForm = () => {
     }
 
     if (typeof result === "object" && result.success === true) {
-      setIsSuccessOpen(true);
+      showToast.success("회원가입 완료! 로그인해주세요.");
+
+      setTimeout(() => {
+        router.push("/login");
+      }, 1000);
     }
   };
 
