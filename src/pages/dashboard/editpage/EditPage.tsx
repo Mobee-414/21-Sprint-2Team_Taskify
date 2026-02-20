@@ -10,9 +10,9 @@ import Sidebar from "@/components/layout/TempSidebar";
 import InviteModal from "@/components/modals/InviteModal";
 import ConfirmModal from "@/components/modals/ConfirmModal";
 
-import DashboardInfoSection from "./component/DashboardInfoSection";
-import MembersSection from "./component/MembersSection";
-import InvitationsSection from "./component/InvitationsSection";
+import DashboardInfoSection from "@/components/Edit/DashboardInfoSection";
+import MembersSection from "@/components/Edit/MembersSection";
+import InvitationsSection from "@/components/Edit/InvitationsSection";
 
 import {
   getMembersByTeam,
