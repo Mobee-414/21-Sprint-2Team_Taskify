@@ -29,8 +29,9 @@ export default function Header({
   const [isMemberModalOpen, setIsMemberModalOpen] = useState(false);
 
   const MAX_VISIBLE = 4;
-  const visibleMembers = members?.slice(0, MAX_VISIBLE);
-  const extraCount = totalCount > MAX_VISIBLE ? totalCount - MAX_VISIBLE : 0;
+  const visibleMembers = members?.slice(0, MAX_VISIBLE) ?? [];
+  const extraCount =
+    members && totalCount > MAX_VISIBLE ? totalCount - MAX_VISIBLE : 0;
 
   const { logout } = useLogout();
 
