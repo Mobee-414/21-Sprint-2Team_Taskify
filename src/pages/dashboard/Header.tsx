@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/router";
 import ProfileDropdown from "@/components/dropdown/feature/Profile";
 import InviteModal from "@/components/modals/InviteModal";
 import { useState } from "react";
@@ -29,7 +28,6 @@ export default function Header({
   const extraCount =
     totalCount > MAX_VISIBLE_MEMBERS ? totalCount - MAX_VISIBLE_MEMBERS : 0;
 
-
   return (
     <header
       className="
@@ -42,7 +40,7 @@ export default function Header({
       "
     >
       <div className="flex items-center">
-        <h1 className="text-[20px] font-bold text-[#333236]">{title}</h1>
+        <h1 className="text-[20px] font-bold text-black-medium">{title}</h1>
         {isOwner && (
           <Image
             src="/icons/crown.svg"
@@ -92,7 +90,12 @@ export default function Header({
           "
         >
           <span className="ml-[16px] mr-[8px] flex items-center">
-            <Image src="/icons/add_box.svg" alt="초대하기" width={20} height={20} />
+            <Image
+              src="/icons/add_box.svg"
+              alt="초대하기"
+              width={20}
+              height={20}
+            />
           </span>
           초대하기
         </button>

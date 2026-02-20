@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import ButtonModal from "@/components/common/Button/ButtonModal";
 
 interface EditColumnModalProps {
   isOpen: boolean;
@@ -89,14 +90,14 @@ export default function EditColumnModal({
 
   return (
     <>
-      <BaseModal isOpen={isOpen} onClose={onClose} width={540}>
-        <div className="flex w-full flex-col items-center overflow-y-auto">
+      <BaseModal isOpen={isOpen} onClose={onClose} radius="sm">
+        <div className="w-[327px] md:w-[568px] mx-auto px-5 md:px-8 py-6 md:py-8 overflow-y-auto">
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="w-full flex flex-col gap-8"
           >
             <h2 className="text-2xl font-bold text-black-dark text-left w-full">
-              컬럼
+              컬럼 관리
             </h2>
 
             <div className="w-full">
@@ -115,21 +116,25 @@ export default function EditColumnModal({
               />
             </div>
 
-            <div className="flex justify-between items-center w-full mt-4">
-              <button
+            <div className="flex gap-2 items-center w-full mt-4">
+              <ButtonModal
                 type="button"
+                variant="secondary"
+                fontSize="md"
                 onClick={() => setIsConfirmOpen(true)}
-                className="text-gray-medium underline text-sm hover:text-red-point"
+                className="flex-1 h-[54px]"
               >
                 삭제
-              </button>
+              </ButtonModal>
 
-              <button
+              <ButtonModal
                 type="submit"
-                className="bg-violet-main text-white px-12 py-4 rounded-[8px] font-bold"
+                variant="primary"
+                fontSize="md"
+                className="flex-1 h-[54px]"
               >
                 변경
-              </button>
+              </ButtonModal>
             </div>
           </form>
         </div>

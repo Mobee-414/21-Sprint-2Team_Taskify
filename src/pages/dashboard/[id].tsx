@@ -11,15 +11,7 @@ import { useDashboardData } from "@/hooks/useDashboardData";
 import { useDashboardModals } from "@/hooks/useDashboardModals";
 import { useState } from "react";
 import { SyncCardListType } from "@/types/card.type";
-import Header from "./Header";
-import { getDashboard } from "@/api/dashboards.api";
-import type { Dashboard as DashboardType } from "@/types/dashboard.type";
-
-interface ColumnType {
-  id: number;
-  title: string;
-  count: number;
-}
+import ButtonColumnAdd from "@/components/common/Button/ButtonColumnAdd";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -66,7 +58,7 @@ export default function Dashboard() {
           onEditClick={() => router.push(`/dashboard/${dashboardId}/edit`)}
         />
 
-        <main className="flex-1 flex flex-col lg:flex-row bg-gray-bg divide-x divide-gray-light">
+        <main className="flex-1 bg-gray-bg flex flex-col overflow-y-auto overflow-x-hidden divide-y divide-gray-light lg:flex-row lg:overflow-x-auto lg:overflow-y-hidden lg:divide-x lg:divide-gray-light">
           {columns.map((column) => (
             <Column
               key={column.id}
@@ -83,9 +75,10 @@ export default function Dashboard() {
             />
           ))}
 
-          <div className="min-w-[354px] flex flex-col p-3">
-            <button
-              className="h-17.5 bg-white border border-gray-light rounded-md flex items-center justify-center gap-3 font-bold hover:bg-gray-50 transition-colors"
+          <div className="shrink-0 w-[284px] md:w-[544px] lg:w-[354px] flex flex-col gap-4 p-3">
+            <ButtonColumnAdd
+              variant="secondary"
+              className="hover:ring-1 hover:ring-violet-main transition-colors"
               onClick={() => setIsAddModalOpen(true)}
             >
               새로운 컬럼 추가하기
@@ -95,7 +88,7 @@ export default function Dashboard() {
                 width={22}
                 height={22}
               />
-            </button>
+            </ButtonColumnAdd>
           </div>
         </main>
       </div>

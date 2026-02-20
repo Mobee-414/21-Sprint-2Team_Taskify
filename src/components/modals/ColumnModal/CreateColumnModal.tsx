@@ -5,6 +5,7 @@ import BaseModal from "../../common/BaseModal";
 import { Input } from "../../common/Input";
 import { useEffect } from "react";
 import axios from "axios";
+import ButtonModal from "@/components/common/Button/ButtonModal";
 
 interface CreateColumnModalProps {
   isOpen: boolean;
@@ -88,11 +89,11 @@ export default function CreateColumnModal({
   };
 
   return (
-    <BaseModal isOpen={isOpen} onClose={onClose} width={540}>
-      <div className="flex w-full flex-col items-center overflow-y-auto">
+    <BaseModal isOpen={isOpen} onClose={onClose} radius="sm">
+      <div className="w-[327px] md:w-[568px] mx-auto px-5 md:px-8 py-6 md:py-8">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col w-full gap-8"
+          className="flex flex-col w-full gap-10 "
         >
           <h2 className="text-2xl font-bold text-black-medium">새 컬럼 생성</h2>
 
@@ -113,19 +114,23 @@ export default function CreateColumnModal({
           />
 
           <div className="flex justify-end gap-3">
-            <button
+            <ButtonModal
               type="button"
+              variant="secondary"
+              fontSize="md"
               onClick={onClose}
-              className="flex-1 py-3 text-gray-medium border border-gray-light rounded-md font-medium"
+              className="flex-1 h-[48px] md:h-[54px]"
             >
               취소
-            </button>
-            <button
+            </ButtonModal>
+            <ButtonModal
               type="submit"
-              className="flex-1 py-3 text-white bg-violet-main rounded-md font-medium"
+              variant="primary"
+              fontSize="md"
+              className="flex-1 h-[48px] md:h-[54px]"
             >
               생성
-            </button>
+            </ButtonModal>
           </div>
         </form>
       </div>
