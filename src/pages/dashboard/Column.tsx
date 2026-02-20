@@ -15,6 +15,7 @@ interface ColumnProps {
   onEditClick: () => void;
   onAddCard: () => void;
   registerCreateHandler?: (handler: SyncCardListType) => void;
+  createHandlerMap: Record<number, SyncCardListType>;
 }
 
 export default function Column({
@@ -23,6 +24,7 @@ export default function Column({
   onEditClick,
   onAddCard,
   registerCreateHandler,
+  createHandlerMap,
 }: ColumnProps) {
   const {
     cards,
@@ -177,7 +179,11 @@ export default function Column({
           columnId={id}
           initialData={editingCardData}
           onSuccess={(action, cardData) => {
+            if (!cardData) return;
             syncCardList(action, cardData);
+            if (action === "edit" && cardData.columnId !== id) {
+              createHandlerMap[cardData.columnId]?.("create", cardData);
+            }
             setIsEditModalOpen(false);
           }}
         />

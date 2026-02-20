@@ -9,7 +9,7 @@ import Header from "@/pages/dashboard/Header";
 import { useDashboardMembers } from "@/hooks/useDashboardMembers";
 import { useDashboardData } from "@/hooks/useDashboardData";
 import { useDashboardModals } from "@/hooks/useDashboardModals";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { SyncCardListType } from "@/types/card.type";
 import ButtonColumnAdd from "@/components/common/Button/ButtonColumnAdd";
 
@@ -27,6 +27,17 @@ export default function Dashboard() {
   const [createHandler, setCreateHandler] = useState<
     Record<number, SyncCardListType>
   >({});
+  const registerHandler = useCallback(
+    (columnId: number, handler: SyncCardListType) => {
+      setCreateHandler((prev) => {
+        if (prev[columnId] === handler) return prev;
+        return {
+          ...prev,
+          [columnId]: handler,
+        };
+      });
+    },[]
+  );
 
   const {
     isAddModalOpen,
@@ -67,11 +78,9 @@ export default function Dashboard() {
               onEditClick={() => openEditColumn(column)}
               onAddCard={() => openAddCard(column.id)}
               registerCreateHandler={(handler) =>
-                setCreateHandler((prev) => ({
-                  ...prev,
-                  [column.id]: handler,
-                }))
+                registerHandler(column.id, handler)
               }
+              createHandlerMap={createHandler}
             />
           ))}
 
